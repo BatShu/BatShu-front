@@ -3,7 +3,13 @@ interface ImportMetaEnv {
   readonly VITE_REST_API_KEY: string;
   readonly VITE_KAKAO_JS_KEY: string;
   readonly VITE_KAKAO_ADMIN_KEY: string;
-  // 다른 환경 변수들에 대한 타입 정의...
+  readonly VITE_FB_API_KEY: string;
+  readonly VITE_FB_AUTH_DOMAIN: string;
+  readonly VITE_FB_PROJECT_ID: string;
+  readonly VITE_FB_STORAGE_BUCKET: string;
+  readonly VITE_FB_MESSAGING_SENDER_ID: string;
+  readonly VITE_FB_APP_ID: string;
+  readonly VITE_FB_MEASUREMENT_ID: string;
 }
 
 interface ImportMeta {
