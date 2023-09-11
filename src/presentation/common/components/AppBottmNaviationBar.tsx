@@ -14,7 +14,7 @@ export const AppBottomNavigationBar = () => {
         background: "#fff",
         boxShadow: "4px 4px 6px 0px rgba(161, 161, 161, 0.03)",
       })}
-      value={"채팅"}
+      value={"홈"}
     >
       <BottomNavigationAction
         label="홈"

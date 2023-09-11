@@ -1,8 +1,10 @@
 import { ReactElement } from "react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
+// styles
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
 import { GlobalStyles } from "./presentation/common/atoms/GlobalStyles";
+// layout
 import Layout from "./presentation/layout/Layout";
 
 export const App = (): ReactElement => {

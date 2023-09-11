@@ -1,23 +1,61 @@
-import { CSSProperties } from "react";
+import { ForwardedRef, forwardRef } from "react";
 import { Map } from "react-kakao-maps-sdk";
-// hooks
-import useUserLocation from "@/hook/useUserLocation";
+// styles
+import { Box, CircularProgress, Typography, css } from "@mui/material";
+import { CssObject } from "../styles/types";
 
-const KakaoMap = () => {
-  const {
-    location: { lat, lng },
-  } = useUserLocation();
+interface KakaoMapProps {
+  location: { lat: number; lng: number };
+  loading: boolean;
+}
 
-  return <Map center={{ lat, lng }} level={4} style={styles.map}></Map>;
+const KakaoMap = (
+  { location, loading }: KakaoMapProps,
+  mapRef: ForwardedRef<kakao.maps.Map>
+) => {
+  return (
+    <Box css={styles.loadingPage}>
+      {loading ? (
+        <>
+          <Typography variant="body2" css={styles.text}>
+            현재 위치를 가져오는 중 입니다.
+          </Typography>
+          <CircularProgress css={styles.progress} />
+        </>
+      ) : (
+        <Map
+          center={location}
+          level={4}
+          css={styles.map}
+          isPanto
+          ref={mapRef}
+        ></Map>
+      )}
+    </Box>
+  );
 };
 
-export default KakaoMap;
+export default forwardRef(KakaoMap);
 
-const styles: { [key: string]: CSSProperties } = {
-  map: {
+const styles: CssObject = {
+  loadingPage: css({
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     position: "absolute",
     width: "100%",
     height: "100%",
-    zIndex: -999,
-  },
+    backgroundColor: "#fff",
+    zIndex: 0,
+  }),
+  text: css({
+    marginBottom: 30,
+    fontWeight: 600,
+  }),
+  progress: css({ color: "var(--primary)" }),
+  map: css({
+    width: "inherit",
+    height: "inherit",
+  }),
 };
