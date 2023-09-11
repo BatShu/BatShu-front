@@ -19,6 +19,9 @@ export const GlobalStyles = (): ReactElement => {
           --icon-color: rgba(120, 120, 120, 1);
           --primary: #2d264b;
         }
+        #root {
+          background-color: var(--road);
+        }
         .road {
           font-size: 7.367790699005127px;
           font-family: "Inter";
