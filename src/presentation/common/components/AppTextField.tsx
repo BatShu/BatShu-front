@@ -22,10 +22,12 @@ type AppTextFieldProps = TextFieldProps;
       /> 
  */
 export const AppTextField = (props: AppTextFieldProps): ReactElement => {
-  return <TextField css={textFieldStyles} {...props} />;
+  return <TextField css={textFieldStyles} {...props} autoComplete="off" />;
 };
 
 const textFieldStyles = css({
+  display: "flex",
+  justifyContent: "center",
   backgroundColor: "white",
   borderRadius: 8,
   "& .MuiOutlinedInput-notchedOutline": {
