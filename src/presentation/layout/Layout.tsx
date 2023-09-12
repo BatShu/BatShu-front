@@ -8,7 +8,12 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <Container fixed disableGutters maxWidth="xs" sx={{ overflow: "hidden" }}>
+    <Container
+      fixed
+      disableGutters
+      maxWidth="xs"
+      sx={{ overflow: "hidden", height: "100vh", bgcolor: "var(--background)" }}
+    >
       {children}
     </Container>
   );

@@ -16,6 +16,9 @@ dependencies:
   '@mui/styled-engine':
     specifier: ^5.13.2
     version: 5.13.2(@emotion/react@11.11.0)(@emotion/styled@11.11.0)(react@18.2.0)
+  flatpickr:
+    specifier: ^4.6.13
+    version: 4.6.13
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -33,6 +36,9 @@ devDependencies:
   '@emotion/babel-plugin':
     specifier: ^11.11.0
     version: 11.11.0
+  '@types/flatpickr':
+    specifier: ^3.1.2
+    version: 3.1.2
   '@types/react':
     specifier: ^18.0.28
     version: 18.2.6
@@ -1114,6 +1120,13 @@ packages:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
 
+  /@types/flatpickr@3.1.2:
+    resolution: {integrity: sha512-vCEuLqfSlpPhLDOvxyYMIlX20Dwn3XSEeYf9rXfcldDQdLVrtxDdIzE82xhlEFVeHpERujCCQIqETNEUrGsVtA==}
+    deprecated: This is a stub types definition for flatpickr (https://github.com/chmln/flatpickr). flatpickr provides its own type definitions, so you don't need @types/flatpickr installed!
+    dependencies:
+      flatpickr: 4.6.13
+    dev: true
+
   /@types/json-schema@7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
@@ -1799,6 +1812,9 @@ packages:
       flatted: 3.2.7
       rimraf: 3.0.2
     dev: true
+
+  /flatpickr@4.6.13:
+    resolution: {integrity: sha512-97PMG/aywoYpB4IvbvUJi0RQi8vearvU0oov1WW3k0WZPBMrTQVqekSX5CjSG/M4Q3i6A/0FKXC7RyAoAUUSPw==}
 
   /flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
