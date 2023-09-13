@@ -27,6 +27,7 @@ const DatePicker = (
       onValueUpdate: (_, date) => setDate(date),
       noCalendar,
       enableTime,
+      disableMobile: true,
       locale: Korean,
     });
   }, [ref, noCalendar, enableTime, setDate]);

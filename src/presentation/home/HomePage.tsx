@@ -14,6 +14,7 @@ import { ReactComponent as MinusIcon } from "@/presentation/common/icons/outline
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
 // components
+import Splash from "../layout/Splash";
 import KakaoMap from "./components/KakaoMap";
 import { AppTextField } from "../common/components/AppTextField";
 import Spacer from "../common/atoms/Spacer";
@@ -47,6 +48,8 @@ export const HomePage = (): ReactElement => {
 
   return (
     <Box css={styles.pageWrapper}>
+      <Splash />
+
       <KakaoMap location={location} loading={loading} ref={mapRef} />
 
       <Box css={pageContentStyles}>
@@ -74,7 +77,6 @@ export const HomePage = (): ReactElement => {
             <AccidentToggleButton />
           </Box>
         </Box>
-
         <Box css={styles.bottomMenu}>
           <Box css={styles.menuBar}>
             <Box css={styles.menuButton}>
@@ -112,7 +114,6 @@ const styles: CssObject = {
   input: css({
     width: "85%",
     height: "44px",
-    "& input": { cursor: "pointer" },
   }),
   bottomMenu: css({
     position: "relative",
