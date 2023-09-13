@@ -23,7 +23,7 @@ const Splash = () => {
     setTimeout(() => {
       setShowSplash(false);
       sessionStorage.setItem("splashShown", "true");
-    }, 2500);
+    }, 2400);
   }, []);
 
   if (!showSplash) return null;

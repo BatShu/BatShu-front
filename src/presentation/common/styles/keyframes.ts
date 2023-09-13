@@ -11,21 +11,33 @@ export const splashB = keyframes`
   }
   50% {
     opacity:1;
+    width:auto;
+    height:auto;
   }
   50.1% {
     opacity:0;
-    display: none;
+    visibility: hidden;
+    width:0;
+    height:0;
   }
   100% {
     opacity:0;
-    display: none;
+    visibility: hidden;
+    width:0;
+    height:0;
   }
 `;
 
 export const splashEye = keyframes`
   0%, 50.1% {
-    display: none;
+    visibility: hidden;
+    width:0;
+    height:0;
     opacity: 0;
+  }
+  50.2%{
+    width:auto;
+    height:auto;
   }
   70% {
     opacity:1;
