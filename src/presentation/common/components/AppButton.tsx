@@ -13,7 +13,6 @@ const AppButton = (props: AppButtonProps): ReactElement => {
       {...props}
       css={css`
         border-radius: 8px;
-        width: 100%;
         font-size: 18px;
         font-weight: 600;
         background-color: ${backgroundColor};

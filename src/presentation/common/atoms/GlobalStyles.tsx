@@ -55,6 +55,12 @@ export const GlobalStyles = (): ReactElement => {
             display: none; /* Chrome, Safari, Opera*/
           }
         }
+        .flatpickr-current-month {
+          display: inline-flex !important;
+          flex-direction: row-reverse;
+          justify-content: center;
+          align-items: center;
+        }
       `}
     />
   );
