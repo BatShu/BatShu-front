@@ -1,20 +1,26 @@
 import { useRef, ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
 // styles
 import { Box, InputAdornment, css } from "@mui/material";
-import { pageContentStyles } from "../common/styles/pageStyles";
+import { pageContentStyles, svgFill } from "../common/styles/pageStyles";
 import { CssObject } from "../common/styles/types";
 // hooks
 import useUserLocation from "@/hook/useUserLocation";
-// components
-import KakaoMap from "../common/temp/KakaoMap";
-import { AppTextField } from "../common/components/AppTextField";
-import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
-import { AccidentToggleButton } from "./components/AccidentToggleButton";
-import { AppIconButton } from "../common/components/AppIconButton";
-import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
-import { AccidentButton } from "./components/AccidentButton";
+// constants
+import { SEARCH_PATH } from "@/domain/paths";
+// icons
 import { ReactComponent as AddIcon } from "@/presentation/common/icons/outlined/Add.svg";
 import { ReactComponent as MinusIcon } from "@/presentation/common/icons/outlined/Minus.svg";
+import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
+import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
+// components
+import Splash from "../layout/Splash";
+import KakaoMap from "./components/KakaoMap";
+import { AppTextField } from "../common/components/AppTextField";
+import Spacer from "../common/atoms/Spacer";
+import { AccidentToggleButton } from "./components/AccidentToggleButton";
+import { AppIconButton } from "../common/components/AppIconButton";
+import { AccidentButton } from "./components/AccidentButton";
 import { AppBottomNavigationBar } from "../common/components/AppBottmNaviationBar";
 
 export const HomePage = (): ReactElement => {
@@ -24,6 +30,7 @@ export const HomePage = (): ReactElement => {
   } = useUserLocation();
 
   const mapRef = useRef<kakao.maps.Map>(null);
+  const navigate = useNavigate();
 
   const goCenter = () => {
     if (!mapRef.current) return;
@@ -32,11 +39,20 @@ export const HomePage = (): ReactElement => {
     mapRef.current.panTo(new kakao.maps.LatLng(location.lat, location.lng));
   };
 
+  const zoomMap = (isPlus: boolean) => {
+    if (!mapRef.current) return;
+    const curLevel = mapRef.current.getLevel();
+
+    mapRef.current.setLevel(curLevel + (isPlus ? -1 : 1), { animate: true });
+  };
+
   return (
     <Box css={styles.pageWrapper}>
+      <Splash />
+
       <KakaoMap location={location} loading={loading} ref={mapRef} />
 
-      <Box css={pageContentStyles}>
+      <Box css={[pageContentStyles, svgFill]}>
         <Box css={styles.topMenu}>
           <AppTextField
             placeholder={"무엇을 봣슈~?"}
@@ -50,15 +66,17 @@ export const HomePage = (): ReactElement => {
                   />
                 </InputAdornment>
               ),
+              readOnly: true,
             }}
             css={styles.input}
+            onClick={() => navigate(SEARCH_PATH)}
           />
           <Box>
             <AccidentButton />
-            <AccidentToggleButton sx={{ mt: "12px" }} />
+            <Spacer y={12} />
+            <AccidentToggleButton />
           </Box>
         </Box>
-
         <Box css={styles.bottomMenu}>
           <Box css={styles.menuBar}>
             <Box css={styles.menuButton}>
@@ -67,10 +85,11 @@ export const HomePage = (): ReactElement => {
               </AppIconButton>
 
               <Box css={styles.zoom}>
-                <AppIconButton size="small">
+                <AppIconButton size="small" onClick={() => zoomMap(true)}>
                   <AddIcon />
                 </AppIconButton>
-                <AppIconButton size="small" sx={{ mt: "10px" }}>
+                <Spacer y={10} />
+                <AppIconButton size="small" onClick={() => zoomMap(false)}>
                   <MinusIcon />
                 </AppIconButton>
               </Box>
@@ -93,8 +112,6 @@ const styles: CssObject = {
     justifyContent: "space-between",
   }),
   input: css({
-    display: "flex",
-    justifyContent: "center",
     width: "85%",
     height: "44px",
   }),

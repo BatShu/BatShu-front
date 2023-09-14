@@ -18,6 +18,7 @@ export const GlobalStyles = (): ReactElement => {
           --road: rgba(107, 122, 133, 1);
           --icon-color: rgba(120, 120, 120, 1);
           --primary: #2d264b;
+          --background: #fcfcfc;
         }
         #root {
           background-color: var(--road);
@@ -33,14 +34,23 @@ export const GlobalStyles = (): ReactElement => {
         .button {
           box-shadow: 4px 4px 6px rgba(161, 161, 161, 0.03);
         }
-        svg {
-          fill: currentColor;
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
         }
-        path {
-          fill: currentColor;
+        * {
+          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; /* Firefox */
+          ::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera*/
+          }
         }
-        rect {
-          fill: currentColor;
+        .flatpickr-current-month {
+          display: inline-flex !important;
+          flex-direction: row-reverse;
+          justify-content: center;
+          align-items: center;
         }
       `}
     />
