@@ -2,7 +2,7 @@ import { useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 // styles
 import { Box, InputAdornment, css } from "@mui/material";
-import { pageContentStyles } from "../common/styles/pageStyles";
+import { pageContentStyles, svgFill } from "../common/styles/pageStyles";
 import { CssObject } from "../common/styles/types";
 // hooks
 import useUserLocation from "@/hook/useUserLocation";
@@ -52,7 +52,7 @@ export const HomePage = (): ReactElement => {
 
       <KakaoMap location={location} loading={loading} ref={mapRef} />
 
-      <Box css={pageContentStyles}>
+      <Box css={[pageContentStyles, svgFill]}>
         <Box css={styles.topMenu}>
           <AppTextField
             placeholder={"무엇을 봣슈~?"}

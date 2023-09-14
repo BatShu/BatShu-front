@@ -223,7 +223,7 @@ const styles: CssObject = {
     height: "48px",
     boxShadow: "4px 4px 6px 0px rgba(75, 75, 75, 0.03)",
     "& input": {
-      padding: "3px 23px",
+      padding: 0,
       textAlign: "center",
       fontSize: "32px",
       fontWeight: 600,
@@ -232,7 +232,6 @@ const styles: CssObject = {
   }),
   text: css({
     "& input": {
-      padding: "8px 12px",
       fontSize: "28px",
     },
   }),

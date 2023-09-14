@@ -23,7 +23,7 @@ const Splash = () => {
     setTimeout(() => {
       setShowSplash(false);
       sessionStorage.setItem("splashShown", "true");
-    }, 2400);
+    }, 2500);
   }, []);
 
   if (!showSplash) return null;
@@ -53,7 +53,7 @@ const styles = {
     },
   }),
   B: css({
-    animation: `${splashB} 2.5s linear`,
+    animation: `${splashB} 3s linear`,
   }),
-  Eye: css({ animation: `${splashEye} 2.5s linear` }),
+  Eye: css({ animation: `${splashEye} 3s linear` }),
 };
