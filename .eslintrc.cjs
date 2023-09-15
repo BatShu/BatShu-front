@@ -8,7 +8,7 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
-  plugins: ["react-refresh"],
+  plugins: ["react-refresh", "@tanstack/eslint-plugin-query"],
   rules: {
     "react-refresh/only-export-components": "off",
   },
