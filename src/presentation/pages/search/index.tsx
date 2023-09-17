@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 // styles
 import { Box, InputAdornment, Typography, css } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { pageContentStyles } from "../common/styles/pageStyles";
-import { CssObject } from "../common/styles/types";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import { pageContentStyles } from "../../common/styles/pageStyles";
+import { CssObject } from "../../common/styles/types";
 // hooks
 import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
 // icons
@@ -14,12 +14,12 @@ import { ReactComponent as Location } from "@/presentation/common/icons/outlined
 import { ReactComponent as Calender1 } from "@/presentation/common/icons/outlined/Calender 1.svg";
 import { ReactComponent as Down2 } from "@/presentation/common/icons/outlined/Down 2.svg";
 // components
-import { AppTextField } from "../common/components/AppTextField";
-import AppButton from "../common/components/AppButton";
-import Spacer from "../common/atoms/Spacer";
+import { AppTextField } from "../../common/components/AppTextField";
+import AppButton from "../../common/components/AppButton";
+import Spacer from "../../common/atoms/Spacer";
 import PlaceResult from "./components/PlaceResult";
-import InputChip from "../common/components/InputChip";
-import DatePicker from "../common/components/DatePicker";
+import InputChip from "../../common/atoms/InputChip";
+import DatePicker from "../../common/atoms/DatePicker";
 
 export const SearchPage = (): ReactElement => {
   const [keyword, setKeyword] = useState("");
@@ -107,7 +107,9 @@ export const SearchPage = (): ReactElement => {
               }}
               css={[styles.inputSelect, validFill(!!place)]}
             />
-            {keyword && <PlaceResult data={result} setPlace={setPlace} />}
+            {keyword && (
+              <PlaceResult data={result} setPlace={setPlace} top={60} />
+            )}
           </Box>
 
           <Spacer y={12} />
@@ -237,7 +239,7 @@ const styles: CssObject = {
   }),
   button: css({
     position: "absolute",
-    bottom: 20,
+    bottom: 36,
     left: 0,
     width: "100%",
     height: "44px",

@@ -1,12 +1,17 @@
-import { Box } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 import { css } from "@emotion/react";
 
 interface InputChipProps {
   text: string;
+  sx?: SxProps;
 }
 
-const InputChip = ({ text }: InputChipProps) => {
-  return <Box css={styles.container}> {text}</Box>;
+const InputChip = ({ text, sx }: InputChipProps) => {
+  return (
+    <Box css={styles.container} sx={sx}>
+      {text}
+    </Box>
+  );
 };
 
 export default InputChip;
@@ -22,5 +27,6 @@ const styles = {
     backgroundColor: "#F7F7F7",
     color: "#000",
     fontFamily: "Pretendard",
+    whiteSpace: "nowrap",
   }),
 };

@@ -1,11 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
+import { SerializedStyles, css } from "@emotion/react";
+// constants
+import { HOME_PATH, WRITE_PATH } from "@/domain/paths";
+// icons
 import { ReactComponent as LogoIcon } from "@/presentation/common/icons/logo.svg";
 import { ReactComponent as Message1Icon } from "@/presentation/common/icons/outlined/Message 1.svg";
 import { ReactComponent as PenIcon } from "@/presentation/common/icons/outlined/Pen.svg";
 import { ReactComponent as InstagramIcon } from "@/presentation/common/icons/outlined/Instagram.svg";
 import { ReactComponent as ProfileSquareIcon } from "@/presentation/common/icons/outlined/Profile Square.svg";
-import { SerializedStyles, css } from "@emotion/react";
+
 export const AppBottomNavigationBar = () => {
+  const navigate = useNavigate();
+
   return (
     <BottomNavigation
       showLabels
@@ -21,6 +28,7 @@ export const AppBottomNavigationBar = () => {
         value={"홈"}
         icon={<LogoIcon />}
         css={actionStyles}
+        onClick={() => navigate(HOME_PATH)}
       />
       <BottomNavigationAction
         label="채팅"
@@ -32,6 +40,7 @@ export const AppBottomNavigationBar = () => {
         label="글쓰기"
         icon={<PenIcon />}
         css={actionStyles}
+        onClick={() => navigate(WRITE_PATH)}
       />
       <BottomNavigationAction
         label="커뮤니티"
@@ -60,7 +69,7 @@ const actionStyles: SerializedStyles = css({
   svg: {
     color: "#c1c1c1",
   },
-  "&.Mui-selected": {
+  ":active, &.Mui-selected": {
     color: "#000",
     svg: {
       color: "#000",

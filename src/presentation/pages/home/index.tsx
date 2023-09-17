@@ -2,10 +2,10 @@ import { useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 // styles
 import { Box, InputAdornment, css } from "@mui/material";
-import { pageContentStyles, svgFill } from "../common/styles/pageStyles";
-import { CssObject } from "../common/styles/types";
-// hooks
-import useUserLocation from "@/hook/useUserLocation";
+import { pageContentStyles, svgFill } from "../../common/styles/pageStyles";
+import { CssObject } from "../../common/styles/types";
+// store
+import { locationStore } from "@/store/locationStore";
 // constants
 import { SEARCH_PATH } from "@/domain/paths";
 // icons
@@ -14,20 +14,20 @@ import { ReactComponent as MinusIcon } from "@/presentation/common/icons/outline
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
 // components
-import Splash from "../layout/Splash";
+import Splash from "../../layout/Splash";
 import KakaoMap from "./components/KakaoMap";
-import { AppTextField } from "../common/components/AppTextField";
-import Spacer from "../common/atoms/Spacer";
+import { AppTextField } from "../../common/components/AppTextField";
+import Spacer from "../../common/atoms/Spacer";
 import { AccidentToggleButton } from "./components/AccidentToggleButton";
-import { AppIconButton } from "../common/components/AppIconButton";
+import { AppIconButton } from "../../common/components/AppIconButton";
 import { AccidentButton } from "./components/AccidentButton";
-import { AppBottomNavigationBar } from "../common/components/AppBottmNaviationBar";
+import { AppBottomNavigationBar } from "../../common/components/AppBottmNaviationBar";
 
 export const HomePage = (): ReactElement => {
   const {
     location,
     status: { loading },
-  } = useUserLocation();
+  } = locationStore();
 
   const mapRef = useRef<kakao.maps.Map>(null);
   const navigate = useNavigate();
@@ -125,7 +125,7 @@ const styles: CssObject = {
   menuBar: css({
     position: "absolute",
     width: "100%",
-    bottom: 0,
+    bottom: "36px",
     left: 0,
   }),
   menuButton: css({
