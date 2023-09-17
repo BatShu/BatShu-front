@@ -30,32 +30,39 @@ const UploadImage = () => {
 
   return (
     <Box css={styles.container}>
-      <Box
-        css={[styles.input, styles.box]}
-        onClick={() => inputRef.current?.click()}
+      <Swiper
+        slidesPerView={4}
+        spaceBetween={10}
+        css={styles.swiper}
+        loop={false}
       >
-        <AddSquare css={styles.addSquare} />
+        <SwiperSlide>
+          <Box
+            css={[styles.input, styles.box]}
+            onClick={() => inputRef.current?.click()}
+          >
+            <AddSquare css={styles.addSquare} />
 
-        <Typography css={styles.text}>
-          {images.length ? `${images.length}/5` : "사진 첨부"}
-        </Typography>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          ref={inputRef}
-          hidden
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (images.length >= 5) {
-              enqueueSnackbar("최대 5장 까지 업로드 가능합니다.");
-              return;
-            }
-            setMultipleFile(e, setImages);
-          }}
-        />
-      </Box>
+            <Typography css={styles.text}>
+              {images.length ? `${images.length}/5` : "사진 첨부"}
+            </Typography>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              ref={inputRef}
+              hidden
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (images.length >= 5) {
+                  enqueueSnackbar("최대 5장 까지 업로드 가능합니다.");
+                  return;
+                }
+                setMultipleFile(e, setImages);
+              }}
+            />
+          </Box>
+        </SwiperSlide>
 
-      <Swiper slidesPerView={2.9} css={styles.swiper}>
         {images.map(({ url }, idx) => (
           <SwiperSlide key={`${url}${idx}`}>
             <Zoom in>
@@ -88,30 +95,26 @@ const styles: CssObject = {
     "& *": { transition: "all ease 0.15s" },
   }),
   swiper: css({
+    display: "flex",
+    overflow: "hidden",
+    padding: "20px 5px 30px 0",
+    touchAction: "none",
     width: "100%",
-    overflowX: "hidden",
-    padding: "20px 0 30px 0",
     "& .swiper-wrapper": {
       display: "flex",
       alignItems: "center",
     },
   }),
-  input: css({
-    cursor: "pointer",
-    margin: "20px 0 30px 0",
-  }),
+  input: css({ cursor: "pointer" }),
   box: css({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    minWidth: "90px",
-    minHeight: "90px",
-    maxWidth: "90px",
-    maxHeight: "90px",
+    width: "100%",
+    aspectRatio: "1",
     borderRadius: "8px",
-    marginRight: "15px",
     backgroundColor: "#fff",
     "& img": {
       width: "100%",
