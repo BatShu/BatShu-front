@@ -1,4 +1,4 @@
-import { API_ACCIDENT_PATH } from "@/domain/apiPaths";
+import { GET_ACCIDENT_BY_ID, GET_ACCIDENT_BY_MAP } from "@/domain/apiPaths";
 import { API_BASE_URL } from "@/domain/constants";
 import { Accident } from "@/domain/models/accident";
 import { AppLocation } from "@/domain/models/location";
@@ -20,8 +20,9 @@ export const useReadAccidentsByLocation = (
     queryKey: ["accidents", x, y],
     queryFn: async () => {
       const res = await fetch(
-        `${API_BASE_URL}/${API_ACCIDENT_PATH}?x=${x}&y=${y}&level=${level}`
+        `${API_BASE_URL}/${GET_ACCIDENT_BY_MAP({ x, y, level })}`
       );
+
       const data = await res.json();
       return data satisfies ReadAccidentsByLocationResponse;
     },
@@ -38,7 +39,7 @@ export const useReadAccidentById = (
   return useQuery({
     queryFn: async () => {
       const res = await fetch(
-        `${API_BASE_URL}/${API_ACCIDENT_PATH}/${accidentId}`
+        `${API_BASE_URL}/${GET_ACCIDENT_BY_ID(accidentId)}`
       );
       const data = await res.json();
       return data satisfies ReadAccidentByIdResponse;
