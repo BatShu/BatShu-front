@@ -1,16 +1,18 @@
-import { useRef } from "react";
+import { useRef, Dispatch, SetStateAction } from "react";
 // styles
 import { Box, Typography, css } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 // icons
 import { ReactComponent as Upload } from "@/presentation/common/icons/outlined/Upload.svg";
-// store
-import { writeFormStore } from "@/store/writeFormStore";
+// lib
+import { TFile, setSingleFile } from "@/lib";
 
-const UploadVideo = () => {
+interface UploadVideoProps {
+  setVideoFile: Dispatch<SetStateAction<TFile | null>>;
+}
+
+const UploadVideo = ({ setVideoFile }: UploadVideoProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const { setVideo } = writeFormStore();
 
   return (
     <Box css={styles.container}>
@@ -31,6 +33,7 @@ const UploadVideo = () => {
         type="file"
         accept="video/*"
         style={{ display: "none" }}
+        onChange={(e) => setSingleFile(e, setVideoFile, "video")}
       />
     </Box>
   );

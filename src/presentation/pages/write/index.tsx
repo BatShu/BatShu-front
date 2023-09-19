@@ -20,15 +20,20 @@ export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
   const [showMap, setShowMap] = useState(false);
 
-  const { type, content, resetForm } = writeFormStore();
+  const { type, title, licensePlate, accidentTime, content } = writeFormStore();
 
   const sliderRef = useRef<Slider>(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    return () => resetForm();
-  }, [resetForm]);
+    // TODO: 사고등록 API
+    console.log(type);
+    console.log(title);
+    console.log(licensePlate);
+    console.log(accidentTime);
+    console.log(content);
+  }, [type, title, licensePlate, accidentTime, content]);
 
   return (
     <Box css={styles.pageWrapper}>

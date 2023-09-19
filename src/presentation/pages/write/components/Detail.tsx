@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, ChangeEvent } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import {
@@ -16,7 +16,6 @@ import { natshuMarker } from "@/presentation/configs";
 // icons
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
-
 // store
 import { writeFormStore } from "@/store/writeFormStore";
 // components
@@ -35,16 +34,34 @@ const Detail = ({ setShowMap }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
   const {
     type,
-    content: { location, mapLevel },
+    title,
+    licensePlate,
+    content: { location, bounty, carModelName, mapLevel },
+    setTitle,
+    setLicensePlate,
+    setContent,
   } = writeFormStore();
 
   const isWitness = type === "목격자";
+
+  const setBounty = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    const bounty = Number(value.replaceAll(",", ""));
+    if (!/^[0-9]*$/.test(String(bounty))) return;
+
+    setContent({ bounty });
+  };
 
   return (
     <Box css={styles.container}>
       {!isWitness && <UploadImage />}
 
-      <AppTextField placeholder="제목을 입력해 주세요!" />
+      <Spacer y={30} />
+
+      <AppTextField
+        value={title}
+        placeholder="제목을 입력해 주세요!"
+        onChange={({ target: { value } }) => setTitle(value)}
+      />
 
       <Spacer y={30} />
 
@@ -67,24 +84,31 @@ const Detail = ({ setShowMap }: DetailProps) => {
 
       <ContentWithTitle title="차량번호">
         <AppTextField
+          value={licensePlate}
           placeholder="차량번호를 입력해주세요!"
-          css={styles.halfWidth}
+          css={styles.halfWidth()}
+          onChange={({ target: { value } }) => setLicensePlate(value)}
         />
       </ContentWithTitle>
 
       <ContentWithTitle title="차량종류">
         <Box display="flex" alignItems="center">
           <AppTextField
+            value={carModelName}
             placeholder="차량종류를 입력해주세요!"
-            css={styles.halfWidth}
+            css={styles.halfWidth(skipCarNumber)}
             disabled={skipCarNumber}
-            style={{ backgroundColor: skipCarNumber ? "#DBDBDB" : "#fff" }}
+            onChange={({ target: { value } }) =>
+              setContent({ carModelName: value })
+            }
           />
           <AppButton
-            onClick={() => setSkipCarNumber((prev) => !prev)}
-            css={styles.skipButton}
+            onClick={() => {
+              setSkipCarNumber((prev) => !prev);
+              setContent({ carModelName: "" });
+            }}
+            css={styles.skipButton(skipCarNumber)}
             backgroundcolor={skipCarNumber ? "#000" : "#fff"}
-            sx={{ color: skipCarNumber ? "#fff" : "#000" }}
           >
             차종모름
           </AppButton>
@@ -121,9 +145,10 @@ const Detail = ({ setShowMap }: DetailProps) => {
       {!isWitness && (
         <ContentWithTitle title="포상금">
           <AppTextField
+            value={bounty === 0 ? "" : bounty.toLocaleString()}
             placeholder="포상금을 입력해주세요!"
-            css={styles.halfWidth}
-            inputProps={{ inputMode: "numeric" }}
+            css={styles.halfWidth()}
+            inputMode="numeric"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -131,6 +156,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
                 </InputAdornment>
               ),
             }}
+            onChange={setBounty}
           />
         </ContentWithTitle>
       )}
@@ -143,6 +169,9 @@ const Detail = ({ setShowMap }: DetailProps) => {
           }자가 알아볼 수 있도록, 사고 내용을 자세하게 입력해주세요`}
           css={styles.memo}
           multiline
+          onChange={({ target: { value } }) =>
+            setContent({ description: value })
+          }
         />
       </ContentWithTitle>
 
@@ -155,7 +184,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
 
 export default Detail;
 
-const styles: CssObject = {
+const styles = {
   container: css({
     overflow: "scroll",
     "& .MuiTextField-root:not(.no-fix)": { height: "40px" },
@@ -171,14 +200,17 @@ const styles: CssObject = {
   accordion: css({
     borderRadius: "8px",
   }),
-  halfWidth: css({ width: "65%" }),
-  skipButton: css({
-    border: "0.5px solid #bbb",
-    borderRadius: "18px",
-    fontSize: "12px",
-    marginLeft: "20px",
-    height: "32px",
-  }),
+  halfWidth: (skipCarNumber?: boolean) =>
+    css({ width: "65%", backgroundColor: skipCarNumber ? "#DBDBDB" : "#fff" }),
+  skipButton: (skipCarNumber: boolean) =>
+    css({
+      border: "0.5px solid #bbb",
+      borderRadius: "18px",
+      fontSize: "12px",
+      marginLeft: "20px",
+      height: "32px",
+      color: skipCarNumber ? "#fff" : "#000",
+    }),
   map: css({
     width: "100%",
     height: "200px",
@@ -200,4 +232,4 @@ const styles: CssObject = {
     color: "#fff",
     zIndex: 999,
   }),
-};
+} satisfies CssObject;

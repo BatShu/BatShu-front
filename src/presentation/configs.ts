@@ -1,8 +1,14 @@
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 import { Fade } from "@mui/material";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProviderProps } from "@mui/x-date-pickers/LocalizationProvider";
 import { SnackbarProviderProps } from "notistack";
 import { MapMarkerProps } from "react-kakao-maps-sdk";
 import { Settings } from "react-slick";
 import Natshu from "@/presentation/common/icons/asset/Group 196.png";
+
+dayjs.locale("ko");
 
 export const snackbarOptions: Omit<SnackbarProviderProps, "children"> = {
   maxSnack: 2,
@@ -34,4 +40,10 @@ export const sliderSettings: Settings = {
   lazyLoad: "anticipated",
 };
 
-export const DATE_FORMAT = "YYYY년 MM월 DD일 ddd요일" as const;
+export const MuiDateCalendarOptions: LocalizationProviderProps<any, any> = {
+  dateAdapter: AdapterDayjs,
+  adapterLocale: "ko",
+};
+
+export const DATE_FORMAT_WRITE = "YYYY년 MM월 DD일 ddd요일" as const;
+export const DATE_FORMAT_SEARCH = "YYYY-MM-DD" as const;

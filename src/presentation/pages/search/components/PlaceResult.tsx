@@ -11,6 +11,8 @@ interface PlaceResultProps {
 }
 
 const PlaceResult = ({ data, setPlace, top = 0 }: PlaceResultProps) => {
+  if (!data.length) return null;
+
   return (
     <Box css={styles.container} top={top}>
       {data.map((place) => (

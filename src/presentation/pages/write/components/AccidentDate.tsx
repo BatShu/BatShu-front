@@ -1,32 +1,71 @@
-import { useRef, useState } from "react";
-import dayjs from "dayjs";
+import { useState, useEffect, useRef, useCallback } from "react";
+import dayjs, { Dayjs } from "dayjs";
 // styles
 import { Box, css, Typography } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 import CustomTimePicker from "@/presentation/common/atoms/CustomTimePicker";
-import { DATE_FORMAT } from "@/presentation/configs";
+import { DATE_FORMAT_WRITE } from "@/presentation/configs";
 // store
 import { writeFormStore } from "@/store/writeFormStore";
 // components
 import Spacer from "@/presentation/common/atoms/Spacer";
 import AppChip from "@/presentation/common/components/AppChip";
-import DatePicker from "@/presentation/common/atoms/DatePicker";
+import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 
 const AccidentDate = () => {
-  const [date, setDate] = useState(dayjs().format(DATE_FORMAT));
+  const [date, setDate] = useState<Dayjs>(dayjs());
+  const [showCalendar, setShowCalendar] = useState(false);
+  const { type, setOnlyDate, setAccidentTimeFrom, setAccidentTimeTo } =
+    writeFormStore();
 
-  const datePickerRef = useRef<HTMLInputElement>(null);
-  const { content, setFrom, setTo } = writeFormStore();
+  const calendarRef = useRef<HTMLDivElement>(null);
+
+  const setFrom = useCallback(
+    (from: number) => {
+      setAccidentTimeFrom(from);
+    },
+    [setAccidentTimeFrom]
+  );
+
+  const setTo = useCallback(
+    (to: number) => {
+      setAccidentTimeTo(to);
+    },
+    [setAccidentTimeTo]
+  );
+
+  useEffect(() => {
+    setOnlyDate(date);
+  }, [date, setOnlyDate]);
+
+  useEffect(() => {
+    setDate(dayjs());
+  }, [type]);
 
   return (
     <Box css={styles.container}>
-      <Box css={styles.date} onClick={() => datePickerRef.current?.click()}>
-        <AppChip label={date} css={css({ marginLeft: 5 })} />
-        <DatePicker
-          setDate={setDate}
-          format={DATE_FORMAT}
-          ref={datePickerRef}
+      <Box css={styles.date} ref={calendarRef}>
+        <AppChip
+          label={date?.format(DATE_FORMAT_WRITE)}
+          css={css({ marginLeft: 5 })}
+          onClick={() => setShowCalendar(true)}
         />
+        {showCalendar && (
+          <AppDateCalendar
+            value={date}
+            absolute
+            onChange={(value) => {
+              setDate(value as Dayjs);
+              setShowCalendar(false);
+            }}
+            onMonthChange={() => setShowCalendar(true)}
+            onYearChange={() => setShowCalendar(true)}
+            hideOnClickOutside
+            css={styles.calendar}
+            validRef={calendarRef}
+            setShowCalendar={setShowCalendar}
+          />
+        )}
       </Box>
 
       <Spacer y={30} />
@@ -34,12 +73,12 @@ const AccidentDate = () => {
       <Box css={styles.timeWrapper}>
         <Box css={styles.time}>
           <AppChip label="시작" css={styles.chip} />
-          <CustomTimePicker setValue={setFrom} />
+          <CustomTimePicker setValue={setFrom} resetKey={type} />
         </Box>
         <Typography css={styles.text}>부터</Typography>
         <Box css={styles.time}>
           <AppChip label="종료" css={styles.chip} />
-          <CustomTimePicker setValue={setTo} />
+          <CustomTimePicker setValue={setTo} resetKey={type} />
         </Box>
       </Box>
     </Box>
@@ -53,6 +92,13 @@ const styles: CssObject = {
     display: "flex",
     position: "relative",
     flexDirection: "column",
+  }),
+  calendar: css({
+    width: "100%",
+    top: 35,
+    left: "50%",
+    transform: "translateX(-50%)",
+    zIndex: 5,
   }),
   timeWrapper: css({
     display: "flex",

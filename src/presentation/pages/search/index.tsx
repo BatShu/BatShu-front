@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Dayjs } from "dayjs";
 // styles
 import { Box, InputAdornment, Typography, css } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { pageContentStyles } from "../../common/styles/pageStyles";
 import { CssObject } from "../../common/styles/types";
 // hooks
 import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
+// constants
+import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { ReactComponent as Group174 } from "@/presentation/common/icons/asset/Group 174.svg";
@@ -19,13 +22,14 @@ import AppButton from "../../common/components/AppButton";
 import Spacer from "../../common/atoms/Spacer";
 import PlaceResult from "./components/PlaceResult";
 import InputChip from "../../common/atoms/InputChip";
-import DatePicker from "../../common/atoms/DatePicker";
+import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 
 export const SearchPage = (): ReactElement => {
   const [keyword, setKeyword] = useState("");
   const [place, setPlace] =
     useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
-  const [date, setDate] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [date, setDate] = useState<Dayjs | null>(null);
   const [carNumber, setCarNumber] = useState({
     head: "",
     middle: "",
@@ -33,7 +37,7 @@ export const SearchPage = (): ReactElement => {
   });
   const [inputComplete, setInputComplete] = useState(false);
 
-  const datePickerRef = useRef<HTMLInputElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const { result } = useKakaoMapSearch(keyword);
   const navigate = useNavigate();
@@ -54,11 +58,6 @@ export const SearchPage = (): ReactElement => {
       )
     );
   }, [place, date, carNumber]);
-
-  const validFill = (valid: boolean) =>
-    css({
-      "& path": { fill: valid ? "#000" : "#CCCCCC" },
-    });
 
   return (
     <Box css={pageContentStyles}>
@@ -105,7 +104,7 @@ export const SearchPage = (): ReactElement => {
                   </InputAdornment>
                 ),
               }}
-              css={[styles.inputSelect, validFill(!!place)]}
+              css={styles.inputSelect(!!place)}
             />
             {keyword && (
               <PlaceResult data={result} setPlace={setPlace} top={60} />
@@ -114,14 +113,16 @@ export const SearchPage = (): ReactElement => {
 
           <Spacer y={12} />
 
-          <Box position="relative">
+          <Box position="relative" ref={calendarRef}>
             <AppTextField
               placeholder={!date ? "언제 인가요?" : ""}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Calender1 />
-                    {date && <InputChip text={date} />}
+                    {date && (
+                      <InputChip text={date.format(DATE_FORMAT_SEARCH)} />
+                    )}
                   </InputAdornment>
                 ),
                 endAdornment: (
@@ -131,10 +132,28 @@ export const SearchPage = (): ReactElement => {
                 ),
                 readOnly: true,
               }}
-              css={[styles.inputSelect, styles.cursor, validFill(!!date)]}
-              onClick={() => datePickerRef.current?.click()}
+              css={[styles.inputSelect(!!date), styles.cursor]}
+              onClick={() => setShowCalendar(true)}
             />
-            <DatePicker setDate={setDate} ref={datePickerRef} />
+            {showCalendar && (
+              <AppDateCalendar
+                onChange={(date) => {
+                  setDate(date as Dayjs);
+                  setShowCalendar(false);
+                }}
+                onMonthChange={() => {
+                  setShowCalendar(true);
+                }}
+                onYearChange={() => {
+                  setShowCalendar(true);
+                }}
+                css={styles.calendar}
+                hideOnClickOutside
+                absolute
+                validRef={calendarRef}
+                setShowCalendar={setShowCalendar}
+              />
+            )}
           </Box>
 
           <Spacer y={12} />
@@ -202,7 +221,7 @@ export const SearchPage = (): ReactElement => {
   );
 };
 
-const styles: CssObject = {
+const styles = {
   container: css({
     position: "relative",
     width: "100%",
@@ -213,12 +232,21 @@ const styles: CssObject = {
     justifyContent: "center",
     alignItems: "center",
   }),
-  inputSelect: css({
-    boxShadow: "4px 4px 6px 0px rgba(75, 75, 75, 0.03)",
-    cursor: "pointer",
-    "& input::placeholder": {
-      color: "#CCCCCC",
-    },
+  inputSelect: (valid: boolean) =>
+    css({
+      boxShadow: "4px 4px 6px 0px rgba(75, 75, 75, 0.03)",
+      cursor: "pointer",
+      "& input::placeholder": {
+        color: "#CCCCCC",
+      },
+      "& path": { fill: valid ? "#000" : "#CCCCCC" },
+    }),
+  calendar: css({
+    width: "90%",
+    zIndex: 5,
+    bottom: 60,
+    left: "50%",
+    transform: "translateX(-50%)",
   }),
   cursor: css({ cursor: "pointer", "& *": { cursor: "pointer" } }),
   inputNumber: css({
@@ -246,4 +274,4 @@ const styles: CssObject = {
     color: "#fff",
     fontWeight: 600,
   }),
-};
+} satisfies CssObject;

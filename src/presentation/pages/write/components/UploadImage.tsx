@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 // styles
 import { Box, Typography, css, Zoom } from "@mui/material";
@@ -7,8 +7,10 @@ import { enqueueSnackbar } from "notistack";
 // icons
 import { ReactComponent as AddSquare } from "@/presentation/common/icons/outlined/Add Square.svg";
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
-// util
-import { TFile, setMultipleFile } from "@/util/imageUtil";
+// store
+import { writeFormStore } from "@/store/writeFormStore";
+// lib
+import { TFile, setMultipleFile, deleteMultipleFileByIndex } from "@/lib";
 
 interface ImageBoxProps {
   src: string;
@@ -27,6 +29,16 @@ const ImageBox = ({ src, onDelete }: ImageBoxProps) => {
 const UploadImage = () => {
   const [images, setImages] = useState<TFile[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { setContent } = writeFormStore();
+  const onDelete = useCallback(
+    (idx: number) => deleteMultipleFileByIndex(idx, setImages),
+    []
+  );
+
+  useEffect(() => {
+    setContent({ images });
+  }, [images, setContent]);
 
   return (
     <Box css={styles.container}>
@@ -53,7 +65,8 @@ const UploadImage = () => {
               ref={inputRef}
               hidden
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (images.length >= 5) {
+                if (!e.target.files) return;
+                if (images.length + e.target.files.length > 5) {
                   enqueueSnackbar("최대 5장 까지 업로드 가능합니다.");
                   return;
                 }
@@ -67,14 +80,7 @@ const UploadImage = () => {
           <SwiperSlide key={`${url}${idx}`}>
             <Zoom in>
               <Box css={styles.box}>
-                <ImageBox
-                  src={url}
-                  onDelete={() =>
-                    setImages((prev) =>
-                      prev.filter((_, index) => idx !== index)
-                    )
-                  }
-                />
+                <ImageBox src={url} onDelete={() => onDelete(idx)} />
               </Box>
             </Zoom>
           </SwiperSlide>
@@ -97,8 +103,8 @@ const styles: CssObject = {
   swiper: css({
     display: "flex",
     overflow: "hidden",
-    padding: "20px 5px 30px 0",
-    touchAction: "none",
+    padding: "20px 5px 0 0",
+    touchAction: "pan-y",
     width: "100%",
     "& .swiper-wrapper": {
       display: "flex",

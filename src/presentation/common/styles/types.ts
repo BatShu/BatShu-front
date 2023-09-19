@@ -1,3 +1,6 @@
 import { SerializedStyles } from "@emotion/react";
 
-export type CssObject = { [key: string]: SerializedStyles };
+export type CssObject = Record<
+  string,
+  SerializedStyles | ((param?: any) => SerializedStyles)
+>;

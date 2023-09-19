@@ -24,7 +24,7 @@ interface SearchMapProps {
 }
 
 const SearchMap = ({ setShowMap }: SearchMapProps) => {
-  const { content, setLocation, setMapLevel } = writeFormStore();
+  const { content, setContent } = writeFormStore();
   const { location } = locationStore();
 
   const [keyword, setKeyword] = useState("");
@@ -55,14 +55,14 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
 
   const onClick = () => {
     if (!markerPosition) return;
-    setLocation(markerPosition);
+    setContent({ location: markerPosition });
     setShowMap(false);
   };
 
   useEffect(() => {
     if (!mapRef.current) return;
-    setMapLevel(mapRef.current.getLevel());
-  }, [markerPosition, setMapLevel]);
+    setContent({ mapLevel: mapRef.current.getLevel() });
+  }, [markerPosition, setContent]);
 
   return (
     <Box css={styles.container}>
