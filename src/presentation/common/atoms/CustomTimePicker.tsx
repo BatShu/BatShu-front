@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
 // styles
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Grid2 from "@mui/material/Unstable_Grid2";
 import { Typography } from "@mui/material";
 import { css } from "@emotion/react";
 import { CssObject } from "@/presentation/common/styles/types";
@@ -107,7 +107,7 @@ export default CustomTimePicker;
 const styles: CssObject = {
   container: css({
     alignItems: "center",
-    touchAction: "pan-x",
+    touchAction: "none",
     "*": { transition: "all ease 0.2s" },
     "& .swiper-swiper": {
       width: "50%",

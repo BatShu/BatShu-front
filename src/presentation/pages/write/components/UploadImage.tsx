@@ -104,7 +104,7 @@ const styles: CssObject = {
     display: "flex",
     overflow: "hidden",
     padding: "20px 5px 0 0",
-    touchAction: "pan-y",
+    touchAction: "none",
     width: "100%",
     "& .swiper-wrapper": {
       display: "flex",

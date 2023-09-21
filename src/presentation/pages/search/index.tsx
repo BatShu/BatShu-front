@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { Dayjs } from "dayjs";
 // styles
 import { Box, InputAdornment, Typography, css } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import Grid2 from "@mui/material/Unstable_Grid2";
 import { pageContentStyles } from "../../common/styles/pageStyles";
 import { CssObject } from "../../common/styles/types";
 // hooks

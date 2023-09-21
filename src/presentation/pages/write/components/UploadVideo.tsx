@@ -1,28 +1,34 @@
 import { useRef, Dispatch, SetStateAction } from "react";
 // styles
-import { Box, Typography, css } from "@mui/material";
+import { Box, Typography, css, Zoom } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 // icons
 import { ReactComponent as Upload } from "@/presentation/common/icons/outlined/Upload.svg";
+import { ReactComponent as TickCircle } from "@/presentation/common/icons/outlined/Tick Circle.svg";
 // lib
 import { TFile, setSingleFile } from "@/lib";
 
 interface UploadVideoProps {
+  valid: boolean;
   setVideoFile: Dispatch<SetStateAction<TFile | null>>;
 }
 
-const UploadVideo = ({ setVideoFile }: UploadVideoProps) => {
+const UploadVideo = ({ valid = false, setVideoFile }: UploadVideoProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <Box css={styles.container}>
-      <Box
-        css={styles.upload}
-        onClick={() => {
-          inputRef.current?.click();
-        }}
-      >
-        <Upload />
+      <Box css={styles.upload} onClick={() => inputRef.current?.click()}>
+        {!valid ? (
+          <Upload />
+        ) : (
+          <Zoom in>
+            <Box css={styles.tick}>
+              <TickCircle className="tick-icon" />
+            </Box>
+          </Zoom>
+        )}
+
         <Typography css={styles.text}>동영상 업로드</Typography>
       </Box>
       <Typography css={styles.caption}>
@@ -59,10 +65,9 @@ const styles: CssObject = {
     fontSize: "16px",
     fontWeight: 600,
     cursor: "pointer",
-    "& svg": {
-      width: "44px",
-    },
+    "& svg": { width: "28px", height: "28px" },
   }),
+  tick: css({ display: "flex", "& .tick-icon path": { fill: "#529aff" } }),
   text: css({ paddingTop: "5px", fontSize: "12px", fontWeight: 600 }),
   caption: css({
     textAlign: "center",

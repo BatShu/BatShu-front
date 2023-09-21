@@ -65,7 +65,9 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
 
       <Spacer y={32} />
 
-      {type === "목격자" && <UploadVideo setVideoFile={setVideoFile} />}
+      {type === "목격자" && (
+        <UploadVideo valid={valid} setVideoFile={setVideoFile} />
+      )}
 
       <AppButton
         css={styles.button}

@@ -1,4 +1,5 @@
 import { Dispatch, RefObject, SetStateAction, useEffect } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import {
   DateCalendar,
   DateCalendarProps,
@@ -10,6 +11,8 @@ interface AppDateCalendarProps extends DateCalendarProps<any> {
   hideOnClickOutside?: boolean;
   validRef?: RefObject<HTMLElement>;
   setShowCalendar?: Dispatch<SetStateAction<boolean>>;
+  minDate?: Dayjs;
+  maxDate?: Dayjs;
 }
 
 const AppDateCalendar = ({
@@ -17,6 +20,8 @@ const AppDateCalendar = ({
   hideOnClickOutside,
   validRef,
   setShowCalendar,
+  minDate = dayjs().subtract(15, "year"),
+  maxDate = dayjs(),
   ...rest
 }: AppDateCalendarProps) => {
   useEffect(() => {
@@ -40,6 +45,8 @@ const AppDateCalendar = ({
       disableFuture
       disableHighlightToday
       views={["year", "month", "day"]}
+      minDate={minDate}
+      maxDate={maxDate}
     />
   );
 };
