@@ -13,10 +13,7 @@ const request = async <T>(
 
     return (await res.json()) satisfies T;
   } catch (error) {
-    console.log(`Error: ${error}`);
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    return new Promise(() => {});
+    throw new Error(`Error: ${error}`);
   }
 };
 

@@ -1,7 +1,7 @@
 import {
   GET_ACCIDENT_BY_ID,
   GET_ACCIDENT_BY_LOCATION,
-} from "@/domain/apiPaths";
+} from "@/domain/endpoint";
 import { Accident } from "@/domain/models/accident";
 import { AppLocation } from "@/domain/models/location";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
