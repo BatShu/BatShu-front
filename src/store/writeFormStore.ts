@@ -4,12 +4,18 @@ import dayjs, { Dayjs } from "dayjs";
 import { ILocation } from "./locationStore";
 // lib
 import { TFile, updateOnlyDate, setExactTimeOnDate } from "@/lib";
+import {
+  UseFormProps,
+  UseFormReturn,
+  useForm,
+  useFormContext,
+} from "react-hook-form";
 
 type TWriter = "사고자" | "목격자" | null;
 
 type TContent = {
   video: TFile | null;
-  images: TFile[] | null;
+  images: TFile[];
   location: ILocation | null;
   carModelName: string;
   bounty: number;
@@ -50,6 +56,18 @@ const initialState: writeFormState = {
     description: "",
     mapLevel: 3,
   },
+};
+export const useWriteForm = (
+  props?: UseFormProps<writeFormState>
+): UseFormReturn<writeFormState> => {
+  return useForm<writeFormState>({
+    ...props,
+    defaultValues: initialState,
+  });
+};
+
+export const useWriteFormContext = () => {
+  return useFormContext<writeFormState>();
 };
 
 export const writeFormStore = create<writeFormState & setwriteFormState>(
