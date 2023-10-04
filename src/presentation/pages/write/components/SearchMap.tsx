@@ -10,7 +10,7 @@ import { natshuMarker } from "@/presentation/configs";
 import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
 // store
 import { ILocation, locationStore } from "@/store/locationStore";
-import { writeFormStore } from "@/store/writeFormStore";
+import { useWriteFormContext } from "@/store/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
@@ -24,7 +24,8 @@ interface SearchMapProps {
 }
 
 const SearchMap = ({ setShowMap }: SearchMapProps) => {
-  const { content, setContent } = writeFormStore();
+  const { watch, setValue } = useWriteFormContext();
+  const content = watch("content");
   const { location } = locationStore();
 
   const [keyword, setKeyword] = useState("");
@@ -55,14 +56,14 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
 
   const onClick = () => {
     if (!markerPosition) return;
-    setContent({ location: markerPosition });
+    setValue("content.location", markerPosition);
     setShowMap(false);
   };
 
   useEffect(() => {
     if (!mapRef.current) return;
-    setContent({ mapLevel: mapRef.current.getLevel() });
-  }, [markerPosition, setContent]);
+    setValue("content.mapLevel", mapRef.current.getLevel());
+  }, [markerPosition, setValue]);
 
   return (
     <Box css={styles.container}>

@@ -6,7 +6,7 @@ import { CssObject } from "@/presentation/common/styles/types";
 import CustomTimePicker from "@/presentation/common/atoms/CustomTimePicker";
 import { DATE_FORMAT_WRITE } from "@/presentation/configs";
 // store
-import { writeFormStore } from "@/store/writeFormStore";
+import { useWriteFormContext } from "@/store/writeForm";
 // components
 import Spacer from "@/presentation/common/atoms/Spacer";
 import AppChip from "@/presentation/common/components/AppChip";
@@ -15,28 +15,35 @@ import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 const AccidentDate = () => {
   const [date, setDate] = useState<Dayjs>(dayjs());
   const [showCalendar, setShowCalendar] = useState(false);
-  const { type, setOnlyDate, setAccidentTimeFrom, setAccidentTimeTo } =
-    writeFormStore();
-
+  const { watch, setValue } = useWriteFormContext();
+  const type = watch("type");
+  const accidentTime = watch("accidentTime");
   const calendarRef = useRef<HTMLDivElement>(null);
 
-  const setFrom = useCallback(
+  const updateOnlyDate = useCallback(
+    (newDate: Dayjs) => {
+      const newAccidentTime = accidentTime.map((oldDay) => {
+        const newDay = oldDay.clone();
+        newDay.set("date", newDate.date());
+        return newDay;
+      }) as [Dayjs, Dayjs];
+      setValue("accidentTime", newAccidentTime);
+    },
+    [accidentTime, setValue]
+  );
+  const setFromHour = useCallback(
     (from: number) => {
-      setAccidentTimeFrom(from);
+      setValue("accidentTime.0", accidentTime[0].hour(from));
     },
-    [setAccidentTimeFrom]
+    [setValue, accidentTime]
   );
 
-  const setTo = useCallback(
+  const setToHour = useCallback(
     (to: number) => {
-      setAccidentTimeTo(to);
+      setValue("accidentTime.0", accidentTime[0].hour(to));
     },
-    [setAccidentTimeTo]
+    [setValue, accidentTime]
   );
-
-  useEffect(() => {
-    setOnlyDate(date);
-  }, [date, setOnlyDate]);
 
   useEffect(() => {
     setDate(dayjs());
@@ -54,9 +61,8 @@ const AccidentDate = () => {
           <AppDateCalendar
             value={date}
             absolute
-            onChange={(value) => {
-              setDate(value as Dayjs);
-              setShowCalendar(false);
+            onChange={(newDate: Dayjs) => {
+              updateOnlyDate(newDate);
             }}
             onMonthChange={() => setShowCalendar(true)}
             onYearChange={() => setShowCalendar(true)}
@@ -73,12 +79,12 @@ const AccidentDate = () => {
       <Box css={styles.timeWrapper}>
         <Box css={styles.time}>
           <AppChip label="시작" css={styles.chip} />
-          <CustomTimePicker setValue={setFrom} resetKey={type} />
+          <CustomTimePicker setValue={setFromHour} resetKey={type} />
         </Box>
         <Typography css={styles.text}>부터</Typography>
         <Box css={styles.time}>
           <AppChip label="종료" css={styles.chip} />
-          <CustomTimePicker setValue={setTo} resetKey={type} />
+          <CustomTimePicker setValue={setToHour} resetKey={type} />
         </Box>
       </Box>
     </Box>

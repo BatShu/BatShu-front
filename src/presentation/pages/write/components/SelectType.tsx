@@ -9,7 +9,7 @@ import { ReactComponent as Group244 } from "@/presentation/common/icons/asset/Gr
 import CarImage1 from "@/presentation/common/icons/asset/car image1.png";
 import CarImage2 from "@/presentation/common/icons/asset/car image 2.png";
 // store
-import { writeFormStore } from "@/store/writeFormStore";
+import { useWriteFormContext } from "@/store/writeForm";
 // lib
 import { TFile, deleteSingleFile } from "@/lib";
 // components
@@ -23,15 +23,15 @@ interface SelectTypeProps {
 
 const SelectType = ({ sliderRef }: SelectTypeProps) => {
   const [videoFile, setVideoFile] = useState<TFile | null>(null);
-  const { type, setType, resetContents } = writeFormStore();
-
+  const { watch, resetField, setValue } = useWriteFormContext();
+  const type = watch("type");
   const valid = type === "사고자" || !!(type === "목격자" && videoFile);
   // TODO: videoFile set 되면 업로드 api 호출
 
   useEffect(() => {
     if (type === "사고자") deleteSingleFile(setVideoFile);
-    resetContents();
-  }, [type, resetContents]);
+    resetField("content");
+  }, [type, resetField]);
 
   return (
     <Box>
@@ -42,7 +42,7 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
       <Box css={styles.typeWrapper}>
         <Box
           css={styles.imgWrapper(type === "사고자")}
-          onClick={() => setType("사고자")}
+          onClick={() => setValue("type", "사고자")}
         >
           <img src={CarImage1} style={{ paddingTop: "17px" }} />
           <Box css={styles.textWrap}>
@@ -53,7 +53,7 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
 
         <Box
           css={styles.imgWrapper(type === "목격자")}
-          onClick={() => setType("목격자")}
+          onClick={() => setValue("type", "목격자")}
         >
           <img src={CarImage2} />
           <Box css={styles.textWrap}>

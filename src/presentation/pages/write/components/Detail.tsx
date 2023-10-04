@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction, ChangeEvent } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import {
@@ -17,7 +17,7 @@ import { natshuMarker } from "@/presentation/configs";
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
 // store
-import { writeFormStore } from "@/store/writeFormStore";
+import { useWriteForm } from "@/store/writeForm";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 import AppButton from "@/presentation/common/components/AppButton";
@@ -32,24 +32,14 @@ interface DetailProps {
 
 const Detail = ({ setShowMap }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
+  const { watch, register, setValue } = useWriteForm();
   const {
     type,
     title,
     licensePlate,
     content: { location, bounty, carModelName, mapLevel },
-    setTitle,
-    setLicensePlate,
-    setContent,
-  } = writeFormStore();
-
+  } = watch();
   const isWitness = type === "목격자";
-
-  const setBounty = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    const bounty = Number(value.replaceAll(",", ""));
-    if (!/^[0-9]*$/.test(String(bounty))) return;
-
-    setContent({ bounty });
-  };
 
   return (
     <Box css={styles.container}>
@@ -60,7 +50,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
       <AppTextField
         value={title}
         placeholder="제목을 입력해 주세요!"
-        onChange={({ target: { value } }) => setTitle(value)}
+        {...register("title")}
       />
 
       <Spacer y={30} />
@@ -87,7 +77,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
           value={licensePlate}
           placeholder="차량번호를 입력해주세요!"
           css={styles.halfWidth()}
-          onChange={({ target: { value } }) => setLicensePlate(value)}
+          {...register("licensePlate")}
         />
       </ContentWithTitle>
 
@@ -98,14 +88,12 @@ const Detail = ({ setShowMap }: DetailProps) => {
             placeholder="차량종류를 입력해주세요!"
             css={styles.halfWidth(skipCarNumber)}
             disabled={skipCarNumber}
-            onChange={({ target: { value } }) =>
-              setContent({ carModelName: value })
-            }
+            {...register("content.carModelName")}
           />
           <AppButton
             onClick={() => {
               setSkipCarNumber((prev) => !prev);
-              setContent({ carModelName: "" });
+              setValue("content.carModelName", "");
             }}
             css={styles.skipButton(skipCarNumber)}
             backgroundcolor={skipCarNumber ? "#000" : "#fff"}
@@ -156,7 +144,9 @@ const Detail = ({ setShowMap }: DetailProps) => {
                 </InputAdornment>
               ),
             }}
-            onChange={setBounty}
+            {...register("content.bounty", {
+              valueAsNumber: true,
+            })}
           />
         </ContentWithTitle>
       )}
@@ -169,9 +159,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
           }자가 알아볼 수 있도록, 사고 내용을 자세하게 입력해주세요`}
           css={styles.memo}
           multiline
-          onChange={({ target: { value } }) =>
-            setContent({ description: value })
-          }
+          {...register("content.description")}
         />
       </ContentWithTitle>
 

@@ -7,7 +7,7 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { ReactComponent as AddSquare } from "@/presentation/common/icons/outlined/Add Square.svg";
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
 // store
-import { useWriteFormContext } from "@/store/writeFormStore";
+import { useWriteFormContext } from "@/store/writeForm";
 
 interface ImageBoxProps {
   src: string;
