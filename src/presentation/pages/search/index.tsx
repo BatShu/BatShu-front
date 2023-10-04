@@ -2,8 +2,7 @@ import { useState, useEffect, useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Dayjs } from "dayjs";
 // styles
-import { Box, InputAdornment, Typography, css } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2";
+import { Box, Grid, InputAdornment, Typography, css } from "@mui/material";
 import { pageContentStyles } from "../../common/styles/pageStyles";
 import { CssObject } from "../../common/styles/types";
 // hooks
@@ -158,8 +157,8 @@ export const SearchPage = (): ReactElement => {
 
           <Spacer y={12} />
 
-          <Grid2 container>
-            <Grid2 xs={3.2}>
+          <Grid container>
+            <Grid item xs={3.2}>
               <AppTextField
                 value={carNumber.head}
                 onChange={({ target: { value } }) => {
@@ -173,10 +172,10 @@ export const SearchPage = (): ReactElement => {
                 }}
                 css={styles.inputNumber}
               />
-            </Grid2>
+            </Grid>
 
-            <Grid2 xs={0.3} />
-            <Grid2 xs={1.8}>
+            <Grid item xs={0.3} />
+            <Grid item xs={1.8}>
               <AppTextField
                 value={carNumber.middle}
                 onChange={({ target: { value } }) => {
@@ -190,10 +189,10 @@ export const SearchPage = (): ReactElement => {
                 }}
                 css={[styles.inputNumber, styles.text]}
               />
-            </Grid2>
-            <Grid2 xs={0.3} />
+            </Grid>
+            <Grid item xs={0.3} />
 
-            <Grid2 xs={6.4}>
+            <Grid item xs={6.4}>
               <AppTextField
                 value={carNumber.rear}
                 onChange={({ target: { value } }) => {
@@ -207,8 +206,8 @@ export const SearchPage = (): ReactElement => {
                 }}
                 css={styles.inputNumber}
               />
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
         </Box>
         <AppButton
           css={styles.button}

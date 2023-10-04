@@ -88,9 +88,10 @@ const styles: CssObject = {
   topArea: css({ display: "flex" }),
   contentWrapper: css({
     height: "100%",
-    "& .slick-slider, .slick-list, .slick-track, .slick-slide > div": {
-      height: "100%",
-    },
+    "& .slick-slider, .slick-list, .slick-track, .slick-slide, .slick-slide > div":
+      {
+        height: "100%",
+      },
   }),
   content: css({
     display: "flex !important",

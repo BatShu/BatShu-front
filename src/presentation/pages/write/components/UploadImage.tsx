@@ -42,7 +42,7 @@ const UploadImage = () => {
   return (
     <Box css={styles.container}>
       <Swiper
-        slidesPerView={4}
+        slidesPerView={4.2}
         spaceBetween={10}
         css={styles.swiper}
         loop={false}

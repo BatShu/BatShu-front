@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide, SwiperRef } from "swiper/react";
 // styles
-import Grid2 from "@mui/material/Unstable_Grid2";
-import { Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { css } from "@emotion/react";
 import { CssObject } from "@/presentation/common/styles/types";
 
@@ -46,8 +45,8 @@ const CustomTimePicker = ({
   const isAm = ampmValue === "오전";
 
   return (
-    <Grid2 container css={styles.container}>
-      <Grid2 xs={4}>
+    <Grid container css={styles.container}>
+      <Grid item xs={4}>
         <Swiper
           direction="vertical"
           slideToClickedSlide
@@ -70,9 +69,9 @@ const CustomTimePicker = ({
             </SwiperSlide>
           ))}
         </Swiper>
-      </Grid2>
-      <Grid2 xs={1} />
-      <Grid2 xs={4}>
+      </Grid>
+      <Grid item xs={1} />
+      <Grid item xs={4}>
         <Swiper
           direction="vertical"
           slideToClickedSlide
@@ -93,12 +92,12 @@ const CustomTimePicker = ({
             </SwiperSlide>
           ))}
         </Swiper>
-      </Grid2>
-      <Grid2 xs={1} />
-      <Grid2 xs={2}>
+      </Grid>
+      <Grid item xs={1} />
+      <Grid item xs={2}>
         <Typography css={styles.text}>시</Typography>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 
