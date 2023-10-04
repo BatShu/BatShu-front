@@ -3,11 +3,11 @@ import { CssObject } from "@/presentation/common/styles/types";
 // components
 import Spacer from "@/presentation/common/atoms/Spacer";
 
-interface DotsProps {
+interface DotsHeaderProps {
   curPage: number;
 }
 
-const Dots = ({ curPage }: DotsProps) => {
+const DotsHeader = ({ curPage }: DotsHeaderProps) => {
   const getTitle = () => {
     switch (curPage) {
       case 0:
@@ -36,7 +36,7 @@ const Dots = ({ curPage }: DotsProps) => {
   );
 };
 
-export default Dots;
+export default DotsHeader;
 
 const styles: CssObject = {
   container: css({

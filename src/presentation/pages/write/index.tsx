@@ -12,7 +12,7 @@ import { writeFormStore } from "@/store/writeFormStore";
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 // components
 import SelectType from "./components/SelectType";
-import Dots from "./components/Dots";
+import DotsHeader from "./components/DotsHeader";
 import Detail from "./components/Detail";
 import SearchMap from "./components/SearchMap";
 
@@ -48,7 +48,7 @@ export const WritePage = () => {
               }}
               css={css(`cursor:pointer;z-index:1`)}
             />
-            <Dots curPage={curPage} />
+            <DotsHeader curPage={curPage} />
           </Box>
 
           <Box css={styles.contentWrapper}>
