@@ -25,6 +25,7 @@ import ContentWithTitle from "./ContentWithTitle";
 import AccidentDate from "./AccidentDate";
 import UploadImage from "./UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
+import { Controller } from "react-hook-form";
 
 interface DetailProps {
   setShowMap: Dispatch<SetStateAction<boolean>>;
@@ -32,10 +33,10 @@ interface DetailProps {
 
 const Detail = ({ setShowMap }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
-  const { watch, register, setValue } = useWriteFormContext();
+  const { watch, register, setValue, control } = useWriteFormContext();
   const {
     type,
-    content: { location, bounty, mapLevel },
+    content: { location, mapLevel },
   } = watch();
   const isWitness = type === "목격자";
   return (
@@ -126,21 +127,28 @@ const Detail = ({ setShowMap }: DetailProps) => {
 
       {!isWitness && (
         <ContentWithTitle title="포상금">
-          <AppTextField
-            value={bounty === 0 ? "" : bounty.toLocaleString()}
-            placeholder="포상금을 입력해주세요!"
-            css={styles.halfWidth()}
-            inputMode="numeric"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Won css={css({ "& path": { fill: "#000" } })} />
-                </InputAdornment>
-              ),
-            }}
-            {...register("content.bounty", {
-              valueAsNumber: true,
-            })}
+          <Controller
+            control={control}
+            name="content.bounty"
+            render={({ field: { onChange, value } }) => (
+              <AppTextField
+                placeholder="포상금을 입력해주세요!"
+                css={styles.halfWidth()}
+                value={value == 0 ? "" : value.toLocaleString()}
+                inputMode="numeric"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Won css={css({ "& path": { fill: "#000" } })} />
+                    </InputAdornment>
+                  ),
+                }}
+                onChange={(e) => {
+                  const num = Number(e.target.value.replace(/,/g, ""));
+                  onChange(num);
+                }}
+              />
+            )}
           />
         </ContentWithTitle>
       )}
