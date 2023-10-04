@@ -1,16 +1,13 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 // styles
 import { Box, Typography, css, Zoom } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
-import { enqueueSnackbar } from "notistack";
 // icons
 import { ReactComponent as AddSquare } from "@/presentation/common/icons/outlined/Add Square.svg";
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
 // store
-import { writeFormStore } from "@/store/writeFormStore";
-// lib
-import { TFile, setMultipleFile, deleteMultipleFileByIndex } from "@/lib";
+import { useWriteFormContext } from "@/store/writeFormStore";
 
 interface ImageBoxProps {
   src: string;
@@ -27,18 +24,20 @@ const ImageBox = ({ src, onDelete }: ImageBoxProps) => {
 };
 
 const UploadImage = () => {
-  const [images, setImages] = useState<TFile[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { setContent } = writeFormStore();
+  const { register, watch, setValue } = useWriteFormContext();
+  const images = watch("content.images");
   const onDelete = useCallback(
-    (idx: number) => deleteMultipleFileByIndex(idx, setImages),
-    []
+    (delIdx: number) =>
+      setValue(
+        "content.images",
+        images.filter((_, idx) => {
+          return idx !== delIdx;
+        })
+      ),
+    [setValue, images]
   );
-
-  useEffect(() => {
-    setContent({ images });
-  }, [images, setContent]);
 
   return (
     <Box css={styles.container}>
@@ -62,16 +61,8 @@ const UploadImage = () => {
               type="file"
               accept="image/*"
               multiple
-              ref={inputRef}
               hidden
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (!e.target.files) return;
-                if (images.length + e.target.files.length > 5) {
-                  enqueueSnackbar("최대 5장 까지 업로드 가능합니다.");
-                  return;
-                }
-                setMultipleFile(e, setImages);
-              }}
+              {...register("content.images")}
             />
           </Box>
         </SwiperSlide>

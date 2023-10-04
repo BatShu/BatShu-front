@@ -7,7 +7,7 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { sliderSettings } from "@/presentation/configs";
 // store
-import { writeFormStore } from "@/store/writeFormStore";
+import { useWriteForm } from "@/store/writeFormStore";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 // components
@@ -15,13 +15,14 @@ import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
 import Detail from "./components/Detail";
 import SearchMap from "./components/SearchMap";
+import { FormProvider } from "react-hook-form";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
   const [showMap, setShowMap] = useState(false);
 
-  const { type, title, licensePlate, accidentTime, content } = writeFormStore();
-
+  const details = useWriteForm();
+  const { type, title, licensePlate, accidentTime, content } = details.watch();
   const sliderRef = useRef<Slider>(null);
 
   const navigate = useNavigate();
@@ -36,40 +37,44 @@ export const WritePage = () => {
   }, [type, title, licensePlate, accidentTime, content]);
 
   return (
-    <Box css={styles.pageWrapper}>
-      {showMap && <SearchMap setShowMap={setShowMap} />}
+    <FormProvider {...details}>
+      <Box css={styles.pageWrapper}>
+        {showMap && <SearchMap setShowMap={setShowMap} />}
 
-      <Box css={pageContentStyles}>
-        <Box css={styles.container}>
-          <Box css={styles.topArea}>
-            <Left1
-              onClick={() => {
-                curPage === 0 ? navigate(-1) : sliderRef.current?.slickGoTo(0);
-              }}
-              css={css(`cursor:pointer;z-index:1`)}
-            />
-            <DotsHeader curPage={curPage} />
-          </Box>
+        <Box css={pageContentStyles}>
+          <Box css={styles.container}>
+            <Box css={styles.topArea}>
+              <Left1
+                onClick={() => {
+                  curPage === 0
+                    ? navigate(-1)
+                    : sliderRef.current?.slickGoTo(0);
+                }}
+                css={css(`cursor:pointer;z-index:1`)}
+              />
+              <DotsHeader curPage={curPage} />
+            </Box>
 
-          <Box css={styles.contentWrapper}>
-            <Slider
-              {...sliderSettings}
-              ref={sliderRef}
-              css={styles.slider}
-              beforeChange={(_, next) => setCurPage(next)}
-            >
-              <Box css={styles.content}>
-                <SelectType sliderRef={sliderRef} />
-              </Box>
+            <Box css={styles.contentWrapper}>
+              <Slider
+                {...sliderSettings}
+                ref={sliderRef}
+                css={styles.slider}
+                beforeChange={(_, next) => setCurPage(next)}
+              >
+                <Box css={styles.content}>
+                  <SelectType sliderRef={sliderRef} />
+                </Box>
 
-              <Box css={styles.content}>
-                <Detail setShowMap={setShowMap} />
-              </Box>
-            </Slider>
+                <Box css={styles.content}>
+                  <Detail setShowMap={setShowMap} />
+                </Box>
+              </Slider>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </FormProvider>
   );
 };
 
