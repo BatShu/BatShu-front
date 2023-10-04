@@ -22,19 +22,15 @@ export const WritePage = () => {
   const [showMap, setShowMap] = useState(false);
 
   const details = useWriteForm();
-  const { type, title, licensePlate, accidentTime, content } = details.watch();
+  const form = details.watch();
   const sliderRef = useRef<Slider>(null);
-
+  console.log(form);
   const navigate = useNavigate();
 
   useEffect(() => {
     // TODO: 사고등록 API
-    console.log(type);
-    console.log(title);
-    console.log(licensePlate);
-    console.log(accidentTime);
-    console.log(content);
-  }, [type, title, licensePlate, accidentTime, content]);
+    console.log(form);
+  }, [form]);
 
   return (
     <FormProvider {...details}>

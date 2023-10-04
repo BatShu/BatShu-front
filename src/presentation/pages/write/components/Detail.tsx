@@ -17,7 +17,7 @@ import { natshuMarker } from "@/presentation/configs";
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
 // store
-import { useWriteForm } from "@/store/writeForm";
+import { useWriteFormContext } from "@/store/writeForm";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 import AppButton from "@/presentation/common/components/AppButton";
@@ -32,15 +32,12 @@ interface DetailProps {
 
 const Detail = ({ setShowMap }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
-  const { watch, register, setValue } = useWriteForm();
+  const { watch, register, setValue } = useWriteFormContext();
   const {
     type,
-    title,
-    licensePlate,
-    content: { location, bounty, carModelName, mapLevel },
+    content: { location, bounty, mapLevel },
   } = watch();
   const isWitness = type === "목격자";
-
   return (
     <Box css={styles.container}>
       {!isWitness && <UploadImage />}
@@ -48,7 +45,6 @@ const Detail = ({ setShowMap }: DetailProps) => {
       <Spacer y={30} />
 
       <AppTextField
-        value={title}
         placeholder="제목을 입력해 주세요!"
         {...register("title")}
       />
@@ -74,7 +70,6 @@ const Detail = ({ setShowMap }: DetailProps) => {
 
       <ContentWithTitle title="차량번호">
         <AppTextField
-          value={licensePlate}
           placeholder="차량번호를 입력해주세요!"
           css={styles.halfWidth()}
           {...register("licensePlate")}
@@ -84,7 +79,6 @@ const Detail = ({ setShowMap }: DetailProps) => {
       <ContentWithTitle title="차량종류">
         <Box display="flex" alignItems="center">
           <AppTextField
-            value={carModelName}
             placeholder="차량종류를 입력해주세요!"
             css={styles.halfWidth(skipCarNumber)}
             disabled={skipCarNumber}
