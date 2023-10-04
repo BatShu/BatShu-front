@@ -23,11 +23,10 @@ const AccidentDate = () => {
   const updateOnlyDate = useCallback(
     (newDate: Dayjs) => {
       const newAccidentTime = accidentTime.map((oldDay) => {
-        const newDay = oldDay.clone();
-        newDay.set("date", newDate.date());
-        return newDay;
+        return oldDay.set("date", newDate.date());
       }) as [Dayjs, Dayjs];
       setValue("accidentTime", newAccidentTime);
+      setDate(newAccidentTime[0]);
     },
     [accidentTime, setValue]
   );
@@ -63,6 +62,7 @@ const AccidentDate = () => {
             absolute
             onChange={(newDate: Dayjs) => {
               updateOnlyDate(newDate);
+              setShowCalendar(false);
             }}
             onMonthChange={() => setShowCalendar(true)}
             onYearChange={() => setShowCalendar(true)}
