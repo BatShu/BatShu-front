@@ -1,12 +1,16 @@
 import { ReactNode } from "react";
 // mui
 import { Container } from "@mui/material";
+// hook
+import useUserLocation from "@/hook/useUserLocation";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  useUserLocation();
+
   return (
     <Container
       fixed

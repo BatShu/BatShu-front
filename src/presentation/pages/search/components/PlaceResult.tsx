@@ -7,11 +7,14 @@ interface PlaceResultProps {
   setPlace: Dispatch<
     SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>
   >;
+  top?: number;
 }
 
-const PlaceResult = ({ data, setPlace }: PlaceResultProps) => {
+const PlaceResult = ({ data, setPlace, top = 0 }: PlaceResultProps) => {
+  if (!data.length) return null;
+
   return (
-    <Box css={styles.container}>
+    <Box css={styles.container} top={top}>
       {data.map((place) => (
         <Box
           key={place.id}
@@ -32,7 +35,6 @@ const styles: CssObject = {
   container: css({
     position: "absolute",
     width: "100%",
-    top: 65,
     left: 0,
     maxHeight: "12rem",
     backgroundColor: "#fff",
@@ -52,6 +54,7 @@ const styles: CssObject = {
     cursor: "pointer",
   }),
   place: css({
+    color: "#000",
     fontSize: "16px",
     fontWeight: 600,
   }),

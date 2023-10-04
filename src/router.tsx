@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import { HOME_PATH, SEARCH_PATH } from "./domain/paths";
-import { HomePage } from "./presentation/home/HomePage";
-import { SearchPage } from "./presentation/search/SearchPage";
+import { HOME_PATH, SEARCH_PATH, WRITE_PATH } from "./domain/paths";
+import { HomePage } from "./presentation/pages/home";
+import { SearchPage } from "./presentation/pages/search";
+import { WritePage } from "./presentation/pages/write";
 
 export const router = createBrowserRouter([
   {
@@ -11,5 +12,9 @@ export const router = createBrowserRouter([
   {
     path: SEARCH_PATH,
     element: <SearchPage />,
+  },
+  {
+    path: WRITE_PATH,
+    element: <WritePage />,
   },
 ]);
