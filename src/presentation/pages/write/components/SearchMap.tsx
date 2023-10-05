@@ -37,7 +37,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
   );
 
   const mapRef = useRef<kakao.maps.Map>(null);
-  const { result } = useKakaoMapSearch(keyword);
+  const { data: result } = useKakaoMapSearch(keyword);
 
   useEffect(() => {
     if (!place || !mapRef.current) return;
@@ -84,7 +84,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
           sx={{ boxShadow: 1 }}
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return;
-            if (e.key === "Enter") setPlace(result[0]);
+            if (e.key === "Enter" && result) setPlace(result[0]);
           }}
           InputProps={{
             endAdornment: (
@@ -94,7 +94,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
                     color: var(--icon-color);
                   `}
                 />
-                {keyword && showResults && (
+                {keyword && showResults && result && (
                   <PlaceResult data={result} setPlace={setPlace} top={50} />
                 )}
               </InputAdornment>
