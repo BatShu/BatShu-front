@@ -1,5 +1,6 @@
 import { useRef, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Controller } from "react-hook-form";
 // styles
 import { Box, Typography, css, Zoom } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
@@ -26,7 +27,7 @@ const ImageBox = ({ src, onDelete }: ImageBoxProps) => {
 const UploadImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { register, watch, setValue } = useWriteFormContext();
+  const { watch, setValue, control } = useWriteFormContext();
   const images = watch("content.images");
   const onDelete = useCallback(
     (delIdx: number) =>
@@ -38,7 +39,18 @@ const UploadImage = () => {
       ),
     [setValue, images]
   );
+  const onSelect = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      onChange: (...event: any[]) => void
+    ) => {
+      const files = e.target.files ?? [];
+      onChange([...files]);
+    },
+    []
+  );
 
+  console.log(images);
   return (
     <Box css={styles.container}>
       <Swiper
@@ -57,12 +69,19 @@ const UploadImage = () => {
             <Typography css={styles.text}>
               {images.length ? `${images.length}/5` : "사진 첨부"}
             </Typography>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              hidden
-              {...register("content.images")}
+            <Controller
+              control={control}
+              name="content.images"
+              render={({ field: { onChange } }) => (
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  ref={inputRef}
+                  onChange={(e) => onSelect(e, onChange)}
+                />
+              )}
             />
           </Box>
         </SwiperSlide>
