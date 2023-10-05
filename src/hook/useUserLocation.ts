@@ -1,20 +1,25 @@
-import { useState, useEffect, useCallback } from "react";
+import { locationStore } from "@/store/locationStore";
+import { useEffect, useCallback } from "react";
 
 export default function useUserLocation() {
-  const [location, setLocation] = useState({ lat: 33.5563, lng: 126.79581 });
-  const [status, setStatus] = useState({ loading: true, error: false });
+  const { location, status, setLocation, setStatus } = locationStore();
 
-  const successHandler: PositionCallback = useCallback((position) => {
-    const { latitude: lat, longitude: lng } = position.coords;
-    setLocation({ lat, lng });
-    setStatus({ loading: false, error: false });
-  }, []);
+  const successHandler: PositionCallback = useCallback(
+    (position) => {
+      const { latitude: lat, longitude: lng } = position.coords;
+      setLocation({ lat, lng });
+      setStatus({ loading: false, error: false });
+    },
+    [setLocation, setStatus]
+  );
 
   const errorHandler: PositionErrorCallback = useCallback(() => {
     setStatus({ loading: false, error: true });
-  }, []);
+  }, [setStatus]);
 
   useEffect(() => {
+    if (!status.loading) return;
+
     const { geolocation } = navigator;
     if (!geolocation) {
       setStatus({ loading: false, error: true });
@@ -23,7 +28,7 @@ export default function useUserLocation() {
     geolocation.getCurrentPosition(successHandler, errorHandler, {
       timeout: 5000,
     });
-  }, [successHandler, errorHandler]);
+  }, [status, setStatus, successHandler, errorHandler]);
 
   return { location, status };
 }

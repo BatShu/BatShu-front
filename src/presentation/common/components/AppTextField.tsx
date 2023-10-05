@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { TextField, TextFieldProps } from "@mui/material";
-import { ReactElement } from "react";
+import { ReactElement, forwardRef } from "react";
 
 type AppTextFieldProps = TextFieldProps;
 /**
@@ -21,9 +21,18 @@ type AppTextFieldProps = TextFieldProps;
         }}
       /> 
  */
-export const AppTextField = (props: AppTextFieldProps): ReactElement => {
-  return <TextField css={textFieldStyles} {...props} autoComplete="off" />;
-};
+export const AppTextField = forwardRef<HTMLInputElement, AppTextFieldProps>(
+  (props: AppTextFieldProps, ref): ReactElement => {
+    return (
+      <TextField
+        css={textFieldStyles}
+        {...props}
+        ref={ref}
+        autoComplete="off"
+      />
+    );
+  }
+);
 
 const textFieldStyles = css({
   display: "flex",

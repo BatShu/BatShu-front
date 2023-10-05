@@ -18,7 +18,7 @@ export const GlobalStyles = (): ReactElement => {
           --road: rgba(107, 122, 133, 1);
           --icon-color: rgba(120, 120, 120, 1);
           --primary: #2d264b;
-          --background: #fcfcfc;
+          --background: #f5f5f5;
         }
         #root {
           background-color: var(--road);
@@ -45,12 +45,6 @@ export const GlobalStyles = (): ReactElement => {
           ::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera*/
           }
-        }
-        .flatpickr-current-month {
-          display: inline-flex !important;
-          flex-direction: row-reverse;
-          justify-content: center;
-          align-items: center;
         }
       `}
     />
