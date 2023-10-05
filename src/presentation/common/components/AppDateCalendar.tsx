@@ -6,7 +6,7 @@ import {
 } from "@mui/x-date-pickers/DateCalendar";
 import { css } from "@emotion/react";
 
-interface AppDateCalendarProps extends DateCalendarProps<any> {
+interface AppDateCalendarProps extends DateCalendarProps<Dayjs> {
   absolute?: boolean;
   hideOnClickOutside?: boolean;
   validRef?: RefObject<HTMLElement>;
