@@ -33,7 +33,13 @@ interface DetailProps {
 
 const Detail = ({ setShowMap }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
-  const { watch, register, setValue, control } = useWriteFormContext();
+  const {
+    watch,
+    register,
+    setValue,
+    control,
+    formState: { isValid },
+  } = useWriteFormContext();
   const {
     type,
     content: { location, mapLevel },
@@ -161,11 +167,11 @@ const Detail = ({ setShowMap }: DetailProps) => {
           }자가 알아볼 수 있도록, 사고 내용을 자세하게 입력해주세요`}
           css={styles.memo}
           multiline
-          {...register("content.description")}
+          {...register("content.description", { required: true })}
         />
       </ContentWithTitle>
 
-      <AppButton backgroundcolor="#000" css={styles.button}>
+      <AppButton css={styles.button(isValid)} disabled={!isValid} type="submit">
         등록하기
       </AppButton>
     </Box>
@@ -213,13 +219,15 @@ const styles = {
     minHeight: "100px",
     "& textarea": { fontSize: "13px" },
   }),
-  button: css({
-    position: "sticky",
-    marginTop: "60px",
-    fontSize: "20px",
-    bottom: 28,
-    width: "100%",
-    color: "#fff",
-    zIndex: 999,
-  }),
+  button: (isValid: boolean) =>
+    css({
+      position: "sticky",
+      marginTop: "60px",
+      fontSize: "20px",
+      bottom: 28,
+      width: "100%",
+      color: "#fff",
+      zIndex: 999,
+      backgroundColor: isValid ? "#000" : "#bbb",
+    }),
 } satisfies CssObject;

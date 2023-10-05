@@ -22,7 +22,7 @@ type TContent = {
   mapLevel: number;
 };
 
-interface writeFormState {
+export interface writeFormState {
   type: TWriter;
   title: string;
   licensePlate: string;
