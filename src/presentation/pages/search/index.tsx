@@ -24,9 +24,10 @@ import InputChip from "../../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import { Controller, useForm } from "react-hook-form";
 
+type PlacesSearchResultItem = kakao.maps.services.PlacesSearchResultItem;
 interface SearchForm {
   keyword: string;
-  place: kakao.maps.services.PlacesSearchResultItem | null;
+  place: PlacesSearchResultItem | null;
   date: Dayjs | null;
   carNumber: {
     head: string;
@@ -56,6 +57,10 @@ export const SearchPage = (): ReactElement => {
   const { data: placeResult } = useKakaoMapSearch(keyword);
   const navigate = useNavigate();
 
+  const handlePlaceChange = (place: PlacesSearchResultItem | null) => {
+    setValue("place", place);
+    setValue("keyword", "");
+  };
   const onSubmit = (data: SearchForm) => {
     console.log(data);
   };
@@ -104,10 +109,7 @@ export const SearchPage = (): ReactElement => {
             {placeResult && (
               <PlaceResult
                 data={placeResult}
-                setPlace={(place) => {
-                  setValue("place", place);
-                  setValue("keyword", "");
-                }}
+                setPlace={handlePlaceChange}
                 top={60}
               />
             )}

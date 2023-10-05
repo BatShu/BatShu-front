@@ -21,7 +21,8 @@ const AccidentDate = () => {
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const updateOnlyDate = useCallback(
-    (newDate: Dayjs) => {
+    (newDate: Dayjs | null) => {
+      if (!newDate) return;
       const newAccidentTime = accidentTime.map((oldDay) => {
         return oldDay.set("date", newDate.date());
       }) as [Dayjs, Dayjs];
@@ -60,7 +61,7 @@ const AccidentDate = () => {
           <AppDateCalendar
             value={date}
             absolute
-            onChange={(newDate: Dayjs) => {
+            onChange={(newDate: Dayjs | null) => {
               updateOnlyDate(newDate);
               setShowCalendar(false);
             }}
