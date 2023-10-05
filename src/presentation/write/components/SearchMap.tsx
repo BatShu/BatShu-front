@@ -7,7 +7,7 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { natshuMarker } from "@/presentation/configs";
 // hooks
-import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
+import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 // store
 import { ILocation, locationStore } from "@/store/locationStore";
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";

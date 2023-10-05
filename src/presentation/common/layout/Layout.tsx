@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 // mui
 import { Container } from "@mui/material";
 // hook
-import useUserLocation from "@/hook/useUserLocation";
+import useUserLocation from "@/hooks/useUserLocation";
 
 interface LayoutProps {
   children: ReactNode;

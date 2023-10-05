@@ -6,7 +6,7 @@ import { Box, Grid, InputAdornment, Typography, css } from "@mui/material";
 import { pageContentStyles } from "../common/styles/pageStyles";
 import { CssObject } from "../common/styles/types";
 // hooks
-import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
+import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 // constants
 import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
 // icons
