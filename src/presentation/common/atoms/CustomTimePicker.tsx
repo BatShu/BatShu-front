@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 import { CssObject } from "@/presentation/common/styles/types";
 
 interface CustomTimePickerProps {
-  setValue: (param?: any) => void;
+  onChange: (param?: any) => void;
   loop?: boolean;
   resetKey?: any;
   ampmInitialValue?: "오전" | "오후";
@@ -14,7 +14,7 @@ interface CustomTimePickerProps {
 }
 
 const CustomTimePicker = ({
-  setValue,
+  onChange,
   loop = false,
   resetKey,
   ampmInitialValue = "오전",
@@ -31,16 +31,16 @@ const CustomTimePicker = ({
 
   useEffect(() => {
     const timeTo24 = timeValue + (ampmValue === "오전" ? 0 : 12);
-    setValue(timeTo24);
-  }, [ampmValue, timeValue, setValue]);
+    onChange(timeTo24);
+  }, [ampmValue, timeValue, onChange]);
 
   useEffect(() => {
     if (!resetKey) return;
 
     ampmRef.current?.swiper.slideTo(ampmInitialValue === "오전" ? 0 : 1);
     timeRef.current?.swiper.slideTo(timeInitialValue);
-    setValue(timeInitialValue + (ampmInitialValue === "오전" ? 0 : 12));
-  }, [resetKey, setValue, ampmInitialValue, timeInitialValue]);
+    onChange(timeInitialValue + (ampmInitialValue === "오전" ? 0 : 12));
+  }, [resetKey, onChange, ampmInitialValue, timeInitialValue]);
 
   const isAm = ampmValue === "오전";
 

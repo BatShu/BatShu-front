@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 // store
-import { ILocation } from "./locationStore";
+import { ILocation } from "../../../store/locationStore";
 // lib
 import { TFile } from "@/lib";
 import {
@@ -22,7 +22,7 @@ type TContent = {
   mapLevel: number;
 };
 
-interface writeFormState {
+export interface writeFormState {
   type: TWriter;
   title: string;
   licensePlate: string;

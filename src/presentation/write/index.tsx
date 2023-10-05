@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 // styles
@@ -7,7 +7,10 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { sliderSettings } from "@/presentation/configs";
 // store
-import { useWriteForm } from "@/store/writeForm";
+import {
+  useWriteForm,
+  writeFormState,
+} from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 // components
@@ -22,19 +25,16 @@ export const WritePage = () => {
   const [showMap, setShowMap] = useState(false);
 
   const details = useWriteForm();
-  const form = details.watch();
+  const handleSubmit = details.handleSubmit;
   const sliderRef = useRef<Slider>(null);
-  console.log(form);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // TODO: 사고등록 API
-    console.log(form);
-  }, [form]);
-
+  const onSubmit = (data: writeFormState) => {
+    console.log(data);
+  };
   return (
     <FormProvider {...details}>
-      <Box css={styles.pageWrapper}>
+      <form css={styles.pageWrapper} onSubmit={handleSubmit(onSubmit)}>
         {showMap && <SearchMap setShowMap={setShowMap} />}
 
         <Box css={pageContentStyles}>
@@ -69,7 +69,7 @@ export const WritePage = () => {
             </Box>
           </Box>
         </Box>
-      </Box>
+      </form>
     </FormProvider>
   );
 };

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import type { Dayjs } from "dayjs";
 // styles
 import { Box, Grid, InputAdornment, Typography, css } from "@mui/material";
-import { pageContentStyles } from "../../common/styles/pageStyles";
-import { CssObject } from "../../common/styles/types";
+import { pageContentStyles } from "../common/styles/pageStyles";
+import { CssObject } from "../common/styles/types";
 // hooks
-import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
+import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 // constants
 import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
 // icons
@@ -16,11 +16,11 @@ import { ReactComponent as Location } from "@/presentation/common/icons/outlined
 import { ReactComponent as Calender1 } from "@/presentation/common/icons/outlined/Calender 1.svg";
 import { ReactComponent as Up2 } from "@/presentation/common/icons/outlined/Up 2.svg";
 // components
-import { AppTextField } from "../../common/components/AppTextField";
-import AppButton from "../../common/components/AppButton";
-import Spacer from "../../common/atoms/Spacer";
+import { AppTextField } from "../common/components/AppTextField";
+import AppButton from "../common/components/AppButton";
+import Spacer from "../common/atoms/Spacer";
 import PlaceResult from "./components/PlaceResult";
-import InputChip from "../../common/atoms/InputChip";
+import InputChip from "../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import { Controller, useForm } from "react-hook-form";
 

@@ -7,10 +7,10 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { natshuMarker } from "@/presentation/configs";
 // hooks
-import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
+import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 // store
 import { ILocation, locationStore } from "@/store/locationStore";
-import { useWriteFormContext } from "@/store/writeForm";
+import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
