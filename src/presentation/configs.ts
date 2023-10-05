@@ -6,7 +6,7 @@ import { LocalizationProviderProps } from "@mui/x-date-pickers/LocalizationProvi
 import { SnackbarProviderProps } from "notistack";
 import { MapMarkerProps } from "react-kakao-maps-sdk";
 import { Settings } from "react-slick";
-import Natshu from "@/presentation/common/icons/asset/Group 196.png";
+import MapFlag from "@/presentation/common/icons/asset/map-flag.png";
 
 dayjs.locale("ko");
 
@@ -18,7 +18,7 @@ export const snackbarOptions: Omit<SnackbarProviderProps, "children"> = {
 };
 
 export const natshuMarker: MapMarkerProps["image"] = {
-  src: Natshu,
+  src: MapFlag,
   size: {
     width: 100,
     height: 100,

@@ -11,7 +11,7 @@ import useKakaoMapSearch from "@/hook/useKakaoMapSearch";
 import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
-import { ReactComponent as Group174 } from "@/presentation/common/icons/asset/Group 174.svg";
+import { ReactComponent as SearchLogo } from "@/presentation/common/icons/asset/search-logo.svg";
 import { ReactComponent as Location } from "@/presentation/common/icons/outlined/Location.svg";
 import { ReactComponent as Calender1 } from "@/presentation/common/icons/outlined/Calender 1.svg";
 import { ReactComponent as Up2 } from "@/presentation/common/icons/outlined/Up 2.svg";
@@ -73,7 +73,7 @@ export const SearchPage = (): ReactElement => {
         <Spacer y={23} />
 
         <Box css={styles.image}>
-          <Group174 />
+          <SearchLogo />
         </Box>
 
         <Spacer y={32} />

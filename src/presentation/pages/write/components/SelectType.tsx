@@ -5,9 +5,9 @@ import { enqueueSnackbar } from "notistack";
 import { Box, Typography, css } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 // icons
-import { ReactComponent as Group244 } from "@/presentation/common/icons/asset/Group 244.svg";
-import CarImage1 from "@/presentation/common/icons/asset/car image1.png";
-import CarImage2 from "@/presentation/common/icons/asset/car image 2.png";
+import { ReactComponent as SelectLogo } from "@/presentation/common/icons/asset/select-logo.svg";
+import CarImage1 from "@/presentation/common/icons/asset/car-image-1.png";
+import CarImage2 from "@/presentation/common/icons/asset/car-image-2.png";
 // store
 import { useWriteFormContext } from "@/store/writeForm";
 // lib
@@ -36,7 +36,7 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
   return (
     <Box>
       <Spacer y={30} />
-      <Group244 height={122} />
+      <SelectLogo height={122} />
       <Typography css={styles.title}>어떤 도움이 필요하신가요?</Typography>
 
       <Box css={styles.typeWrapper}>
