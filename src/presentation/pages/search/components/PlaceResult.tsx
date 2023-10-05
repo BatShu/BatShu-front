@@ -1,12 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 import { CssObject } from "@/presentation/common/styles/types";
 import { Box, Typography, css } from "@mui/material";
 
 interface PlaceResultProps {
   data: kakao.maps.services.PlacesSearchResult;
-  setPlace: Dispatch<
-    SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>
-  >;
+  setPlace: Dispatch<kakao.maps.services.PlacesSearchResultItem | null>;
   top?: number;
 }
 

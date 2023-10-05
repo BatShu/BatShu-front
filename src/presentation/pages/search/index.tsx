@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, ReactElement } from "react";
+import { useState, useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Dayjs } from "dayjs";
 // styles
@@ -14,7 +14,7 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 import { ReactComponent as Group174 } from "@/presentation/common/icons/asset/Group 174.svg";
 import { ReactComponent as Location } from "@/presentation/common/icons/outlined/Location.svg";
 import { ReactComponent as Calender1 } from "@/presentation/common/icons/outlined/Calender 1.svg";
-import { ReactComponent as Down2 } from "@/presentation/common/icons/outlined/Down 2.svg";
+import { ReactComponent as Up2 } from "@/presentation/common/icons/outlined/Up 2.svg";
 // components
 import { AppTextField } from "../../common/components/AppTextField";
 import AppButton from "../../common/components/AppButton";
@@ -22,44 +22,46 @@ import Spacer from "../../common/atoms/Spacer";
 import PlaceResult from "./components/PlaceResult";
 import InputChip from "../../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
+import { Controller, useForm } from "react-hook-form";
+
+interface SearchForm {
+  keyword: string;
+  place: kakao.maps.services.PlacesSearchResultItem | null;
+  date: Dayjs | null;
+  carNumber: {
+    head: string;
+    middle: string;
+    rear: string;
+  };
+}
+const useSearchForm = () => {
+  return useForm<SearchForm>();
+};
 
 export const SearchPage = (): ReactElement => {
-  const [keyword, setKeyword] = useState("");
-  const [place, setPlace] =
-    useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid },
+    control,
+    watch,
+    setValue,
+  } = useSearchForm();
   const [showCalendar, setShowCalendar] = useState(false);
-  const [date, setDate] = useState<Dayjs | null>(null);
-  const [carNumber, setCarNumber] = useState({
-    head: "",
-    middle: "",
-    rear: "",
-  });
-  const [inputComplete, setInputComplete] = useState(false);
 
   const calendarRef = useRef<HTMLDivElement>(null);
-
-  const { result } = useKakaoMapSearch(keyword);
+  const date = watch("date");
+  const keyword = watch("keyword");
+  const place = watch("place");
+  const { data: placeResult } = useKakaoMapSearch(keyword);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (place) setKeyword("");
-  }, [place]);
-
-  useEffect(() => {
-    const { head, middle, rear } = carNumber;
-    setInputComplete(
-      Boolean(
-        place &&
-          date &&
-          head.length >= 2 &&
-          middle.length === 1 &&
-          rear.length === 4
-      )
-    );
-  }, [place, date, carNumber]);
+  const onSubmit = (data: SearchForm) => {
+    console.log(data);
+  };
 
   return (
-    <Box css={pageContentStyles}>
+    <form css={pageContentStyles} onSubmit={handleSubmit(onSubmit)}>
       <Box css={styles.container}>
         <Left1 onClick={() => navigate(-1)} css={css(`cursor:pointer;`)} />
 
@@ -82,16 +84,10 @@ export const SearchPage = (): ReactElement => {
         <Box>
           <Box position="relative">
             <AppTextField
-              value={keyword}
-              onChange={({ target: { value } }) => {
-                if (place) return;
-                setKeyword(value);
-              }}
+              {...register("keyword")}
               onKeyDown={(e) => {
-                if (e.nativeEvent.isComposing || !place) return;
-
-                if (e.key === "Backspace") {
-                  setPlace(null);
+                if (e.key === "Backspace" && place) {
+                  setValue("place", null);
                 }
               }}
               placeholder={!place ? "어디 인가요?" : ""}
@@ -105,8 +101,15 @@ export const SearchPage = (): ReactElement => {
               }}
               css={styles.inputSelect(!!place)}
             />
-            {keyword && (
-              <PlaceResult data={result} setPlace={setPlace} top={60} />
+            {placeResult && (
+              <PlaceResult
+                data={placeResult}
+                setPlace={(place) => {
+                  setValue("place", place);
+                  setValue("keyword", "");
+                }}
+                top={60}
+              />
             )}
           </Box>
 
@@ -126,7 +129,7 @@ export const SearchPage = (): ReactElement => {
                 ),
                 endAdornment: (
                   <InputAdornment position="end">
-                    <Down2 />
+                    <Up2 />
                   </InputAdornment>
                 ),
                 readOnly: true,
@@ -135,22 +138,23 @@ export const SearchPage = (): ReactElement => {
               onClick={() => setShowCalendar(true)}
             />
             {showCalendar && (
-              <AppDateCalendar
-                onChange={(date) => {
-                  setDate(date as Dayjs);
-                  setShowCalendar(false);
-                }}
-                onMonthChange={() => {
-                  setShowCalendar(true);
-                }}
-                onYearChange={() => {
-                  setShowCalendar(true);
-                }}
-                css={styles.calendar}
-                hideOnClickOutside
-                absolute
-                validRef={calendarRef}
-                setShowCalendar={setShowCalendar}
+              <Controller
+                control={control}
+                name="date"
+                render={({ field }) => (
+                  <AppDateCalendar
+                    css={styles.calendar}
+                    hideOnClickOutside
+                    absolute
+                    validRef={calendarRef}
+                    setShowCalendar={setShowCalendar}
+                    value={field.value}
+                    onChange={(newDate) => {
+                      field.onChange(newDate);
+                      setShowCalendar(false);
+                    }}
+                  />
+                )}
               />
             )}
           </Box>
@@ -160,15 +164,16 @@ export const SearchPage = (): ReactElement => {
           <Grid container>
             <Grid item xs={3.2}>
               <AppTextField
-                value={carNumber.head}
-                onChange={({ target: { value } }) => {
-                  setCarNumber((prev) => ({ ...prev, head: value }));
-                }}
                 placeholder="00"
+                {...register("carNumber.head", {
+                  required: true,
+                  minLength: 2,
+                  maxLength: 3,
+                  pattern: /^[0-9]*$/,
+                })}
                 inputProps={{
                   maxLength: 3,
                   inputMode: "numeric",
-                  pattern: "[0-9]*",
                 }}
                 css={styles.inputNumber}
               />
@@ -177,15 +182,16 @@ export const SearchPage = (): ReactElement => {
             <Grid item xs={0.3} />
             <Grid item xs={1.8}>
               <AppTextField
-                value={carNumber.middle}
-                onChange={({ target: { value } }) => {
-                  setCarNumber((prev) => ({ ...prev, middle: value }));
-                }}
+                {...register("carNumber.middle", {
+                  required: true,
+                  minLength: 1,
+                  maxLength: 1,
+                  pattern: /^[가-힣]$/,
+                })}
                 placeholder="가"
                 inputProps={{
                   maxLength: 1,
                   inputMode: "text",
-                  pattern: "/^[가-힣]$/",
                 }}
                 css={[styles.inputNumber, styles.text]}
               />
@@ -194,15 +200,16 @@ export const SearchPage = (): ReactElement => {
 
             <Grid item xs={6.4}>
               <AppTextField
-                value={carNumber.rear}
-                onChange={({ target: { value } }) => {
-                  setCarNumber((prev) => ({ ...prev, rear: value }));
-                }}
+                {...register("carNumber.rear", {
+                  required: true,
+                  minLength: 4,
+                  maxLength: 4,
+                  pattern: /^[0-9]*$/,
+                })}
                 placeholder="0000"
                 inputProps={{
                   maxLength: 4,
                   inputMode: "numeric",
-                  pattern: "[0-9]*",
                 }}
                 css={styles.inputNumber}
               />
@@ -210,13 +217,14 @@ export const SearchPage = (): ReactElement => {
           </Grid>
         </Box>
         <AppButton
-          css={styles.button}
-          backgroundcolor={inputComplete ? "#000" : "#bbb"}
+          css={styles.button(isValid)}
+          disabled={!isValid}
+          type="submit"
         >
           검색하기
         </AppButton>
       </Box>
-    </Box>
+    </form>
   );
 };
 
@@ -264,13 +272,15 @@ const styles = {
       fontSize: "28px",
     },
   }),
-  button: css({
-    position: "absolute",
-    bottom: 36,
-    left: 0,
-    width: "100%",
-    height: "44px",
-    color: "#fff",
-    fontWeight: 600,
-  }),
+  button: (isValid: boolean) =>
+    css({
+      position: "absolute",
+      bottom: 36,
+      left: 0,
+      width: "100%",
+      height: "44px",
+      color: "#fff",
+      backgroundColor: isValid ? "#000" : "#ccc",
+      fontWeight: 600,
+    }),
 } satisfies CssObject;
