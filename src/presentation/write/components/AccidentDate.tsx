@@ -33,14 +33,14 @@ const AccidentDate = () => {
   );
   const setFromHour = useCallback(
     (from: number) => {
-      setValue("accidentTime.0", accidentTime[0].hour(from));
+      setValue("accidentTime.0", accidentTime[0].hour(from).minute(0));
     },
     [setValue, accidentTime]
   );
 
   const setToHour = useCallback(
     (to: number) => {
-      setValue("accidentTime.0", accidentTime[0].hour(to));
+      setValue("accidentTime.1", accidentTime[1].hour(to).minute(0));
     },
     [setValue, accidentTime]
   );
@@ -80,12 +80,12 @@ const AccidentDate = () => {
       <Box css={styles.timeWrapper}>
         <Box css={styles.time}>
           <AppChip label="시작" css={styles.chip} />
-          <CustomTimePicker setValue={setFromHour} resetKey={type} />
+          <CustomTimePicker onChange={setFromHour} resetKey={type} />
         </Box>
         <Typography css={styles.text}>부터</Typography>
         <Box css={styles.time}>
           <AppChip label="종료" css={styles.chip} />
-          <CustomTimePicker setValue={setToHour} resetKey={type} />
+          <CustomTimePicker onChange={setToHour} resetKey={type} />
         </Box>
       </Box>
     </Box>
