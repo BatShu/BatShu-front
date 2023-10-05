@@ -14,7 +14,7 @@ import { ReactComponent as MinusIcon } from "@/presentation/common/icons/outline
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
 // components
-import Splash from "../layout/Splash";
+import Splash from "../common/layout/Splash";
 import KakaoMap from "./components/KakaoMap";
 import { AppTextField } from "../common/components/AppTextField";
 import Spacer from "../common/atoms/Spacer";

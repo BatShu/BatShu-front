@@ -14,7 +14,7 @@ import {
   snackbarOptions,
 } from "./presentation/configs";
 // layout
-import Layout from "./presentation/layout/Layout";
+import Layout from "./presentation/common/layout/Layout";
 
 const queryClient = new QueryClient();
 

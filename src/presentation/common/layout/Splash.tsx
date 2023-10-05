@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // styles
 import { Box } from "@mui/material";
 import { css } from "@emotion/react";
-import { splashB, splashEye } from "../common/styles/keyframes";
+import { splashB, splashEye } from "../styles/keyframes";
 // icons
 import { ReactComponent as B } from "@/presentation/common/icons/splash/B.svg";
 import { ReactComponent as ATSHU } from "@/presentation/common/icons/splash/ATSHU.svg";
