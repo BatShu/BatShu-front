@@ -2,7 +2,7 @@ import { ForwardedRef, forwardRef } from "react";
 import { Map } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
-import { CssObject } from "../../../common/styles/types";
+import { CssObject } from "../../common/styles/types";
 
 interface KakaoMapProps {
   location: { lat: number; lng: number };

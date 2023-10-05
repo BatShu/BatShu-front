@@ -2,8 +2,8 @@ import { useRef, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 // styles
 import { Box, InputAdornment, css } from "@mui/material";
-import { pageContentStyles, svgFill } from "../../common/styles/pageStyles";
-import { CssObject } from "../../common/styles/types";
+import { pageContentStyles, svgFill } from "../common/styles/pageStyles";
+import { CssObject } from "../common/styles/types";
 // store
 import { locationStore } from "@/store/locationStore";
 // constants
@@ -14,14 +14,14 @@ import { ReactComponent as MinusIcon } from "@/presentation/common/icons/outline
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 import { ReactComponent as Situation1Icon } from "@/presentation/common/icons/outlined/Situation 1.svg";
 // components
-import Splash from "../../layout/Splash";
+import Splash from "../layout/Splash";
 import KakaoMap from "./components/KakaoMap";
-import { AppTextField } from "../../common/components/AppTextField";
-import Spacer from "../../common/atoms/Spacer";
+import { AppTextField } from "../common/components/AppTextField";
+import Spacer from "../common/atoms/Spacer";
 import { AccidentToggleButton } from "./components/AccidentToggleButton";
-import { AppIconButton } from "../../common/components/AppIconButton";
+import { AppIconButton } from "../common/components/AppIconButton";
 import { AccidentButton } from "./components/AccidentButton";
-import { AppBottomNavigationBar } from "../../common/components/AppBottmNaviationBar";
+import { AppBottomNavigationBar } from "../common/components/AppBottmNaviationBar";
 import { useReadAccidentsByLocation } from "@/data/hooks/accident";
 
 export const HomePage = (): ReactElement => {

@@ -7,7 +7,7 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { sliderSettings } from "@/presentation/configs";
 // store
-import { useWriteForm } from "@/store/writeForm";
+import { useWriteForm } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 // components

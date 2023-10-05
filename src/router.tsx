@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import { HOME_PATH, SEARCH_PATH, WRITE_PATH } from "./domain/paths";
-import { HomePage } from "./presentation/pages/home";
-import { SearchPage } from "./presentation/pages/search";
-import { WritePage } from "./presentation/pages/write";
+import { HomePage } from "./presentation/home";
+import { SearchPage } from "./presentation/search";
+import { WritePage } from "./presentation/write";
 
 export const router = createBrowserRouter([
   {
