@@ -6,7 +6,6 @@ type AppButtonProps = ButtonProps;
 const AppButton = (props: AppButtonProps): ReactElement => {
   return (
     <Button
-      {...props}
       css={css`
         border-radius: 8px;
         font-size: 18px;
@@ -16,10 +15,12 @@ const AppButton = (props: AppButtonProps): ReactElement => {
         &:hover {
           background-color: #333;
         }
+
         &:disabled {
           background-color: #bbb;
         }
       `}
+      {...props}
     />
   );
 };
