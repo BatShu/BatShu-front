@@ -11,6 +11,7 @@ import { ReactComponent as Lock2Icon } from "@/presentation/common/icons/outline
 import { ReactComponent as GoogleLogoIcon } from "@/presentation/common/icons/asset/google-logo.svg";
 import { Link } from "react-router-dom";
 import { SIGNUP_PATH } from "@/domain/paths";
+import { useSignInWithGoogle } from "@/data/hooks/auth";
 interface LoginForm {
   id: string;
   password: string;
@@ -28,6 +29,10 @@ export const LoginPage = (): ReactElement => {
   const onSubmit = (data: LoginForm) => {
     console.log(data);
   };
+
+  const { mutate: onGoogleLogin, isLoading: isGoogleLogining } =
+    useSignInWithGoogle();
+
   return (
     <form css={styles.pageWrapper} onSubmit={handleSubmit(onSubmit)}>
       <Box css={styles.headerContainer}>
@@ -79,7 +84,13 @@ export const LoginPage = (): ReactElement => {
         <Link to={SIGNUP_PATH} css={styles.link}>
           <AppButton css={styles.button}>회원가입</AppButton>
         </Link>
-        <AppButton css={[styles.button, styles.googleLoginButton]}>
+        <AppButton
+          css={[styles.button, styles.googleLoginButton]}
+          onClick={() => {
+            onGoogleLogin();
+          }}
+          loading={isGoogleLogining}
+        >
           <GoogleLogoIcon />
           구글로 로그인
         </AppButton>

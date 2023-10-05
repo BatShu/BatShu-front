@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
-import { Button, ButtonProps, css } from "@mui/material";
-
-type AppButtonProps = ButtonProps;
+import { css } from "@mui/material";
+import { LoadingButton, LoadingButtonProps } from "@mui/lab";
+type AppButtonProps = LoadingButtonProps;
 
 const AppButton = (props: AppButtonProps): ReactElement => {
   return (
-    <Button
+    <LoadingButton
       css={css`
         border-radius: 8px;
         font-size: 18px;
