@@ -43,27 +43,29 @@ const setSingleFile = (
 
 const setMultipleFile = (
   event: ChangeEvent<HTMLInputElement>,
-  setFileState: Dispatch<SetStateAction<TFile[]>>,
+  onChange: (...event: any[]) => void,
   type: "image" | "video" = "image"
 ) => {
   event.preventDefault();
   const { target } = event;
-
-  if (!target.files) return;
+  const files = target.files;
+  if (files == null) {
+    onChange([]);
+    return;
+  }
 
   const acceptableArray =
     type === "image" ? acceptableImageExt : acceptableVideoExt;
 
-  for (let i = 0; i < target.files.length; i += 1) {
-    const file = target.files[i];
-
+  const newFiles = [...files].map((file) => {
     if (checkAcceptableExt(file.name, acceptableArray)) {
       const url = URL.createObjectURL(file);
-      setFileState((prev) => [...prev, { file, url }]);
+      return { file, url };
     } else {
       enqueueSnackbar(`${acceptableArray.join(", ")}파일만 가능합니다!`);
     }
-  }
+  });
+  onChange(newFiles);
 };
 
 // execute URL.revokeObjectURL to prevent memory leak
