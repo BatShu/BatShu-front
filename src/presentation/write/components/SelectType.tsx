@@ -70,8 +70,8 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
       )}
 
       <AppButton
+        disabled={!valid}
         css={styles.button}
-        backgroundcolor={valid ? "#000" : "#bbb"}
         onClick={() => {
           if (!valid) {
             enqueueSnackbar("파일을 첨부해 주세요!");

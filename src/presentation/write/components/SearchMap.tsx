@@ -120,7 +120,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
         </Map>
         <AppButton
           onClick={onClick}
-          backgroundcolor={markerPosition ? "#000" : "#bbb"}
+          disabled={!markerPosition}
           css={styles.button}
         >
           확인

@@ -15,7 +15,13 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
-    svgr(),
+    svgr({
+      svgrOptions: {
+        replaceAttrValues: {
+          "#2D264B": "currentColor",
+        },
+      },
+    }),
     VitePWA(manifest),
   ],
 });

@@ -96,8 +96,8 @@ const Detail = ({ setShowMap }: DetailProps) => {
               setSkipCarNumber((prev) => !prev);
               setValue("content.carModelName", "");
             }}
-            css={styles.skipButton(skipCarNumber)}
-            backgroundcolor={skipCarNumber ? "#000" : "#fff"}
+            css={styles.skipButton}
+            disabled={skipCarNumber}
           >
             차종모름
           </AppButton>
@@ -198,15 +198,13 @@ const styles = {
   }),
   halfWidth: (skipCarNumber?: boolean) =>
     css({ width: "65%", backgroundColor: skipCarNumber ? "#DBDBDB" : "#fff" }),
-  skipButton: (skipCarNumber: boolean) =>
-    css({
-      border: "0.5px solid #bbb",
-      borderRadius: "18px",
-      fontSize: "12px",
-      marginLeft: "20px",
-      height: "32px",
-      color: skipCarNumber ? "#fff" : "#000",
-    }),
+  skipButton: css({
+    border: "0.5px solid #bbb",
+    borderRadius: "18px",
+    fontSize: "12px",
+    marginLeft: "20px",
+    height: "32px",
+  }),
   map: css({
     width: "100%",
     height: "200px",
