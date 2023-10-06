@@ -1,8 +1,8 @@
 import { queryWrapper } from "@/lib";
-import { AppLocation } from "../models/location";
+import { ILocation } from "../models/location";
 
 export const GET_ACCIDENT_BY_LOCATION =
-  queryWrapper<AppLocation>("api/accident");
+  queryWrapper<ILocation>("api/accident");
 export const GET_ACCIDENT_BY_ID = (accidentId: number) =>
   `api/accident/${accidentId}`;
 

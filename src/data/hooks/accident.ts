@@ -3,7 +3,7 @@ import {
   GET_ACCIDENT_BY_LOCATION,
 } from "@/domain/endpoint";
 import { Accident } from "@/domain/models/accident";
-import { AppLocation } from "@/domain/models/location";
+import { ILocation } from "@/domain/models/location";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { API } from "@/lib";
 
@@ -11,7 +11,7 @@ export interface ReadAccidentsByLocationResponse {
   ok: boolean;
   data: {
     id: number;
-    location: AppLocation;
+    location: ILocation;
   }[];
 }
 export const useReadAccidentsByLocation = (
