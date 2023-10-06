@@ -1,4 +1,11 @@
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { css } from "@emotion/react";
@@ -10,68 +17,91 @@ import { natshuMarker } from "@/presentation/configs";
 import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 // store
 import { ILocation, locationStore } from "@/store/locationStore";
-import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
-import PlaceResult from "../../search/components/PlaceResult";
 import AppButton from "@/presentation/common/components/AppButton";
+import PlaceResult from "./PlaceResult";
 
 interface SearchMapProps {
-  setShowMap: Dispatch<SetStateAction<boolean>>;
+  setShowMap?: Dispatch<SetStateAction<boolean>>;
+  center?: ILocation | null;
+  setPlace?: Dispatch<
+    SetStateAction<kakao.maps.services.PlacesSearchResultItem | null>
+  >;
+  setMarkerPosition?: Dispatch<SetStateAction<ILocation | null>>;
+  setLevel?: Dispatch<SetStateAction<number>>;
+  checked?: boolean;
+  onComplete: (params?: any) => void;
 }
 
-const SearchMap = ({ setShowMap }: SearchMapProps) => {
-  const { watch, setValue } = useWriteFormContext();
-  const content = watch("content");
+const SearchMap = (props: SearchMapProps) => {
+  const {
+    setShowMap,
+    center,
+    setPlace,
+    setMarkerPosition,
+    setLevel,
+    checked = false,
+    onComplete,
+  } = props;
+
   const { location } = locationStore();
+  const curCenter = center || location;
 
   const [keyword, setKeyword] = useState("");
   const [showResults, setShowResults] = useState(false);
-  const [place, setPlace] =
+  const [curPlace, setCurPlace] =
     useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
-  const [markerPosition, setMarkerPosition] = useState<ILocation | null>(
-    content.location
+  const [curMarkerPosition, setCurMarkerPosition] = useState<ILocation | null>(
+    checked ? curCenter : null
   );
 
   const mapRef = useRef<kakao.maps.Map>(null);
+
   const { data: result } = useKakaoMapSearch(keyword);
 
-  useEffect(() => {
-    if (!place || !mapRef.current) return;
-    setKeyword(place.place_name);
+  const updatePlace = useCallback(() => {
+    if (!setPlace || !curPlace || !mapRef.current) return;
+
+    setKeyword(curPlace.place_name);
     setShowResults(false);
 
-    const lat = Number(place.y);
-    const lng = Number(place.x);
+    const lat = Number(curPlace.y);
+    const lng = Number(curPlace.x);
 
     const position = new kakao.maps.LatLng(lat, lng);
-    setMarkerPosition({ lat, lng });
+    setCurMarkerPosition({ lat, lng });
 
     mapRef.current.setLevel(1);
     mapRef.current.panTo(position);
-  }, [place]);
+    setPlace?.(curPlace);
+  }, [curPlace, setPlace]);
 
-  const onClick = () => {
-    if (!markerPosition) return;
-    setValue("content.location", markerPosition);
-    setShowMap(false);
-  };
+  const updateMarker = useCallback(() => {
+    if (!setMarkerPosition) return;
+    setMarkerPosition(curMarkerPosition);
+  }, [curMarkerPosition, setMarkerPosition]);
 
   useEffect(() => {
     if (!mapRef.current) return;
-    setValue("content.mapLevel", mapRef.current.getLevel());
-  }, [markerPosition, setValue]);
+
+    updatePlace();
+    updateMarker();
+    setLevel?.(mapRef.current.getLevel());
+  }, [updatePlace, updateMarker, setLevel]);
 
   return (
     <Box css={styles.container}>
       <Box css={pageContentStyles}>
-        <Left1
-          onClick={() => setShowMap(false)}
-          css={css(`cursor:pointer;z-index:4;margin-bottom:10px`)}
-        />
+        {setShowMap && (
+          <Left1
+            onClick={() => setShowMap(false)}
+            css={css(`cursor:pointer;z-index:4;margin-bottom:10px`)}
+          />
+        )}
 
         <AppTextField
           value={keyword}
@@ -84,7 +114,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
           sx={{ boxShadow: 1 }}
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return;
-            if (e.key === "Enter" && result) setPlace(result[0]);
+            if (e.key === "Enter" && result) setCurPlace(result[0]);
           }}
           InputProps={{
             endAdornment: (
@@ -95,7 +125,7 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
                   `}
                 />
                 {keyword && showResults && result && (
-                  <PlaceResult data={result} setPlace={setPlace} top={50} />
+                  <PlaceResult data={result} setPlace={setCurPlace} top={50} />
                 )}
               </InputAdornment>
             ),
@@ -103,10 +133,10 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
         />
 
         <Map
-          center={content.location || location}
-          level={content.mapLevel}
+          center={curCenter}
+          level={3}
           onClick={(_, { latLng }) =>
-            setMarkerPosition({
+            setCurMarkerPosition({
               lat: latLng.getLat(),
               lng: latLng.getLng(),
             })
@@ -114,13 +144,16 @@ const SearchMap = ({ setShowMap }: SearchMapProps) => {
           css={styles.map}
           ref={mapRef}
         >
-          {markerPosition && (
-            <MapMarker position={markerPosition} image={natshuMarker} />
+          {curMarkerPosition && (
+            <MapMarker position={curMarkerPosition} image={natshuMarker} />
           )}
         </Map>
         <AppButton
-          onClick={onClick}
-          backgroundcolor={markerPosition ? "#000" : "#bbb"}
+          onClick={() => {
+            onComplete();
+            setShowMap?.(false);
+          }}
+          backgroundcolor={curMarkerPosition ? "#000" : "#bbb"}
           css={styles.button}
         >
           확인
