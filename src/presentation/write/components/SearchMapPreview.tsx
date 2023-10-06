@@ -6,31 +6,49 @@ import { ILocation } from "@/domain/models/location";
 import { InputAdornment, css } from "@mui/material";
 import { ReactElement, useState } from "react";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
+import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
+import InputChip from "@/presentation/common/atoms/InputChip";
 interface SearchMapPreviewProps {
-  value: ILocation | null;
-  onChange: (value: ILocation | null) => void;
+  location: ILocation | null;
+  onLocationChange: (value: ILocation | null) => void;
 }
 export const SearchMapPreview = ({
-  value,
-  onChange,
+  location,
+  onLocationChange: onChange,
 }: SearchMapPreviewProps): ReactElement => {
   const [showMap, setShowMap] = useState(false);
   const selectLocation = (newLocation: ILocation | null) => {
     onChange(newLocation);
   };
+
+  const { data: address } = useKakaoMapAddressSearch(location);
   return (
     <>
       {showMap && (
         <SearchMap
-          curLocation={value}
+          curLocation={location}
           onLocationSelected={selectLocation}
           setShowMap={setShowMap}
         />
       )}
+
       <AppTextField
-        placeholder="사고가 발생한 위치를 알려주세요!"
+        placeholder={location == null ? "사고가 발생한 위치를 알려주세요!" : ""}
         onClick={() => setShowMap(true)}
         InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              {location != null && (
+                <InputChip
+                  text={
+                    location?.place == null
+                      ? `${address?.address_name}`
+                      : location?.place?.place_name
+                  }
+                />
+              )}
+            </InputAdornment>
+          ),
           endAdornment: (
             <InputAdornment position="end">
               <Frame36 />
@@ -40,15 +58,15 @@ export const SearchMapPreview = ({
         }}
         sx={{ cursor: "pointer" }}
       />
-      {value && (
+      {location && (
         <Map
-          center={value}
-          level={value.level}
+          center={location}
+          level={location.level}
           css={styles.map}
           draggable={false}
           disableDoubleClickZoom
         >
-          <MapMarker position={value} image={natshuMarker} />
+          <MapMarker position={location} image={natshuMarker} />
         </Map>
       )}
     </>

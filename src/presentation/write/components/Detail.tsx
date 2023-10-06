@@ -101,8 +101,8 @@ const Detail = () => {
 
       <ContentWithTitle title="사고위치">
         <SearchMapPreview
-          value={location}
-          onChange={(value) => {
+          location={location}
+          onLocationChange={(value) => {
             setValue("content.location", value);
           }}
         />

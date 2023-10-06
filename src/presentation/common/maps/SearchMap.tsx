@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, Dispatch, SetStateAction } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { css } from "@emotion/react";
-import { Box, InputAdornment } from "@mui/material";
+import { Container, InputAdornment, Modal } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { natshuMarker } from "@/presentation/configs";
@@ -80,8 +80,13 @@ const SearchMap = (props: SearchMapProps) => {
     onLocationSelected(curCenter);
   }, [setShowMap, onLocationSelected, curCenter]);
   return (
-    <Box css={styles.container}>
-      <Box css={pageContentStyles}>
+    <Modal css={styles.container} open>
+      <Container
+        css={[pageContentStyles, styles.content]}
+        maxWidth={"xs"}
+        fixed
+        disableGutters
+      >
         {setShowMap && (
           <Left1
             onClick={() => setShowMap(false)}
@@ -143,8 +148,8 @@ const SearchMap = (props: SearchMapProps) => {
         >
           확인
         </AppButton>
-      </Box>
-    </Box>
+      </Container>
+    </Modal>
   );
 };
 
@@ -152,13 +157,19 @@ export default SearchMap;
 
 const styles: CssObject = {
   container: css({
-    position: "absolute",
+    position: "fixed",
     top: 0,
     left: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: 4,
+    backgroundColor: "var(--background)",
+  }),
+  content: css({
+    position: "relative",
     width: "100%",
     height: "100%",
-    zIndex: 2,
-    backgroundColor: "var(--background)",
+    zIndex: 4,
   }),
   input: css({ height: "40px", zIndex: 4 }),
   map: css({
