@@ -57,7 +57,7 @@ export const SignUpPage = (): ReactElement => {
       .then((confirmationResult) => {
         console.log(confirmationResult);
       })
-      .catch((error) => {
+      .catch(() => {
         // Error; SMS not sent
         // ...
       });
