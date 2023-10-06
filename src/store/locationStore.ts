@@ -1,6 +1,5 @@
 import { ILocation } from "@/domain/models/location";
 import { create } from "zustand";
-import { devtools } from "zustand/middleware";
 
 export interface ILocationStatus {
   loading: boolean;
@@ -28,11 +27,11 @@ const initialState: locationState = {
 };
 
 export const locationStore = create<locationState & setLocationState>(
-  devtools((set) => ({
+  (set) => ({
     ...initialState,
     setLocation: (location: ILocation) =>
       set((prev) => ({ ...prev, location })),
     setStatus: (status: ILocationStatus) =>
       set((prev) => ({ ...prev, status })),
-  }))
+  })
 );
