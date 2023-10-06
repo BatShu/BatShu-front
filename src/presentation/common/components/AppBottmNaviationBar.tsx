@@ -9,10 +9,12 @@ import { ReactComponent as Message1Icon } from "@/presentation/common/icons/outl
 import { ReactComponent as PenIcon } from "@/presentation/common/icons/outlined/Pen.svg";
 import { ReactComponent as InstagramIcon } from "@/presentation/common/icons/outlined/Instagram.svg";
 import { ReactComponent as ProfileSquareIcon } from "@/presentation/common/icons/outlined/Profile Square.svg";
+import { useSignOut } from "@/data/hooks/auth";
 
 export const AppBottomNavigationBar = () => {
   const navigate = useNavigate();
-
+  // for test
+  const { mutate: signOut } = useSignOut();
   return (
     <BottomNavigation
       showLabels
@@ -51,6 +53,7 @@ export const AppBottomNavigationBar = () => {
         label="프로필"
         icon={<ProfileSquareIcon />}
         css={actionStyles}
+        onClick={() => signOut()}
       />
     </BottomNavigation>
   );
