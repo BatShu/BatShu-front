@@ -20,14 +20,14 @@ const useKakaoMapSearch = (keyword: string) => {
 
 export const useKakaoMapAddressSearch = (location: ILocation | null) => {
   return useQuery<kakao.maps.services.Address>({
-    queryKey: ["kakaoMapAdressSearch", location?.y, location?.x],
+    queryKey: ["kakaoMapAdressSearch", location?.lat, location?.lng],
     queryFn: async () => {
       if (location == null) {
         throw new Error("location is null");
       }
       const geoEncoder = new kakao.maps.services.Geocoder();
       return new Promise((resolve, reject) => {
-        geoEncoder.coord2Address(location.x, location.y, (data, status) => {
+        geoEncoder.coord2Address(location.lng, location.lat, (data, status) => {
           if (status === kakao.maps.services.Status.OK) {
             resolve(data[0].address);
           }

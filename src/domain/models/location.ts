@@ -1,11 +1,11 @@
 export type TPlace = kakao.maps.services.PlacesSearchResultItem;
 /**
- * @param y 위도 (latitude)
- * @param x 경도 (longitude)
+ * @param lat 위도 (y)
+ * @param lng 경도 (x)
  */
 export interface ILocation {
-  y: number;
-  x: number;
+  lat: number;
+  lng: number;
   level: number;
   place: TPlace | null;
 }

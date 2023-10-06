@@ -36,7 +36,7 @@ export const HomePage = (): ReactElement => {
     if (!mapRef.current) return;
 
     mapRef.current.setLevel(4);
-    mapRef.current.panTo(new kakao.maps.LatLng(location.y, location.x));
+    mapRef.current.panTo(new kakao.maps.LatLng(location.lat, location.lng));
   };
 
   const zoomMap = (isPlus: boolean) => {

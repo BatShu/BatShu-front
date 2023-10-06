@@ -19,8 +19,8 @@ interface setLocationState {
 
 const initialState: locationState = {
   location: {
-    y: 37.24291020655134,
-    x: 127.08118995506915,
+    lat: 37.24291020655134,
+    lng: 127.08118995506915,
     level: 3,
     place: null,
   },
