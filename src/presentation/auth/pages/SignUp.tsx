@@ -80,6 +80,9 @@ export const SignUpPage = (): ReactElement => {
             <AppTextField
               placeholder="아이디를 입력해주세요."
               type="id"
+              inputProps={{
+                maxLength: 20,
+              }}
               {...register("id", {
                 required: true,
                 minLength: 4,
@@ -92,6 +95,9 @@ export const SignUpPage = (): ReactElement => {
             <AppTextField
               placeholder="비밀번호를 입력해주세요."
               type="password"
+              inputProps={{
+                maxLength: 20,
+              }}
               {...register("password", {
                 required: true,
                 minLength: 8,
@@ -112,6 +118,10 @@ export const SignUpPage = (): ReactElement => {
                 css={css`
                   flex: 1;
                 `}
+                inputProps={{
+                  maxLength: 11,
+                  inputMode: "numeric",
+                }}
                 {...register("phoneNumber", {
                   required: true,
                   maxLength: 11,
