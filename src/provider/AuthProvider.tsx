@@ -10,6 +10,7 @@ export const AuthProvider = () => {
   const navigate = useNavigate();
   useEffect(() => {
     console.log(user);
+    if (!init) return;
     if (location.pathname === LOGIN_PATH || location.pathname === SIGNUP_PATH) {
       if (user == null) return;
       navigate(HOME_PATH, { replace: true });
@@ -17,7 +18,7 @@ export const AuthProvider = () => {
     }
     if (user != null) return;
     navigate(LOGIN_PATH, { replace: true });
-  }, [user, location, navigate, setUser]);
+  }, [user, location, navigate, setUser, init]);
 
   return (
     <>
