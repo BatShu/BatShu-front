@@ -22,7 +22,6 @@ import { AccidentToggleButton } from "./components/AccidentToggleButton";
 import { AppIconButton } from "../common/components/AppIconButton";
 import { AccidentButton } from "./components/AccidentButton";
 import { AppBottomNavigationBar } from "../common/components/AppBottmNaviationBar";
-import { useReadAccidentsByLocation } from "@/data/hooks/accident";
 
 export const HomePage = (): ReactElement => {
   const {
