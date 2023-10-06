@@ -75,6 +75,10 @@ const SearchMap = (props: SearchMapProps) => {
     [setCurCenter]
   );
 
+  const handleLocationSearchComplete = useCallback(() => {
+    setShowMap?.(false);
+    onLocationSelected(curCenter);
+  }, [setShowMap, onLocationSelected, curCenter]);
   return (
     <Box css={styles.container}>
       <Box css={pageContentStyles}>
@@ -134,10 +138,7 @@ const SearchMap = (props: SearchMapProps) => {
         </Map>
         <AppButton
           disabled={!location || !checked}
-          onClick={() => {
-            setShowMap?.(false);
-            onLocationSelected(curCenter);
-          }}
+          onClick={handleLocationSearchComplete}
           css={styles.button}
         >
           확인

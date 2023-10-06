@@ -67,6 +67,7 @@ export const SearchPage = (): ReactElement => {
           onLocationSelected={(newLocation) => {
             setValue("location", newLocation);
           }}
+          setShowMap={setShowMap}
         />
       )}
 
