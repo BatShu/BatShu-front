@@ -21,7 +21,10 @@ export const useReadAccidentsByLocation = (
     queryKey: ["accidents", location],
     queryFn: () =>
       API.GET<ReadAccidentsByLocationResponse>(
-        GET_ACCIDENT_BY_LOCATION(location)
+        GET_ACCIDENT_BY_LOCATION({
+          x: location.lng,
+          y: location.lat,
+        })
       ),
   });
 };
