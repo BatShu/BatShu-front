@@ -1,5 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { useState } from "react";
 // styles
 import {
   Accordion,
@@ -12,10 +11,9 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CssObject } from "@/presentation/common/styles/types";
-import { natshuMarker } from "@/presentation/configs";
 // icons
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
-import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
+
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // components
@@ -26,12 +24,9 @@ import AccidentDate from "./AccidentDate";
 import UploadImage from "./UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
 import { Controller } from "react-hook-form";
+import { SearchMapPreview } from "./SearchMapPreview";
 
-interface DetailProps {
-  setShowMap: Dispatch<SetStateAction<boolean>>;
-}
-
-const Detail = ({ setShowMap }: DetailProps) => {
+const Detail = () => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
   const {
     watch,
@@ -42,7 +37,7 @@ const Detail = ({ setShowMap }: DetailProps) => {
   } = useWriteFormContext();
   const {
     type,
-    content: { location, mapLevel },
+    content: { location },
   } = watch();
   const isWitness = type === "목격자";
   return (
@@ -105,30 +100,12 @@ const Detail = ({ setShowMap }: DetailProps) => {
       </ContentWithTitle>
 
       <ContentWithTitle title="사고위치">
-        <AppTextField
-          placeholder="사고가 발생한 위치를 알려주세요!"
-          onClick={() => setShowMap(true)}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Frame36 />
-              </InputAdornment>
-            ),
-            readOnly: true,
+        <SearchMapPreview
+          value={location}
+          onChange={(value) => {
+            setValue("content.location", value);
           }}
-          sx={{ cursor: "pointer" }}
         />
-        {location && (
-          <Map
-            center={location}
-            level={mapLevel}
-            css={styles.map}
-            draggable={false}
-            disableDoubleClickZoom
-          >
-            <MapMarker position={location} image={natshuMarker} />
-          </Map>
-        )}
       </ContentWithTitle>
 
       {!isWitness && (

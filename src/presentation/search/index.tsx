@@ -25,7 +25,7 @@ import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import SearchMap from "../common/maps/SearchMap";
 
 interface SearchForm {
-  place: ILocation | null;
+  location: ILocation | null;
   date: Dayjs | null;
   carNumber: {
     head: string;
@@ -50,19 +50,10 @@ export const SearchPage = (): ReactElement => {
   const [showMap, setShowMap] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const [curPlace, setCurPlace] =
-    useState<kakao.maps.services.PlacesSearchResultItem | null>(null);
-  const [markerPosition, setMarkerPosition] = useState<ILocation | null>(null);
-
   const calendarRef = useRef<HTMLDivElement>(null);
   const date = watch("date");
-  const place = watch("place");
+  const location = watch("location");
   const navigate = useNavigate();
-
-  const onComplete = () => {
-    if (!markerPosition) return;
-    setValue("place", markerPosition);
-  };
 
   const onSubmit = (data: SearchForm) => {
     console.log(data);
@@ -72,12 +63,10 @@ export const SearchPage = (): ReactElement => {
     <form css={styles.container} onSubmit={handleSubmit(onSubmit)}>
       {showMap && (
         <SearchMap
-          center={place}
-          setShowMap={setShowMap}
-          setPlace={setCurPlace}
-          setMarkerPosition={setMarkerPosition}
-          onComplete={onComplete}
-          checked={!!place}
+          curLocation={location}
+          onLocationSelected={(newLocation) => {
+            setValue("location", newLocation);
+          }}
         />
       )}
 
@@ -102,16 +91,16 @@ export const SearchPage = (): ReactElement => {
 
         <Box>
           <AppTextField
-            placeholder={!place ? "어디 인가요?" : ""}
+            placeholder={location == null ? "어디 인가요?" : ""}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <Location />
-                  {(curPlace || markerPosition) && (
+                  {location?.place && (
                     <InputChip
                       text={
-                        curPlace?.place_name ||
-                        `${markerPosition?.lat}, ${markerPosition?.lng}`
+                        location?.place?.place_name ||
+                        `${location?.lat}, ${location?.lng}`
                       }
                     />
                   )}
@@ -119,7 +108,7 @@ export const SearchPage = (): ReactElement => {
               ),
               readOnly: true,
             }}
-            css={styles.inputSelect(!!place)}
+            css={styles.inputSelect(location == null)}
             onClick={() => setShowMap(true)}
           />
 

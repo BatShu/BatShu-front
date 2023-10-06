@@ -7,8 +7,6 @@ import { Box, css } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { sliderSettings } from "@/presentation/configs";
-// types
-import { ILocation } from "@/store/locationStore";
 // store
 import {
   useWriteForm,
@@ -20,21 +18,14 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
 import Detail from "./components/Detail";
-import SearchMap from "../common/maps/SearchMap";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
-  const [showMap, setShowMap] = useState(false);
-  const [markerPosition, setMarkerPosition] = useState<ILocation | null>(null);
 
   const details = useWriteForm();
   const handleSubmit = details.handleSubmit;
   const sliderRef = useRef<Slider>(null);
   const navigate = useNavigate();
-
-  const selectLocation = () => {
-    details.setValue("content.location", markerPosition);
-  };
 
   const onSubmit = (data: writeFormState) => {
     console.log(data);
@@ -43,14 +34,6 @@ export const WritePage = () => {
   return (
     <FormProvider {...details}>
       <form css={styles.pageWrapper} onSubmit={handleSubmit(onSubmit)}>
-        {showMap && (
-          <SearchMap
-            setShowMap={setShowMap}
-            setMarkerPosition={setMarkerPosition}
-            onComplete={selectLocation}
-          />
-        )}
-
         <Box css={pageContentStyles}>
           <Box css={styles.container}>
             <Box css={styles.topArea}>
@@ -77,7 +60,7 @@ export const WritePage = () => {
                 </Box>
 
                 <Box css={styles.content}>
-                  <Detail setShowMap={setShowMap} />
+                  <Detail />
                 </Box>
               </Slider>
             </Box>
