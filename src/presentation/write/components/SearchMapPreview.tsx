@@ -2,7 +2,7 @@ import { AppTextField } from "@/presentation/common/components/AppTextField";
 import SearchMap from "@/presentation/common/maps/SearchMap";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { natshuMarker } from "@/presentation/configs";
-import { ILocation } from "@/store/locationStore";
+import { ILocation } from "@/domain/models/location";
 import { InputAdornment, css } from "@mui/material";
 import { ReactElement, useState } from "react";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";

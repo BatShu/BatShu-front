@@ -8,7 +8,8 @@ import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { natshuMarker } from "@/presentation/configs";
 // hooks
 // store
-import { ILocation, TPlace, locationStore } from "@/store/locationStore";
+import { locationStore } from "@/store/locationStore";
+import { ILocation, TPlace } from "@/domain/models/location";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";

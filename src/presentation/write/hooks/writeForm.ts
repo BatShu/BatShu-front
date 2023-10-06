@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 // store
-import { ILocation } from "../../../store/locationStore";
+import { ILocation } from "@/domain/models/location";
 // lib
 import { TFile } from "@/lib";
 import {

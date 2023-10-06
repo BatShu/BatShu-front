@@ -15,7 +15,7 @@ import { ReactComponent as Location } from "@/presentation/common/icons/outlined
 import { ReactComponent as Calender1 } from "@/presentation/common/icons/outlined/Calender 1.svg";
 import { ReactComponent as Up2 } from "@/presentation/common/icons/outlined/Up 2.svg";
 // types
-import { ILocation } from "@/store/locationStore";
+import { ILocation } from "@/domain/models/location";
 // components
 import { AppTextField } from "../common/components/AppTextField";
 import AppButton from "../common/components/AppButton";

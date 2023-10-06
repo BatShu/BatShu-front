@@ -1,6 +1,6 @@
 import { CssObject } from "@/presentation/common/styles/types";
 import { Box, Typography, css } from "@mui/material";
-import { TPlace } from "@/store/locationStore";
+import { TPlace } from "@/domain/models/location";
 import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 
 interface PlaceResultProps {
