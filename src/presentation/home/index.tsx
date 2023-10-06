@@ -37,7 +37,7 @@ export const HomePage = (): ReactElement => {
     if (!mapRef.current) return;
 
     mapRef.current.setLevel(4);
-    mapRef.current.panTo(new kakao.maps.LatLng(location.lat, location.lng));
+    mapRef.current.panTo(new kakao.maps.LatLng(location.y, location.x));
   };
 
   const zoomMap = (isPlus: boolean) => {
@@ -47,7 +47,7 @@ export const HomePage = (): ReactElement => {
     mapRef.current.setLevel(curLevel + (isPlus ? -1 : 1), { animate: true });
   };
 
-  useReadAccidentsByLocation(1, 1, 1);
+  //useReadAccidentsByLocation(1, 1, 1);
   return (
     <Box css={styles.pageWrapper}>
       <Splash />

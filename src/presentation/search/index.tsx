@@ -23,6 +23,7 @@ import Spacer from "../common/atoms/Spacer";
 import InputChip from "../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import SearchMap from "../common/maps/SearchMap";
+import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 
 interface SearchForm {
   location: ILocation | null;
@@ -54,7 +55,7 @@ export const SearchPage = (): ReactElement => {
   const date = watch("date");
   const location = watch("location");
   const navigate = useNavigate();
-
+  const { data: address } = useKakaoMapAddressSearch(location);
   const onSubmit = (data: SearchForm) => {
     console.log(data);
   };
@@ -97,11 +98,12 @@ export const SearchPage = (): ReactElement => {
               startAdornment: (
                 <InputAdornment position="start">
                   <Location />
-                  {location?.place && (
+                  {location != null && (
                     <InputChip
                       text={
-                        location?.place?.place_name ||
-                        `${location?.lat}, ${location?.lng}`
+                        location?.place == null
+                          ? `${address?.address_name}`
+                          : location?.place?.place_name
                       }
                     />
                   )}

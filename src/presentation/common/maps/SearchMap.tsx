@@ -50,8 +50,8 @@ const SearchMap = (props: SearchMapProps) => {
 
       const position = new kakao.maps.LatLng(lat, lng);
       setCurCenter({
-        lat,
-        lng,
+        y: lat,
+        x: lng,
         level: mapRef.current.getLevel(),
         place: newPlace,
       });
@@ -65,8 +65,8 @@ const SearchMap = (props: SearchMapProps) => {
   const handleUpdateLocation = useCallback(
     (latLng: kakao.maps.LatLng) => {
       setCurCenter({
-        lat: latLng.getLat(),
-        lng: latLng.getLng(),
+        y: latLng.getLat(),
+        x: latLng.getLng(),
         level: mapRef.current?.getLevel() ?? 3,
         place: null,
       });

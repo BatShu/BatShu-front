@@ -15,15 +15,13 @@ export interface ReadAccidentsByLocationResponse {
   }[];
 }
 export const useReadAccidentsByLocation = (
-  x: number,
-  y: number,
-  level: number
+  location: ILocation
 ): UseQueryResult<ReadAccidentsByLocationResponse> => {
   return useQuery({
-    queryKey: ["accidents", x, y],
+    queryKey: ["accidents", location],
     queryFn: () =>
       API.GET<ReadAccidentsByLocationResponse>(
-        GET_ACCIDENT_BY_LOCATION({ x, y, level })
+        GET_ACCIDENT_BY_LOCATION(location)
       ),
   });
 };

@@ -1,3 +1,4 @@
+import { ILocation } from "@/domain/models/location";
 import { useQuery } from "@tanstack/react-query";
 
 const useKakaoMapSearch = (keyword: string) => {
@@ -17,4 +18,23 @@ const useKakaoMapSearch = (keyword: string) => {
   });
 };
 
+export const useKakaoMapAddressSearch = (location: ILocation | null) => {
+  return useQuery<kakao.maps.services.Address>({
+    queryKey: ["kakaoMapAdressSearch", location?.y, location?.x],
+    queryFn: async () => {
+      if (location == null) {
+        throw new Error("location is null");
+      }
+      const geoEncoder = new kakao.maps.services.Geocoder();
+      return new Promise((resolve, reject) => {
+        geoEncoder.coord2Address(location.x, location.y, (data, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            resolve(data[0].address);
+          }
+          reject("검색 결과가 없습니다.");
+        });
+      });
+    },
+  });
+};
 export default useKakaoMapSearch;
