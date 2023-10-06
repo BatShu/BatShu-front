@@ -7,7 +7,7 @@ export default function useUserLocation() {
   const successHandler: PositionCallback = useCallback(
     (position) => {
       const { latitude: lat, longitude: lng } = position.coords;
-      setLocation({ lat, lng });
+      setLocation({ lat, lng, level: 3, place: null });
       setStatus({ loading: false, error: false });
     },
     [setLocation, setStatus]
