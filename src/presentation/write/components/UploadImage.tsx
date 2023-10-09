@@ -9,7 +9,7 @@ import { ReactComponent as AddSquare } from "@/presentation/common/icons/outline
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
-import { setMultipleFile } from "@/lib";
+import { TFile, setMultipleFile } from "@/lib";
 
 interface ImageBoxProps {
   src: string;
@@ -69,7 +69,11 @@ const UploadImage = () => {
                   multiple
                   hidden
                   ref={inputRef}
-                  onChange={(e) => setMultipleFile(e, onChange)}
+                  onChange={(e) =>
+                    setMultipleFile(e, (newImages: TFile[]) => {
+                      onChange(images.concat(newImages));
+                    })
+                  }
                 />
               )}
             />
