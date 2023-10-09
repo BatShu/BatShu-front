@@ -34,7 +34,7 @@ const SearchMap = (props: SearchMapProps) => {
   );
 
   const [keyword, setKeyword] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(curLocation != null);
   const [showResults, setShowResults] = useState(false);
 
   const mapRef = useRef<kakao.maps.Map>(null);
