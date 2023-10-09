@@ -46,6 +46,10 @@ export const GlobalStyles = (): ReactElement => {
             display: none; /* Chrome, Safari, Opera*/
           }
         }
+        .notistack-MuiContent-default {
+          display: flex;
+          justify-content: center;
+        }
       `}
     />
   );
