@@ -1,0 +1,27 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 39">
+<g id="Group 31">
+<path id="Rectangle 55" d="M6.74124 3.911C6.77817 3.81406 6.87113 3.75 6.97487 3.75H17.0251C17.1289 3.75 17.2218 3.81406 17.2588 3.911L18.7826 7.911C18.8449 8.07463 18.724 8.25 18.5489 8.25H5.45106C5.27595 8.25 5.1551 8.07463 5.21744 7.911L6.74124 3.911Z" stroke="black" stroke-width="1.5"/>
+<g id="Rectangle 56">
+<mask id="path-2-inside-1_418_19220" fill="white">
+<rect x="2" y="10" width="20" height="7" rx="1"/>
+</mask>
+<rect x="2" y="10" width="20" height="7" rx="1" stroke="black" stroke-width="3" mask="url(#path-2-inside-1_418_19220)"/>
+</g>
+<circle id="Ellipse 11" cx="6.5" cy="13.5" r="1" stroke="black"/>
+<circle id="Ellipse 12" cx="17.5" cy="13.5" r="1" stroke="black"/>
+<g id="Rectangle 57">
+<mask id="path-5-inside-2_418_19220" fill="white">
+<path d="M4 16H8V20C8 20.5523 7.55228 21 7 21H5C4.44772 21 4 20.5523 4 20V16Z"/>
+</mask>
+<path d="M4 16H8V20C8 20.5523 7.55228 21 7 21H5C4.44772 21 4 20.5523 4 20V16Z" stroke="black" stroke-width="3" mask="url(#path-5-inside-2_418_19220)"/>
+</g>
+<g id="Rectangle 58">
+<mask id="path-6-inside-3_418_19220" fill="white">
+<path d="M16 16H20V20C20 20.5523 19.5523 21 19 21H17C16.4477 21 16 20.5523 16 20V16Z"/>
+</mask>
+<path d="M16 16H20V20C20 20.5523 19.5523 21 19 21H17C16.4477 21 16 20.5523 16 20V16Z" stroke="black" stroke-width="3" mask="url(#path-6-inside-3_418_19220)"/>
+</g>
+</g>
+</g>
+</svg>

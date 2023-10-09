@@ -11,7 +11,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { GlobalStyles } from "./presentation/common/atoms/GlobalStyles";
+import { GlobalStyles } from "./presentation/common/styles/GlobalStyles";
 import {
   MuiDateCalendarOptions,
   snackbarOptions,

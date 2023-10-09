@@ -9,6 +9,7 @@ import { ReactComponent as AddSquare } from "@/presentation/common/icons/outline
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
+// lib
 import { setMultipleFile } from "@/lib";
 
 interface ImageBoxProps {
@@ -44,7 +45,7 @@ const UploadImage = () => {
   return (
     <Box css={styles.container}>
       <Swiper
-        slidesPerView={4.2}
+        slidesPerView={3.5}
         spaceBetween={10}
         css={styles.swiper}
         loop={false}
@@ -101,15 +102,8 @@ const styles: CssObject = {
     "& *": { transition: "all ease 0.15s" },
   }),
   swiper: css({
-    display: "flex",
-    overflow: "hidden",
-    padding: "20px 5px 0 0",
-    touchAction: "none",
     width: "100%",
-    "& .swiper-wrapper": {
-      display: "flex",
-      alignItems: "center",
-    },
+    "& .swiper-wrapper": { paddingTop: "10px" },
   }),
   input: css({ cursor: "pointer" }),
   box: css({
@@ -135,7 +129,7 @@ const styles: CssObject = {
     position: "absolute",
     width: 18,
     top: -10,
-    right: -5,
+    right: 0,
     cursor: "pointer",
     ":hover": {
       transform: "scale(1.08)",

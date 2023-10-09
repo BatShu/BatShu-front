@@ -5,6 +5,7 @@ import {
   SEARCH_PATH,
   WRITE_PATH,
   LOGIN_PATH,
+  DETAIL_PATH,
 } from "./domain/paths";
 import { HomePage } from "./presentation/home";
 import { SearchPage } from "./presentation/search";
@@ -12,6 +13,7 @@ import { WritePage } from "./presentation/write";
 import { SignUpPage } from "./presentation/auth/pages/SignUp";
 import { LoginPage } from "./presentation/auth/pages/Login";
 import { AuthProvider } from "./provider/AuthProvider";
+import { DetailPage } from "./presentation/detail";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: LOGIN_PATH,
         element: <LoginPage />,
+      },
+      {
+        path: DETAIL_PATH,
+        element: <DetailPage />,
       },
     ],
   },

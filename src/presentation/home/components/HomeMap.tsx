@@ -13,6 +13,8 @@ import { curLocationMarker, pinMarker } from "@/presentation/configs";
 import { ILocation, locationStore } from "@/store/locationStore";
 // components
 import AccidentDrawer from "./AccidentDrawer";
+// delete
+import { dummyAccidents } from "../temp";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -57,7 +59,7 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {dummyDatadata.map(({ id, location: { y, x } }) => (
+          {dummyAccidents.map(({ id, location: { y, x } }) => (
             <MapMarker
               key={id}
               position={{ lat: y, lng: x }}
@@ -99,30 +101,3 @@ const styles = {
     height: "inherit",
   }),
 };
-
-const dummyDatadata = [
-  {
-    id: 0,
-    location: {
-      x: 127.02877138902706,
-      y: 37.553756043633705,
-      level: 1,
-    },
-  },
-  {
-    id: 1,
-    location: {
-      x: 127.11223931056016,
-      y: 37.59973258972703,
-      level: 2,
-    },
-  },
-  {
-    id: 2,
-    location: {
-      x: 127.03877138902706,
-      y: 37.5737560436337,
-      level: 1,
-    },
-  },
-];

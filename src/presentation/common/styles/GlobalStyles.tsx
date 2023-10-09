@@ -1,5 +1,6 @@
 import { Global, css } from "@emotion/react";
 import { ReactElement } from "react";
+import "swiper/css";
 
 export const GlobalStyles = (): ReactElement => {
   return (

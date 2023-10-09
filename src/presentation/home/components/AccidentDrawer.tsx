@@ -1,12 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 // styles
 import { Box, Divider, SwipeableDrawer, Typography, css } from "@mui/material";
-// hooks
-import { useReadAccidentById } from "@/data/hooks/accident";
+// icons
+import { ReactComponent as TimeCircle2 } from "@/presentation/common/icons/outlined/Time Circle 2.svg";
+import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
 // constants
 import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
+// delete
+import { dummyDetail } from "../temp";
 
 interface AccidentDrawerProps {
   accidentId: number | null;
@@ -20,8 +24,12 @@ const AccidentDrawer = ({
   onClose,
 }: AccidentDrawerProps) => {
   // useReadAccidentById(accidentId);
-  const { accidentTime, photos, accidentlocation, createdTime } = dummyData;
+  const { accidentTime, photos, createdTime } = dummyDetail;
+  const router = useNavigate();
 
+  const routeToDetail = () => {
+    router(`/detail/${accidentId}`, { state: { dummyDetail } });
+  };
   return (
     <SwipeableDrawer
       open={!!accidentId}
@@ -35,7 +43,7 @@ const AccidentDrawer = ({
         <Divider css={styles.divider} />
         <Box css={styles.contentWrapper}>
           <Box className="content">
-            <Box className="status">● 요청중</Box>
+            <Typography className="status">● 요청중</Typography>
             <Box className="date">
               {dayjs(createdTime).format(DATE_FORMAT_SEARCH)}
             </Box>
@@ -50,13 +58,22 @@ const AccidentDrawer = ({
                   60마 8888
                 </Typography>
               </Box>
-              <Box css={styles.chip}>{accidentTime}</Box>
-              <Box css={styles.chip}>{accidentlocation.x}</Box>
+              <Box css={styles.chip}>
+                <TimeCircle2 css={styles.icon} />
+                {accidentTime}
+              </Box>
+              <Box css={styles.chip}>
+                <Frame36 css={styles.icon} />
+                종각역 3번출구
+              </Box>
             </Box>
           </Box>
 
           <Box className="content">
-            <AppButton css={[styles.button, styles.detail]}>
+            <AppButton
+              css={[styles.button, styles.detail]}
+              onClick={routeToDetail}
+            >
               자세히 보기
             </AppButton>
             <AppButton css={styles.button}>제보하기</AppButton>
@@ -96,67 +113,50 @@ const styles = {
       "& .status": { color: "#68CCE2" },
       "& .date": { color: "#C2C2C2" },
     },
-    "& .middle": { padding: "12px 0 30px 0" },
+    "& .middle": { justifyContent: "unset", padding: "12px 0 30px 0" },
     "& .accident-image": {
-      height: 140,
+      width: 140,
       aspectRatio: "1",
       borderRadius: "10px",
     },
     "& .info": {
       display: "flex",
-      maxWidth: "60%",
       flexDirection: "column",
+      width: "50%",
       justifyContent: "space-between",
       paddingLeft: "25px",
-      "& .car-number": { color: "#fff", backgroundColor: "#000" },
+      marginLeft: "auto",
+      "& .car-number": {
+        flexDirection: "column",
+        color: "#fff",
+        backgroundColor: "#000",
+      },
     },
   }),
   chip: css({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
     ":not(.car-number)": { width: "fit-content" },
-    fontSize: "16px",
+    fontSize: "14px",
     fontWeight: 500,
     color: "#808080",
     backgroundColor: "#F5F5F5",
     borderRadius: "12px",
-    padding: "6px 24px",
+    padding: "6px 15px",
   }),
+  icon: css({ width: "18px", marginRight: "5px" }),
   "& .detail": css({
     color: "#000",
     backgroundColor: "#fff",
     border: "2px solid #000",
   }),
-  button: css({
-    width: "49%",
-  }),
+  button: css({ width: "49%" }),
   detail: css({
     color: "#000",
     backgroundColor: "#fff",
     border: "1.5px solid #000",
-    "&:hover": {
-      backgroundColor: "inherit",
-    },
+    "&:hover": { backgroundColor: "inherit" },
   }),
-};
-
-const dummyData = {
-  id: 1,
-  author: {
-    uid: "0",
-    email: "[이메일]",
-    displayName: "0번 유",
-    photoURL: "[프로필 사진 url]",
-  },
-  contentTitle: "게시글 제목",
-  contentDescription: "게시글 내용",
-  photos: [
-    "https://images.unsplash.com/photo-1682686581362-796145f0e123",
-    "https://images.unsplash.com/photo-1694481348806-0b6de4934812",
-  ],
-  accidentTime: "사고 시간",
-  accidentlocation: {
-    x: 127.02877138902706,
-    y: 37.553756043633705,
-    level: 1,
-  },
-  createdTime: "Thu Sep 14 2023 18:00:41 GMT+0900 (한국 표준시)",
 };
