@@ -3,9 +3,10 @@ import { Map } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
 import { CssObject } from "../../common/styles/types";
+import { ILocation } from "@/domain/models/location";
 
 interface KakaoMapProps {
-  location: { lat: number; lng: number };
+  location: ILocation;
   loading: boolean;
 }
 

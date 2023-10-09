@@ -22,7 +22,6 @@ import { AccidentToggleButton } from "./components/AccidentToggleButton";
 import { AppIconButton } from "../common/components/AppIconButton";
 import { AccidentButton } from "./components/AccidentButton";
 import { AppBottomNavigationBar } from "../common/components/AppBottmNaviationBar";
-import { useReadAccidentsByLocation } from "@/data/hooks/accident";
 
 export const HomePage = (): ReactElement => {
   const {
@@ -47,7 +46,7 @@ export const HomePage = (): ReactElement => {
     mapRef.current.setLevel(curLevel + (isPlus ? -1 : 1), { animate: true });
   };
 
-  useReadAccidentsByLocation(1, 1, 1);
+  //useReadAccidentsByLocation(1, 1, 1);
   return (
     <Box css={styles.pageWrapper}>
       <Splash />

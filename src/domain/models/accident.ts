@@ -1,5 +1,5 @@
 import { AppUser } from "./appUser";
-import { AppLocation } from "./location";
+import { ILocation } from "./location";
 export interface Accident {
   id: number;
   author: AppUser;
@@ -7,6 +7,6 @@ export interface Accident {
   contentDescription: string;
   photos: string[];
   accidentTime: string;
-  accidentlocation: AppLocation;
+  accidentlocation: ILocation;
   createdTime: string;
 }

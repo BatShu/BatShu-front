@@ -1,11 +1,11 @@
 import { User } from "firebase/auth";
-import { AppLocation } from "./location";
+import { ILocation } from "./location";
 export interface Observe {
   author: User;
   contentTitle: string;
   contentDescription: string;
   photos: string[];
   accidentTime: string;
-  accidentlocation: AppLocation;
+  accidentlocation: ILocation;
   createdTime: string;
 }
