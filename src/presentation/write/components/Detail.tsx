@@ -127,8 +127,9 @@ const Detail = () => {
                   ),
                 }}
                 onChange={(e) => {
-                  const num = Number(e.target.value.replace(/,/g, ""));
-                  onChange(num);
+                  const bounty = e.target.value.replaceAll(",", "");
+                  if (!/^[0-9]*$/.test(bounty)) return;
+                  onChange(Number(bounty));
                 }}
               />
             )}
