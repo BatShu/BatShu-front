@@ -71,7 +71,7 @@ const UploadImage = () => {
                   ref={inputRef}
                   onChange={(e) =>
                     setMultipleFile(e, (newImages: TFile[]) => {
-                      onChange(images.concat(newImages));
+                      onChange(images.concat(newImages).slice(0, 5));
                     })
                   }
                 />
