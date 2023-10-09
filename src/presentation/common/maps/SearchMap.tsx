@@ -28,9 +28,9 @@ interface SearchMapProps {
 const SearchMap = (props: SearchMapProps) => {
   const { setShowMap, curLocation, onLocationSelected } = props;
 
-  const { location } = locationStore();
+  const { location: gLocation } = locationStore();
   const [curCenter, setCurCenter] = useState<ILocation>(
-    location ?? curLocation
+    curLocation ?? gLocation
   );
 
   const [keyword, setKeyword] = useState("");
@@ -142,7 +142,7 @@ const SearchMap = (props: SearchMapProps) => {
           )}
         </Map>
         <AppButton
-          disabled={!location || !checked}
+          disabled={!gLocation || !checked}
           onClick={handleLocationSearchComplete}
           css={styles.button}
         >
