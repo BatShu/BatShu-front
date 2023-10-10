@@ -1,12 +1,19 @@
-import { useState, useCallback, useRef, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useCallback,
+  useRef,
+  Dispatch,
+  SetStateAction,
+  useMemo,
+} from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import debounce from "lodash/debounce";
 // styles
 import { css } from "@emotion/react";
 import { Container, InputAdornment, Modal } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { natshuMarker } from "@/presentation/configs";
-// hooks
 // store
 import { locationStore } from "@/store/locationStore";
 import { ILocation, TPlace } from "@/domain/models/location";
@@ -79,6 +86,20 @@ const SearchMap = (props: SearchMapProps) => {
     setShowMap?.(false);
     onLocationSelected(curCenter);
   }, [setShowMap, onLocationSelected, curCenter]);
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(
+        (value: string) => {
+          setKeyword(value);
+          setShowResults(true);
+        },
+        250,
+        { leading: false }
+      ),
+    []
+  );
+
   return (
     <Modal css={styles.container} open>
       <Container
@@ -95,18 +116,10 @@ const SearchMap = (props: SearchMapProps) => {
         )}
 
         <AppTextField
-          value={keyword}
-          onChange={({ target: { value } }) => {
-            setKeyword(value);
-            setShowResults(true);
-          }}
+          onChange={({ target: { value } }) => debouncedSearch(value)}
           placeholder="정확한 사고 장소에 핀을 찍어주세요!"
           css={styles.input}
           sx={{ boxShadow: 1 }}
-          // onKeyDown={(e) => {
-          //   if (e.nativeEvent.isComposing) return;
-          //   if (e.key === "Enter" && result) setCurPlace(result[0]);
-          // }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
