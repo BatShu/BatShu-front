@@ -37,9 +37,9 @@ const HomeMap = (
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
       setAccidentDrawerId(id);
-      if (mapRef.current.getLevel() >= 8) {
-        mapRef.current.setLevel(2);
-      }
+      // if (mapRef.current.getLevel() >= 8) {
+      //   mapRef.current.setLevel(2);
+      // }
       mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
     },
     [mapRef]
