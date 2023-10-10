@@ -15,6 +15,7 @@ interface DetailChipsProps {
 
 const DetailChips = ({ data }: DetailChipsProps) => {
   const { accidentTime } = data;
+
   return (
     <Box css={styles.chipArea}>
       <DetailChip Adornment={Frame39} text="2022 SONATA" />
@@ -31,21 +32,5 @@ const styles = {
   chipArea: css({
     display: "flex",
     flexWrap: "wrap",
-    "& .chip": {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "fit-content",
-      margin: "10px 10px 0 0",
-      whiteSpace: "nowrap",
-      fontSize: "14px",
-      fontWeight: 500,
-      color: "#000",
-      border: "1px solid #d5d5d5",
-      borderRadius: "12px",
-      padding: "6px 15px",
-      cursor: "default",
-    },
-    "& svg": { marginRight: "5px" },
   }),
 };

@@ -9,8 +9,10 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
 import { curLocationMarker, pinMarker } from "@/presentation/configs";
+// types
+import { ILocation } from "@/domain/models/location";
 // store
-import { ILocation, locationStore } from "@/store/locationStore";
+import { locationStore } from "@/store/locationStore";
 // components
 import AccidentDrawer from "./AccidentDrawer";
 // delete
@@ -31,7 +33,7 @@ const HomeMap = (
   // useReadAccidentsByLocation(1, 1, 1);
 
   const clickMarker = useCallback(
-    (id: number, { lat, lng }: ILocation) => {
+    (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
       setAccidentDrawerId(id);

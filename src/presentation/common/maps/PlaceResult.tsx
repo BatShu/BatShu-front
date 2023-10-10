@@ -1,23 +1,28 @@
-import { Dispatch } from "react";
 import { CssObject } from "@/presentation/common/styles/types";
 import { Box, Typography, css } from "@mui/material";
+import { TPlace } from "@/domain/models/location";
+import useKakaoMapSearch from "@/hooks/useKakaoMapSearch";
 
 interface PlaceResultProps {
-  data: kakao.maps.services.PlacesSearchResult;
-  setPlace: Dispatch<kakao.maps.services.PlacesSearchResultItem | null>;
+  keyword: string;
+  onPlaceSelected: (place: TPlace | null) => void;
   top?: number;
 }
 
-const PlaceResult = ({ data, setPlace, top = 0 }: PlaceResultProps) => {
-  if (!data.length) return null;
-
+const PlaceResult = ({
+  keyword,
+  onPlaceSelected: onPlaceSelected,
+  top = 0,
+}: PlaceResultProps) => {
+  const { data: result } = useKakaoMapSearch(keyword);
+  if (!result) return null;
   return (
     <Box css={styles.container} top={top}>
-      {data.map((place) => (
+      {result.map((place) => (
         <Box
           key={place.id}
           css={styles.content}
-          onClick={() => setPlace(place)}
+          onClick={() => onPlaceSelected(place)}
         >
           <Typography css={styles.place}> {place.place_name}</Typography>
           <Typography css={styles.address}> {place.address_name}</Typography>

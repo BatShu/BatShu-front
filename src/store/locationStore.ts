@@ -1,9 +1,5 @@
+import { ILocation } from "@/domain/models/location";
 import { create } from "zustand";
-
-export interface ILocation {
-  lat: number;
-  lng: number;
-}
 
 export interface ILocationStatus {
   loading: boolean;
@@ -21,7 +17,12 @@ interface setLocationState {
 }
 
 const initialState: locationState = {
-  location: { lat: 127.08118995506915, lng: 37.24291020655134 },
+  location: {
+    lat: 37.24291020655134,
+    lng: 127.08118995506915,
+    level: 3,
+    place: null,
+  },
   status: { loading: true, error: false },
 };
 

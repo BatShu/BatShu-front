@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 // store
-import { ILocation } from "../../../store/locationStore";
+import { ILocation } from "@/domain/models/location";
 // lib
 import { TFile } from "@/lib";
 import {
@@ -19,7 +19,6 @@ type TContent = {
   carModelName: string;
   bounty: number;
   description: string;
-  mapLevel: number;
 };
 
 export interface writeFormState {
@@ -42,7 +41,6 @@ const initialState: writeFormState = {
     carModelName: "",
     bounty: 0,
     description: "",
-    mapLevel: 3,
   },
 };
 export const useWriteForm = (

@@ -14,6 +14,7 @@ export const HomePage = (): ReactElement => {
 
   const mapRef = useRef<kakao.maps.Map>(null);
 
+  //useReadAccidentsByLocation(1, 1, 1);
   return (
     <Box css={styles.pageWrapper}>
       <Splash />
