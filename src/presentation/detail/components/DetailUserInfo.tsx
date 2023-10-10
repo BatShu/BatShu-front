@@ -11,7 +11,7 @@ interface DetailUserInfoProps {
 const DetailUserInfo = ({ author }: DetailUserInfoProps) => {
   return (
     <Box css={styles.userInfo}>
-      <UserInfoWithImage src={author.photoURL} name={author.displayName} />
+      <UserInfoWithImage author={author} />
       <Typography className="status">● 요청중</Typography>
     </Box>
   );

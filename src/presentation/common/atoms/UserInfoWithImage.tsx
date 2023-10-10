@@ -1,20 +1,22 @@
 // styles
 import { Box, Typography, css } from "@mui/material";
+// components
+import SkeletonImage from "./SkeletonImage";
+import { dummyDetail } from "@/presentation/home/temp";
 
 interface UserInfoWithImageProps {
-  src: string;
-  name: string;
+  author: (typeof dummyDetail)["author"];
 }
 
-const UserInfoWithImage = ({ src, name }: UserInfoWithImageProps) => {
+const UserInfoWithImage = ({ author }: UserInfoWithImageProps) => {
   return (
     <Box css={styles.container}>
-      <img
-        src={src}
-        alt="user-profile-image-circle"
-        css={styles.profileImage}
+      <SkeletonImage
+        variant="rounded"
+        src={author.photoURL}
+        imgCss={styles.profileImage}
       />
-      <Typography css={styles.text}>{name}</Typography>
+      <Typography css={styles.text}>{author.displayName}</Typography>
     </Box>
   );
 };
@@ -28,6 +30,7 @@ const styles = {
   }),
   profileImage: css({
     width: 42,
+    height: 42,
     marginRight: 15,
     aspectRatio: "1",
     borderRadius: 999,
