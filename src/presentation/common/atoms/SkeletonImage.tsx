@@ -23,7 +23,6 @@ const SkeletonImage = ({
       <Skeleton variant={variant} css={imgCss} style={style(!load)} />
       <img
         src={src}
-        alt="user-profile-image-circle"
         css={imgCss}
         onLoad={() => setLoad(true)}
         style={style(load)}

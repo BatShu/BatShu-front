@@ -2,21 +2,21 @@
 import { Box, Typography, css } from "@mui/material";
 // components
 import SkeletonImage from "./SkeletonImage";
-import { dummyDetail } from "@/presentation/home/temp";
 
 interface UserInfoWithImageProps {
-  author: (typeof dummyDetail)["author"];
+  profileImage: string;
+  name: string;
 }
 
-const UserInfoWithImage = ({ author }: UserInfoWithImageProps) => {
+const UserInfoWithImage = ({ profileImage, name }: UserInfoWithImageProps) => {
   return (
     <Box css={styles.container}>
       <SkeletonImage
         variant="rounded"
-        src={author.photoURL}
+        src={profileImage}
         imgCss={styles.profileImage}
       />
-      <Typography css={styles.text}>{author.displayName}</Typography>
+      <Typography css={styles.text}>{name}</Typography>
     </Box>
   );
 };

@@ -7,7 +7,7 @@ import type { dummyDetail } from "../../home/temp";
 import SkeletonImage from "@/presentation/common/atoms/SkeletonImage";
 
 interface DetailAccidentImageProps {
-  photos: (typeof dummyDetail)["photos"];
+  photos: (typeof dummyDetail)["photoUrls"];
 }
 
 const DetailAccidentImage = ({ photos }: DetailAccidentImageProps) => {
@@ -40,5 +40,6 @@ const styles = {
     height: "unset",
     aspectRatio: "1",
     borderRadius: "8px",
+    objectFit: "contain",
   }),
 };

@@ -61,12 +61,12 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {dummyAccidents.map(({ id, location: { y, x } }) => (
+          {dummyAccidents.map(({ accidentId, accidentLocation: { y, x } }) => (
             <MapMarker
-              key={id}
+              key={accidentId}
               position={{ lat: y, lng: x }}
               image={markerImage}
-              onClick={() => clickMarker(id, { lat: y, lng: x })}
+              onClick={() => clickMarker(accidentId, { lat: y, lng: x })}
             />
           ))}
           <AccidentDrawer

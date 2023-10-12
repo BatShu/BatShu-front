@@ -18,7 +18,9 @@ const useKakaoMapSearch = (keyword: string) => {
   });
 };
 
-export const useKakaoMapAddressSearch = (location: ILocation | null) => {
+export const useKakaoMapAddressSearch = (
+  location: Pick<ILocation, "lat" | "lng"> | null
+) => {
   return useQuery<kakao.maps.services.Address>({
     queryKey: ["kakaoMapAdressSearch", location?.lat, location?.lng],
     queryFn: async () => {

@@ -5,11 +5,13 @@ import { Box, Divider, SwipeableDrawer, Typography, css } from "@mui/material";
 // icons
 import { ReactComponent as TimeCircle2 } from "@/presentation/common/icons/outlined/Time Circle 2.svg";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
+// hooks
+import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 // constants
-import { DATE_FORMAT_SEARCH } from "@/presentation/configs";
+import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
-// delete
+// TODO: delete
 import { dummyDetail } from "../temp";
 
 interface AccidentDrawerProps {
@@ -24,12 +26,24 @@ const AccidentDrawer = ({
   onClose,
 }: AccidentDrawerProps) => {
   // useReadAccidentById(accidentId);
-  const { accidentTime, photos, createdTime } = dummyDetail;
+  const {
+    carModelName,
+    licensePlate,
+    accidentTime,
+    photoUrls,
+    createdAt,
+    accidentLocation: { y: lat, x: lng },
+  } = dummyDetail;
   const router = useNavigate();
 
+  const { data } = useKakaoMapAddressSearch({ lat, lng });
+
   const routeToDetail = () => {
-    router(`/detail/${accidentId}`, { state: { dummyDetail } });
+    router(`/detail/${accidentId}`, {
+      state: { dummyDetail, placeName: data?.address_name },
+    });
   };
+
   return (
     <SwipeableDrawer
       open={!!accidentId}
@@ -44,27 +58,33 @@ const AccidentDrawer = ({
         <Box css={styles.contentWrapper}>
           <Box className="content">
             <Typography className="status">● 요청중</Typography>
-            <Box className="date">
-              {dayjs(createdTime).format(DATE_FORMAT_SEARCH)}
-            </Box>
+            <Typography className="date">{createdAt.split("T")[0]}</Typography>
           </Box>
 
           <Box className="content middle">
-            <img className="accident-image" src={photos[0]} />
+            <img className="accident-image" src={photoUrls[0]} />
             <Box className="info">
               <Box css={styles.chip} className="car-number">
-                <Typography css={css(`font-size:8px`)}>DB소나타</Typography>
-                <Typography css={css(`font-size:18px;font-weight:bold;`)}>
-                  60마 8888
+                <Typography css={css(`font-size:10px`)}>
+                  {carModelName}
+                </Typography>
+                <Typography css={css(`font-size:20px;font-weight:bold;`)}>
+                  {licensePlate}
                 </Typography>
               </Box>
-              <Box css={styles.chip}>
+
+              <Box css={[styles.chip, css(`width:fit-content;`)]}>
                 <TimeCircle2 css={styles.icon} />
-                {accidentTime}
+                <span>
+                  {dayjs(accidentTime[1].split(":")[0]).format(
+                    DATE_FORMAT_DETAIL_CHIP
+                  )}
+                </span>
               </Box>
+
               <Box css={styles.chip}>
                 <Frame36 css={styles.icon} />
-                종각역 3번출구
+                <span>{data?.address_name}</span>
               </Box>
             </Box>
           </Box>
@@ -98,7 +118,12 @@ const styles = {
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   }),
-  divider: css({ width: 52, height: 2.5, backgroundColor: "#EEEDED" }),
+  divider: css({
+    width: 52,
+    height: 2.5,
+    backgroundColor: "#EEEDED",
+    border: 0,
+  }),
   contentWrapper: css({
     display: "flex",
     flexDirection: "column",
@@ -110,8 +135,8 @@ const styles = {
       justifyContent: "space-between",
       width: "100%",
       fontSize: "12px",
-      "& .status": { color: "#68CCE2" },
-      "& .date": { color: "#C2C2C2" },
+      "& .status": { fontSize: "12px", color: "#68CCE2" },
+      "& .date": { fontSize: "12px", color: "#C2C2C2" },
     },
     "& .middle": { justifyContent: "unset", padding: "12px 0 30px 0" },
     "& .accident-image": {
@@ -128,6 +153,7 @@ const styles = {
       marginLeft: "auto",
       "& .car-number": {
         flexDirection: "column",
+        padding: "6px 24px",
         color: "#fff",
         backgroundColor: "#000",
       },
@@ -137,22 +163,27 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    whiteSpace: "nowrap",
-    ":not(.car-number)": { width: "fit-content" },
     fontSize: "14px",
     fontWeight: 500,
     color: "#808080",
     backgroundColor: "#F5F5F5",
     borderRadius: "12px",
-    padding: "6px 15px",
+    padding: "6px 9px",
+    minWidth: 0,
+    maxWidth: "100%",
+    "& span": {
+      overflow: "hidden",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+    },
   }),
-  icon: css({ width: "18px", marginRight: "5px" }),
+  icon: css({ flexShrink: 0, width: "18px", marginRight: "5px" }),
   "& .detail": css({
     color: "#000",
     backgroundColor: "#fff",
     border: "2px solid #000",
   }),
-  button: css({ width: "49%" }),
+  button: css({ width: "48%" }),
   detail: css({
     color: "#000",
     backgroundColor: "#fff",

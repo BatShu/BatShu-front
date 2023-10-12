@@ -11,31 +11,45 @@ import DetailUserInfo from "./components/DetailUserInfo";
 import DetailAccidentImage from "./components/DetailAccidentImage";
 import DetailChips from "./components/DetailChips";
 import DetailContent from "./components/DetailContent";
-import AppButton from "../common/components/AppButton";
 import DetailLocation from "./components/DetailLocation";
+import AppButton from "../common/components/AppButton";
 
 export const DetailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { author, photos, accidentlocation } = location.state
+  const { photoUrls, accidentLocation } = location.state
     .dummyDetail as typeof dummyDetail;
 
-  // TODO: 목격글 사고글 분기해야함, 맵 미리보기 컴포넌트로
+  const { placeName } = location.state;
+
+  // TODO: delete
+  // 왜 author 안주지
+  const tempAuthor = {
+    uid: "0",
+    email: "[이메일]",
+    displayName: "마라탕 좋아",
+    photoURL: "https://images.unsplash.com/photo-1682686581362-796145f0e123",
+  };
+
+  // TODO: 목격글 사고글 분기
   return (
     <Box css={pageContentStyles}>
       <Left1 onClick={() => navigate(-1)} css={css(`cursor:pointer;`)} />
 
       <Box css={styles.container}>
-        <DetailUserInfo author={author} />
+        <DetailUserInfo author={tempAuthor} />
 
-        <DetailAccidentImage photos={photos} />
+        <DetailAccidentImage photos={photoUrls} />
 
         <DetailChips data={dummyDetail} />
 
         <DetailContent data={dummyDetail} />
 
-        <DetailLocation accidentLocation={accidentlocation} />
+        <DetailLocation
+          accidentLocation={accidentLocation}
+          placeName={placeName}
+        />
       </Box>
 
       {/* TODO: 채팅 연결 */}

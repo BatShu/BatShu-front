@@ -8,12 +8,12 @@ interface DetailContentProps {
 }
 
 const DetailContent = ({ data }: DetailContentProps) => {
-  const { contentTitle, accidentTime, contentDescription } = data;
+  const { contentTitle, createdAt, contentDescription } = data;
 
   return (
     <Box css={styles.content}>
       <Typography className="title">{contentTitle}</Typography>
-      <Typography className="date">{accidentTime}</Typography>
+      <Typography className="date">{createdAt.split("T")[0]}</Typography>
       <Typography className="description">{contentDescription}</Typography>
     </Box>
   );

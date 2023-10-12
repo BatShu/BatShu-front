@@ -1,23 +1,24 @@
+// TODO: delete
 export const dummyAccidents = [
   {
-    id: 0,
-    location: {
+    accidentId: 51,
+    accidentLocation: {
       x: 127.02877138902706,
       y: 37.553756043633705,
       level: 1,
     },
   },
   {
-    id: 1,
-    location: {
+    accidentId: 52,
+    accidentLocation: {
       x: 127.11223931056016,
       y: 37.59973258972703,
       level: 2,
     },
   },
   {
-    id: 2,
-    location: {
+    accidentId: 53,
+    accidentLocation: {
       x: 127.03877138902706,
       y: 37.5737560436337,
       level: 1,
@@ -26,28 +27,19 @@ export const dummyAccidents = [
 ];
 
 export const dummyDetail = {
-  id: 1,
-  author: {
-    uid: "0",
-    email: "[이메일]",
-    displayName: "마라탕 좋아",
-    photoURL: "https://images.unsplash.com/photo-1682686581362-796145f0e123",
-  },
-  contentTitle: "게시글 제목",
-  contentDescription:
-    "종각역 3번 출구 벤츠 충돌 제보 부탁드립니다. 가나다라마바사 아자차가 카나아다 카라나아 자아자마가 카다나. 종각역 3번 출구 벤츠 충돌 제보 부탁드립니다. 가나다라마바사 아자차가 카나아다 카라나아",
-  photos: [
-    "https://images.unsplash.com/photo-1682686581362-796145f0e123",
-    "https://images.unsplash.com/photo-1694481348806-0b6de4934812",
-    "https://images.unsplash.com/photo-1694481348806-0b6de4934812",
-    "https://images.unsplash.com/photo-1694481348806-0b6de4934812",
-    "https://images.unsplash.com/photo-1694481348806-0b6de4934812",
+  contentTitle: "아..큰일남4",
+  contentDescription: "뺑소니당했어3",
+  photoUrls: [
+    "https://batshu-bucket.s3.amazonaws.com/e96c441a1d55add3460a787ed183a5a0.png",
+    "https://batshu-bucket.s3.amazonaws.com/0d02e9f9486818ea945852b58654764b.png",
   ],
-  accidentTime: "사고 시간",
-  accidentlocation: {
-    x: 127.02877138902706,
-    y: 37.553756043633705,
-    level: 1,
+  accidentTime: ["2023-10-31T15:05:04.000Z", "2023-10-31T15:06:04.000Z"],
+  createdAt: "2023-10-09T13:14:10.000Z",
+  accidentLocation: {
+    x: 127.11223931056016,
+    y: 37.59973258972703,
   },
-  createdTime: "Thu Sep 14 2023 18:00:41 GMT+0900 (한국 표준시)",
+  carModelName: "avante",
+  licensePlate: "13어 1342",
+  bounty: 400000,
 };

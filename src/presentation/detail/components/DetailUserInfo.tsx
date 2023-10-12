@@ -5,13 +5,17 @@ import type { dummyDetail } from "../../home/temp";
 import UserInfoWithImage from "@/presentation/common/atoms/UserInfoWithImage";
 
 interface DetailUserInfoProps {
-  author: (typeof dummyDetail)["author"];
+  // author: (typeof dummyDetail)["author"];
+  author: { [key: string]: any };
 }
 
 const DetailUserInfo = ({ author }: DetailUserInfoProps) => {
   return (
     <Box css={styles.userInfo}>
-      <UserInfoWithImage author={author} />
+      <UserInfoWithImage
+        profileImage={author.photoURL}
+        name={author.displayName}
+      />
       <Typography className="status">● 요청중</Typography>
     </Box>
   );
@@ -24,6 +28,6 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    "& .status": { color: "#68CCE2" },
+    "& .status": { fontSize: "12px", color: "#68CCE2" },
   }),
 };

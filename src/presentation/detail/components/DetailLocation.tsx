@@ -10,10 +10,14 @@ import type { dummyDetail } from "../../home/temp";
 import DetailChip from "./DetailChip";
 
 interface DetailLocationProps {
-  accidentLocation: (typeof dummyDetail)["accidentlocation"];
+  accidentLocation: (typeof dummyDetail)["accidentLocation"];
+  placeName: string;
 }
 
-const DetailLocation = ({ accidentLocation }: DetailLocationProps) => {
+const DetailLocation = ({
+  accidentLocation,
+  placeName,
+}: DetailLocationProps) => {
   const center = { lat: accidentLocation.y, lng: accidentLocation.x };
 
   return (
@@ -22,14 +26,14 @@ const DetailLocation = ({ accidentLocation }: DetailLocationProps) => {
         <Typography className="title">위치 정보</Typography>
         <DetailChip
           Adornment={Frame36}
-          text="종각역 어쩌구"
+          text={placeName}
           style={css(`color:#868686;margin:0;`)}
         />
       </Box>
 
       <Map
         center={center}
-        level={accidentLocation.level}
+        level={1}
         css={styles.map}
         draggable={false}
         disableDoubleClickZoom
