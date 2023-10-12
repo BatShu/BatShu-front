@@ -24,7 +24,6 @@ export const DetailPage = () => {
   const { placeName } = location.state;
 
   // TODO: delete
-  // 왜 author 안주지
   const tempAuthor = {
     uid: "0",
     email: "[이메일]",
