@@ -5,7 +5,7 @@ import {
 import { Accident } from "@/domain/models/accident";
 import { ILocation } from "@/domain/models/location";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { API } from "@/lib";
+import { API } from "../util/fetcher";
 
 export interface ReadAccidentsByLocationResponse {
   ok: boolean;
