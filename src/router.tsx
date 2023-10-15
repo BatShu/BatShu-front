@@ -6,7 +6,7 @@ import {
   WRITE_PATH,
   LOGIN_PATH,
   DETAIL_PATH,
-} from "./domain/paths";
+} from "./domain/constants/paths";
 import { HomePage } from "./presentation/home";
 import { SearchPage } from "./presentation/search";
 import { WritePage } from "./presentation/write";

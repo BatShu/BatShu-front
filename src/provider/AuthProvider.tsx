@@ -1,4 +1,4 @@
-import { HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from "@/domain/paths";
+import { HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from "@/domain/constants/paths";
 import { useAuthStore } from "@/store/authStore";
 import { Backdrop, CircularProgress, css } from "@mui/material";
 import { useEffect } from "react";

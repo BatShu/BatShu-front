@@ -4,7 +4,7 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { LOGIN_PATH } from "@/domain/paths";
+import { LOGIN_PATH } from "@/domain/constants/paths";
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 import { useForm } from "react-hook-form";
 import AppButton from "@/presentation/common/components/AppButton";

@@ -10,7 +10,7 @@ import { ReactComponent as Profile1Icon } from "@/presentation/common/icons/outl
 import { ReactComponent as Lock2Icon } from "@/presentation/common/icons/outlined/Lock 2.svg";
 import { ReactComponent as GoogleLogoIcon } from "@/presentation/common/icons/asset/google-logo.svg";
 import { Link } from "react-router-dom";
-import { SIGNUP_PATH } from "@/domain/paths";
+import { SIGNUP_PATH } from "@/domain/constants/paths";
 import { useSignInWithGoogle } from "@/data/hooks/auth";
 interface LoginForm {
   id: string;

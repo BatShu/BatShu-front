@@ -6,7 +6,7 @@ import { Box, InputAdornment, IconButton, css } from "@mui/material";
 // icons
 import { ReactComponent as SearchIcon } from "@/presentation/common/icons/outlined/Search 1.svg";
 // constants
-import { SEARCH_PATH } from "@/domain/paths";
+import { SEARCH_PATH } from "@/domain/constants/paths";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 

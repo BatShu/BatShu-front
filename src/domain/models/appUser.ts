@@ -1,3 +1,6 @@
 import { User } from "firebase/auth";
 
-export type AppUser = Pick<User, "displayName" | "uid" | "photoURL" | "email">;
+export interface AppUser extends Pick<User, "displayName" | "uid" | "email"> {
+  googleProfilePhotoUrl: string;
+  fbUser: User;
+}

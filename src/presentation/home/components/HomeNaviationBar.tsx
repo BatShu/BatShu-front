@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { SerializedStyles, css } from "@emotion/react";
 // constants
-import { HOME_PATH, WRITE_PATH } from "@/domain/paths";
+import { HOME_PATH, WRITE_PATH } from "@/domain/constants/paths";
 // icons
 import { ReactComponent as LogoIcon } from "@/presentation/common/icons/logo.svg";
 import { ReactComponent as Message1Icon } from "@/presentation/common/icons/outlined/Message 1.svg";
