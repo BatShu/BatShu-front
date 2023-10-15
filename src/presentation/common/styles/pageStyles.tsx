@@ -7,9 +7,3 @@ export const pageContentStyles = css({
   height: "100%",
   padding: "20px 28px",
 });
-
-export const svgFill = css({
-  "& svg, path, rect": {
-    fill: "currentColor",
-  },
-});

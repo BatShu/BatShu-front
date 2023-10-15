@@ -124,7 +124,6 @@ const styles: CssObject = {
       "& p": { color: "#C1C1C1", fontSize: "10px" },
     },
     "& .swiper-slide-active": {
-      padding: "8px 12px",
       "& p": { color: "#000", fontSize: "14px", fontWeight: 700 },
       border: "1px solid #CCC",
       borderLeft: 0,

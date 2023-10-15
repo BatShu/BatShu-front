@@ -1,5 +1,6 @@
 import { Global, css } from "@emotion/react";
 import { ReactElement } from "react";
+import "swiper/css";
 
 export const GlobalStyles = (): ReactElement => {
   return (
@@ -45,6 +46,10 @@ export const GlobalStyles = (): ReactElement => {
           ::-webkit-scrollbar {
             display: none; /* Chrome, Safari, Opera*/
           }
+        }
+        .notistack-MuiContent-default {
+          display: flex;
+          justify-content: center;
         }
       `}
     />

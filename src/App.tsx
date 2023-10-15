@@ -5,13 +5,18 @@ import { SnackbarProvider } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // styles
-import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import {
+  CssBaseline,
+  StyledEngineProvider,
+  ThemeProvider,
+} from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { GlobalStyles } from "./presentation/common/atoms/GlobalStyles";
+import { GlobalStyles } from "./presentation/common/styles/GlobalStyles";
 import {
   MuiDateCalendarOptions,
   snackbarOptions,
 } from "./presentation/configs";
+import theme from "./presentation/common/styles/theme";
 // layout
 import Layout from "./presentation/common/layout/Layout";
 
@@ -25,15 +30,17 @@ export const App = (): ReactElement => {
   return (
     <QueryClientProvider client={queryClient}>
       <StyledEngineProvider injectFirst>
-        <SnackbarProvider {...snackbarOptions}>
-          <LocalizationProvider {...MuiDateCalendarOptions}>
-            <Layout>
-              <RouterProvider router={router} />
-              <CssBaseline />
-              <GlobalStyles />
-            </Layout>
-          </LocalizationProvider>
-        </SnackbarProvider>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider {...snackbarOptions}>
+            <LocalizationProvider {...MuiDateCalendarOptions}>
+              <Layout>
+                <RouterProvider router={router} />
+                <CssBaseline />
+                <GlobalStyles />
+              </Layout>
+            </LocalizationProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
       </StyledEngineProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
