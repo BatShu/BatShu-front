@@ -1,5 +1,6 @@
 import { userRepository } from "@/data/backend";
 import { auth } from "@/data/firebase";
+import { AppApiError } from "@/domain/models/appError";
 import { AppUser } from "@/domain/models/appUser";
 import { handleError } from "@/lib";
 import { User, onAuthStateChanged } from "firebase/auth";
@@ -22,9 +23,7 @@ onAuthStateChanged(auth, async (fbUser) => {
     appUser = await userRepository.readUserByAuth(fbUser);
   } catch (e) {
     const err = handleError(e);
-    console.error(err);
-    // TODO: 하드코딩 해결
-    if (err.message === "already exist") {
+    if (err instanceof AppApiError && err.status === 400) {
       await userRepository.createUser(fbUser);
       appUser = await userRepository.readUserByAuth(fbUser);
     }

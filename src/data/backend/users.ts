@@ -8,22 +8,16 @@ export class UserRepository {
   async readUserByAuth(fbUser: User): Promise<AppUser> {
     const headers = await getAuthHeader(fbUser);
     const res = await API.GET<AppResponse<AppUser>>("api/user", headers);
-    if (res.ok) {
-      return res.data;
-    }
-    throw new Error(res.msg);
+    return res.data;
   }
 
   async createUser(fbUser: User): Promise<void> {
     const headers = await getAuthHeader(fbUser);
-    const res = await API.POST<AppResponse>("api/user", {
+    await API.POST<AppResponse>("api/user", {
       ...headers,
       body: JSON.stringify({
         uid: fbUser.uid,
       }),
     });
-    if (!res.ok) {
-      throw new Error(res.msg);
-    }
   }
 }

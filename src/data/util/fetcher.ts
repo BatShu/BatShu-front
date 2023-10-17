@@ -1,4 +1,4 @@
-import { AppError } from "@/domain/models/appError";
+import { AppApiError } from "@/domain/models/appError";
 
 const { VITE_API_BASE_URL } = import.meta.env;
 
@@ -14,14 +14,14 @@ const request = async <T>(
     const res = await fetch(url, { ...defaultConfig, ...config });
     const body = await res.json();
     if (body.ok === false) {
-      throw new AppError({
+      throw new AppApiError({
         status: res.status,
         message: body.msg,
       });
     }
     return body satisfies T;
   } catch (error) {
-    if (error instanceof AppError) {
+    if (error instanceof AppApiError) {
       throw error;
     }
     throw new Error(`Error: ${error}`);

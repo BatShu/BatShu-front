@@ -2,7 +2,7 @@ interface IAppError {
   message: string;
   status: number;
 }
-export class AppError extends Error {
+export class AppApiError extends Error {
   status: number;
   constructor({ message, status }: IAppError) {
     super(message);
