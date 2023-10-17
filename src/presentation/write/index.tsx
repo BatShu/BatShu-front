@@ -17,6 +17,11 @@ import {
 } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
+// types
+import {
+  TPostAccidentResponse,
+  TPostObserveResponse,
+} from "@/domain/models/appResponse";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
@@ -32,7 +37,6 @@ export const WritePage = () => {
 
   const onSubmit = async (data: writeFormState) => {
     const { type, title, accidentTime, content, licensePlate } = data;
-    console.log(data);
 
     const isAccident = type === "사고자";
     const endPoint = isAccident ? POST_ACCIDENT : POST_OBSERVE;
@@ -68,11 +72,16 @@ export const WritePage = () => {
       formData.append("observeTime", accidentTime[1]);
       formData.append("observeLocation[x]", x);
       formData.append("observeLocation[y]", y);
-      formData.append("videoId", "1");
+      formData.append("videoId", String(content.videoId));
     }
 
-    // const res = await API.POST(endPoint, { body: formData });
-    // console.log(res);
+    // FIXME: 런타임 내에서 결정되는 타입이라 자동완성이 안됨
+    const res = await API.POST<
+      typeof isAccident extends true
+        ? TPostAccidentResponse
+        : TPostObserveResponse
+    >(endPoint, { body: formData });
+    console.log(res);
   };
 
   return (

@@ -8,16 +8,19 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { ReactComponent as SelectLogo } from "@/presentation/common/icons/asset/select-logo.svg";
 import CarImage1 from "@/presentation/common/icons/asset/car-image-1.png";
 import CarImage2 from "@/presentation/common/icons/asset/car-image-2.png";
+// api
+import { API } from "@/data/util/fetcher";
+import { POST_VIDEO_UPLOAD } from "@/domain/endpoint";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
+// types
+import { TVideoUploadResponse } from "@/domain/models/appResponse";
 // lib
 import { TFile, deleteSingleFile } from "@/lib";
 // components
 import AppButton from "@/presentation/common/components/AppButton";
 import Spacer from "@/presentation/common/atoms/Spacer";
 import UploadVideo from "./UploadVideo";
-import { API } from "@/data/util/fetcher";
-import { POST_VIDEO_UPLOAD } from "@/domain/endpoint";
 
 interface SelectTypeProps {
   sliderRef: RefObject<Slider>;
@@ -36,12 +39,14 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
       const formData = new FormData();
       formData.append("video", videoFile.file);
 
-      const res = await API.POST<any>(POST_VIDEO_UPLOAD, {
+      const {
+        data: { videoId },
+      } = await API.POST<TVideoUploadResponse>(POST_VIDEO_UPLOAD, {
         headers: { "Content-Type": "multipart/form-data" },
         body: formData,
       });
-      if (res.videoId) {
-        setValue("content.videoId", res.videoId);
+      if (videoId) {
+        setValue("content.videoId", videoId[0].id);
       }
     })();
   }, [videoFile, setValue]);
