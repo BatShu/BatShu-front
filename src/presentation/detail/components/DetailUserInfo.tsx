@@ -1,6 +1,4 @@
 import { Box, Typography, css } from "@mui/material";
-// types
-import type { dummyDetail } from "../../home/temp";
 // components
 import UserInfoWithImage from "@/presentation/common/atoms/UserInfoWithImage";
 

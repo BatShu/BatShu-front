@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export const AuthProvider = () => {
-  const { user, setUser, init } = useAuthStore();
+  const { fbUser: user, setUser, init } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
