@@ -29,11 +29,11 @@ const UploadImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { watch, setValue, control } = useWriteFormContext();
-  const images = watch("content.images");
+  const images = watch("content.photos");
   const onDelete = useCallback(
     (delIdx: number) =>
       setValue(
-        "content.images",
+        "content.photos",
         images.filter((_, idx) => {
           return idx !== delIdx;
         })
@@ -61,7 +61,7 @@ const UploadImage = () => {
             </Typography>
             <Controller
               control={control}
-              name="content.images"
+              name="content.photos"
               render={({ field: { onChange } }) => (
                 <input
                   type="file"

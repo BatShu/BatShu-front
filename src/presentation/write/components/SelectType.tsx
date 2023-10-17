@@ -16,6 +16,8 @@ import { TFile, deleteSingleFile } from "@/lib";
 import AppButton from "@/presentation/common/components/AppButton";
 import Spacer from "@/presentation/common/atoms/Spacer";
 import UploadVideo from "./UploadVideo";
+import { API } from "@/data/util/fetcher";
+import { POST_VIDEO_UPLOAD } from "@/domain/endpoint";
 
 interface SelectTypeProps {
   sliderRef: RefObject<Slider>;
@@ -26,7 +28,23 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
   const { watch, resetField, setValue } = useWriteFormContext();
   const type = watch("type");
   const valid = type === "사고자" || !!(type === "목격자" && videoFile);
-  // TODO: videoFile set 되면 업로드 api 호출
+
+  useEffect(() => {
+    (async () => {
+      if (!videoFile || !videoFile.file) return;
+
+      const formData = new FormData();
+      formData.append("video", videoFile.file);
+
+      const res = await API.POST<any>(POST_VIDEO_UPLOAD, {
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
+      });
+      if (res.videoId) {
+        setValue("content.videoId", res.videoId);
+      }
+    })();
+  }, [videoFile, setValue]);
 
   useEffect(() => {
     if (type === "사고자") deleteSingleFile(setVideoFile);

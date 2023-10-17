@@ -1,7 +1,7 @@
 const { VITE_API_BASE_URL } = import.meta.env;
 
 const defaultConfig: Partial<RequestInit> = {
-  credentials: "include",
+  credentials: "omit",
 };
 
 const request = async <T>(

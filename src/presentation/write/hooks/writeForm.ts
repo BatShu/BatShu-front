@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 // store
 import { ILocation } from "@/domain/models/location";
 // lib
@@ -13,9 +13,10 @@ import {
 type TWriter = "사고자" | "목격자" | null;
 
 type TContent = {
-  video: TFile | null;
-  images: TFile[];
+  videoId: number | null;
+  photos: TFile[];
   location: ILocation | null;
+  placeName: string;
   carModelName: string;
   bounty: number;
   description: string;
@@ -25,7 +26,7 @@ export interface writeFormState {
   type: TWriter;
   title: string;
   licensePlate: string;
-  accidentTime: [Dayjs, Dayjs];
+  accidentTime: [string, string];
   content: TContent;
 }
 
@@ -33,11 +34,12 @@ const initialState: writeFormState = {
   type: null,
   title: "",
   licensePlate: "",
-  accidentTime: [dayjs(), dayjs()],
+  accidentTime: [dayjs().format(), dayjs().format()],
   content: {
-    video: null,
-    images: [],
+    videoId: null,
+    photos: [],
     location: null,
+    placeName: "",
     carModelName: "",
     bounty: 0,
     description: "",

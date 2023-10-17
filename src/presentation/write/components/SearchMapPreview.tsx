@@ -4,10 +4,11 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { natshuMarker } from "@/presentation/configs";
 import { ILocation } from "@/domain/models/location";
 import { InputAdornment, css } from "@mui/material";
-import { ReactElement, useState } from "react";
+import { ReactElement, useState, useEffect, useMemo } from "react";
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import InputChip from "@/presentation/common/atoms/InputChip";
+import { useWriteFormContext } from "../hooks/writeForm";
 interface SearchMapPreviewProps {
   location: ILocation | null;
   onLocationChange: (value: ILocation | null) => void;
@@ -22,6 +23,18 @@ export const SearchMapPreview = ({
   };
 
   const { data: address } = useKakaoMapAddressSearch(location);
+  const { setValue } = useWriteFormContext();
+
+  const placeName = useMemo(() => {
+    return location?.place == null
+      ? `${address?.address_name}`
+      : location?.place?.place_name;
+  }, [location, address]);
+
+  useEffect(() => {
+    setValue("content.placeName", placeName);
+  }, [setValue, placeName]);
+
   return (
     <>
       {showMap && (
@@ -38,15 +51,7 @@ export const SearchMapPreview = ({
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              {location != null && (
-                <InputChip
-                  text={
-                    location?.place == null
-                      ? `${address?.address_name}`
-                      : location?.place?.place_name
-                  }
-                />
-              )}
+              {location != null && <InputChip text={placeName} />}
             </InputAdornment>
           ),
           endAdornment: (
