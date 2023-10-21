@@ -22,6 +22,8 @@ import {
   TPostAccidentResponse,
   TPostObserveResponse,
 } from "@/domain/models/appResponse";
+// lib
+import { appendToFormData } from "@/data/util/common";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
@@ -41,38 +43,29 @@ export const WritePage = () => {
     const isAccident = type === "사고자";
     const endPoint = isAccident ? POST_ACCIDENT : POST_OBSERVE;
 
-    const commonPayload = {
+    const formData = new FormData();
+
+    appendToFormData(formData, {
       contentTitle: title,
       contentDescription: content.description,
       placeName: content.placeName,
       carModelName: content.carModelName,
       licensePlate: licensePlate,
-    };
-
-    const formData = new FormData();
-
-    (Object.keys(commonPayload) as (keyof typeof commonPayload)[]).forEach(
-      (key) => formData.append(key, commonPayload[key])
-    );
-
-    const x = String(content.location?.lng);
-    const y = String(content.location?.lat);
+      [isAccident ? "accidentTime" : "observeTime"]: accidentTime,
+      [isAccident ? "accidentLocation" : "observeLocation"]: JSON.stringify({
+        // FIXME: optional chaining
+        x: content.location?.lng,
+        y: content.location?.lat,
+      }),
+    });
 
     if (isAccident) {
-      formData.append("accidentTime", accidentTime[0]);
-      formData.append("accidentTime", accidentTime[1]);
-      formData.append("bounty", String(content.bounty));
-      formData.append("accidentLocation[x]", x);
-      formData.append("accidentLocation[y]", y);
-      content.photos.forEach(({ file }) => {
-        if (file) formData.append("photos", file);
+      appendToFormData(formData, {
+        bounty: String(content.bounty),
+        photos: content.photos.map(({ file }) => file as Blob),
       });
     } else {
-      formData.append("observeTime", accidentTime[0]);
-      formData.append("observeTime", accidentTime[1]);
-      formData.append("observeLocation[x]", x);
-      formData.append("observeLocation[y]", y);
-      formData.append("videoId", String(content.videoId));
+      appendToFormData(formData, { videoId: String(content.videoId) });
     }
 
     // FIXME: 런타임 내에서 결정되는 타입이라 자동완성이 안됨
@@ -81,6 +74,7 @@ export const WritePage = () => {
         ? TPostAccidentResponse
         : TPostObserveResponse
     >(endPoint, { body: formData });
+
     console.log(res);
   };
 

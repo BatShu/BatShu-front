@@ -28,15 +28,21 @@ const ImageBox = ({ src, onDelete }: ImageBoxProps) => {
 const UploadImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { watch, setValue, control } = useWriteFormContext();
+  const { watch, setValue, control, trigger } = useWriteFormContext();
   const images = watch("content.photos");
   const onDelete = useCallback(
     (delIdx: number) =>
       setValue(
         "content.photos",
-        images.filter((_, idx) => {
-          return idx !== delIdx;
-        })
+        images.filter(({ url }, idx) => {
+          if (idx !== delIdx) return true;
+          else if (inputRef.current) {
+            inputRef.current.value = "";
+            URL.revokeObjectURL(url);
+            return false;
+          }
+        }),
+        { shouldValidate: true }
       ),
     [setValue, images]
   );
@@ -62,6 +68,7 @@ const UploadImage = () => {
             <Controller
               control={control}
               name="content.photos"
+              rules={{ required: true }}
               render={({ field: { onChange } }) => (
                 <input
                   type="file"
@@ -72,6 +79,7 @@ const UploadImage = () => {
                   onChange={(e) =>
                     setMultipleFile(e, (newImages: TFile[]) => {
                       onChange(images.concat(newImages).slice(0, 5));
+                      trigger("content.photos");
                     })
                   }
                 />
