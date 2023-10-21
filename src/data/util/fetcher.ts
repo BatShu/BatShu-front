@@ -29,30 +29,39 @@ const request = async <T>(
 };
 
 const API = {
-  GET: async <T>(endpoint: string, config?: RequestInit) => {
+  headers: {},
+
+  GET: async function <T>(endpoint: string, config?: RequestInit) {
     return await request<T>(`${VITE_API_BASE_URL}/${endpoint}`, {
       method: "GET",
       ...config,
+      headers: { ...this.headers, ...config?.headers },
     });
   },
 
-  POST: async <T>(endpoint: string, config?: RequestInit) =>
-    await request<T>(`${VITE_API_BASE_URL}/${endpoint}`, {
+  POST: async function <T>(endpoint: string, config?: RequestInit) {
+    return await request<T>(`${VITE_API_BASE_URL}/${endpoint}`, {
       method: "POST",
       ...config,
-    }),
+      headers: { ...this.headers, ...config?.headers },
+    });
+  },
 
-  DELETE: async <T>(endpoint: string, config?: RequestInit) =>
+  DELETE: async function <T>(endpoint: string, config?: RequestInit) {
     await request<T>(`${VITE_API_BASE_URL}/${endpoint}`, {
       method: "DELETE",
       ...config,
-    }),
+      headers: { ...this.headers, ...config?.headers },
+    });
+  },
 
-  PATCH: async <T>(endpoint: string, config?: RequestInit) =>
+  PATCH: async function <T>(endpoint: string, config?: RequestInit) {
     await request<T>(`${VITE_API_BASE_URL}/${endpoint}`, {
       method: "PATCH",
       ...config,
-    }),
+      headers: { ...this.headers, ...config?.headers },
+    });
+  },
 };
 
 export { request, API };
