@@ -15,6 +15,9 @@ import {
   useWriteForm,
   writeFormState,
 } from "@/presentation/write/hooks/writeForm";
+import { useAuthStore } from "@/store/authStore";
+// lib
+import { getAuthHeader } from "@/data/util/header";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 // types
@@ -23,7 +26,7 @@ import {
   TPostObserveResponse,
 } from "@/domain/models/appResponse";
 // lib
-import { appendToFormData } from "@/data/util/common";
+import { appendToFormData, setObjectInFormData } from "@/data/util/common";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
@@ -31,6 +34,7 @@ import Detail from "./components/Detail";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
+  const { fbUser } = useAuthStore();
 
   const details = useWriteForm();
   const handleSubmit = details.handleSubmit;
@@ -38,6 +42,8 @@ export const WritePage = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data: writeFormState) => {
+    if (!fbUser) return;
+
     const { type, title, accidentTime, content, licensePlate } = data;
 
     const isAccident = type === "사고자";
@@ -52,12 +58,12 @@ export const WritePage = () => {
       carModelName: content.carModelName,
       licensePlate: licensePlate,
       [isAccident ? "accidentTime" : "observeTime"]: accidentTime,
-      [isAccident ? "accidentLocation" : "observeLocation"]: JSON.stringify({
-        // FIXME: optional chaining
-        x: content.location?.lng,
-        y: content.location?.lat,
-      }),
     });
+    setObjectInFormData(
+      formData,
+      { x: content.location?.lng, y: content.location?.lat },
+      isAccident ? "accidentLocation" : "observeLocation"
+    );
 
     if (isAccident) {
       appendToFormData(formData, {
@@ -73,7 +79,7 @@ export const WritePage = () => {
       typeof isAccident extends true
         ? TPostAccidentResponse
         : TPostObserveResponse
-    >(endPoint, { body: formData });
+    >(endPoint, { ...(await getAuthHeader(fbUser)), body: formData });
 
     console.log(res);
   };
