@@ -14,8 +14,8 @@ export const appendToFormData = (
 
 export const setObjectInFormData = (
   formData: FormData,
-  objectData: Record<string, any>,
-  parentKey: string
+  parentKey: string,
+  objectData: Record<string, any>
 ) => {
   Object.keys(objectData).forEach((key) => {
     const value = objectData[key];
@@ -23,12 +23,12 @@ export const setObjectInFormData = (
       key = `${parentKey}[${key}]`;
     }
     if (value instanceof Object && !Array.isArray(value)) {
-      return setObjectInFormData(formData, value, key);
+      return setObjectInFormData(formData, key, value);
     }
     if (Array.isArray(value)) {
       value.forEach((v, idx) => {
         if (v instanceof Object) {
-          setObjectInFormData(formData, v, `${key}[${idx}]`);
+          setObjectInFormData(formData, `${key}[${idx}]`, v);
         } else {
           formData.append(`${key}[${idx}]`, v);
         }

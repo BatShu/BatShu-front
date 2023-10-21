@@ -61,8 +61,8 @@ export const WritePage = () => {
     });
     setObjectInFormData(
       formData,
-      { x: content.location?.lng, y: content.location?.lat },
-      isAccident ? "accidentLocation" : "observeLocation"
+      isAccident ? "accidentLocation" : "observeLocation",
+      { x: content.location?.lng, y: content.location?.lat }
     );
 
     if (isAccident) {
