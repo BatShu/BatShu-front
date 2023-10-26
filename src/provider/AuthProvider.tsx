@@ -1,3 +1,5 @@
+import { API } from "@/data/util/fetcher";
+import { getAuthHeader } from "@/data/util/header";
 import { HOME_PATH, LOGIN_PATH, SIGNUP_PATH } from "@/domain/constants/paths";
 import { useAuthStore } from "@/store/authStore";
 import { Backdrop, CircularProgress, css } from "@mui/material";
@@ -16,7 +18,10 @@ export const AuthProvider = () => {
       navigate(HOME_PATH, { replace: true });
       return;
     }
-    if (user != null) return;
+    if (user != null) {
+      (async () => (API.headers = (await getAuthHeader(user)).headers))();
+      return;
+    }
     navigate(LOGIN_PATH, { replace: true });
   }, [user, location, navigate, setUser, init]);
 
