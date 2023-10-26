@@ -77,5 +77,11 @@ authApi.interceptors.request.use((res) => {
   res.headers["Authorization"] = `Bearer ${token}`;
   return res;
 });
+authApi.interceptors.response.use((res) => {
+  if (res.data.ok == false || res.status >= 400) {
+    throw new Error(res.data.msg ?? "Unknown error");
+  }
+  return res;
+});
 
 export { request, API };
