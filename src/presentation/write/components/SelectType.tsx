@@ -8,8 +8,13 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { ReactComponent as SelectLogo } from "@/presentation/common/icons/asset/select-logo.svg";
 import CarImage1 from "@/presentation/common/icons/asset/car-image-1.png";
 import CarImage2 from "@/presentation/common/icons/asset/car-image-2.png";
+// api
+import { API } from "@/data/util/fetcher";
+import { POST_VIDEO_UPLOAD } from "@/domain/endpoint";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
+// types
+import { TVideoUploadResponse } from "@/domain/models/appResponse";
 // lib
 import { TFile, deleteSingleFile } from "@/lib";
 // components
@@ -26,7 +31,25 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
   const { watch, resetField, setValue } = useWriteFormContext();
   const type = watch("type");
   const valid = type === "사고자" || !!(type === "목격자" && videoFile);
-  // TODO: videoFile set 되면 업로드 api 호출
+
+  useEffect(() => {
+    (async () => {
+      if (!videoFile || !videoFile.file) return;
+
+      const formData = new FormData();
+      formData.append("video", videoFile.file);
+
+      const {
+        data: { videoId },
+      } = await API.POST<TVideoUploadResponse>(POST_VIDEO_UPLOAD, {
+        headers: { "Content-Type": "multipart/form-data" },
+        body: formData,
+      });
+      if (videoId) {
+        setValue("content.videoId", videoId[0].id);
+      }
+    })();
+  }, [videoFile, setValue]);
 
   useEffect(() => {
     if (type === "사고자") deleteSingleFile(setVideoFile);

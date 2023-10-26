@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Controller } from "react-hook-form";
 // styles
 import {
   Accordion,
@@ -10,10 +11,8 @@ import {
   InputAdornment,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { CssObject } from "@/presentation/common/styles/types";
 // icons
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
-
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // components
@@ -23,7 +22,6 @@ import ContentWithTitle from "./ContentWithTitle";
 import AccidentDate from "./AccidentDate";
 import UploadImage from "./UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
-import { Controller } from "react-hook-form";
 import { SearchMapPreview } from "./SearchMapPreview";
 
 const Detail = () => {
@@ -33,13 +31,27 @@ const Detail = () => {
     register,
     setValue,
     control,
-    formState: { isValid },
+    formState: { isValid, errors },
+    setError,
+    clearErrors,
   } = useWriteFormContext();
   const {
     type,
     content: { location },
   } = watch();
+
   const isWitness = type === "목격자";
+
+  const formValid = isValid && !Object.keys(errors).length;
+
+  useEffect(() => {
+    if (!location) {
+      setError("content.location", { message: "invalid location" });
+      return;
+    }
+    clearErrors("content.location");
+  }, [location, setValue, setError, clearErrors]);
+
   return (
     <Box css={styles.container}>
       {!isWitness && <UploadImage />}
@@ -48,7 +60,7 @@ const Detail = () => {
 
       <AppTextField
         placeholder="제목을 입력해 주세요!"
-        {...register("title")}
+        {...register("title", { required: true })}
       />
 
       <Spacer y={30} />
@@ -74,7 +86,7 @@ const Detail = () => {
         <AppTextField
           placeholder="차량번호를 입력해주세요!"
           css={styles.halfWidth()}
-          {...register("licensePlate")}
+          {...register("licensePlate", { required: true })}
         />
       </ContentWithTitle>
 
@@ -148,7 +160,11 @@ const Detail = () => {
         />
       </ContentWithTitle>
 
-      <AppButton css={styles.button(isValid)} disabled={!isValid} type="submit">
+      <AppButton
+        css={styles.button(formValid)}
+        disabled={!formValid}
+        type="submit"
+      >
         등록하기
       </AppButton>
     </Box>
@@ -211,4 +227,4 @@ const styles = {
       zIndex: 999,
       backgroundColor: isValid ? "#000" : "#bbb",
     }),
-} satisfies CssObject;
+};

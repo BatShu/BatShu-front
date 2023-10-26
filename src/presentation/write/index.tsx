@@ -7,13 +7,26 @@ import { Box, css } from "@mui/material";
 import { CssObject } from "@/presentation/common/styles/types";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 import { sliderSettings } from "@/presentation/configs";
+// api
+import { API } from "@/data/util/fetcher";
+import { POST_ACCIDENT, POST_OBSERVE } from "@/domain/endpoint";
 // store
 import {
   useWriteForm,
   writeFormState,
 } from "@/presentation/write/hooks/writeForm";
+import { useAuthStore } from "@/store/authStore";
+// lib
+import { getAuthHeader } from "@/data/util/header";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
+// types
+import {
+  TPostAccidentResponse,
+  TPostObserveResponse,
+} from "@/domain/models/appResponse";
+// lib
+import { appendToFormData, setObjectInFormData } from "@/data/util/common";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
@@ -21,19 +34,63 @@ import Detail from "./components/Detail";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
+  const { fbUser } = useAuthStore();
 
   const details = useWriteForm();
   const handleSubmit = details.handleSubmit;
   const sliderRef = useRef<Slider>(null);
   const navigate = useNavigate();
 
-  const onSubmit = (data: writeFormState) => {
-    console.log(data);
+  const onSubmit = async (data: writeFormState) => {
+    if (!fbUser) return;
+
+    const { type, title, accidentTime, content, licensePlate } = data;
+
+    const isAccident = type === "사고자";
+    const endPoint = isAccident ? POST_ACCIDENT : POST_OBSERVE;
+
+    const formData = new FormData();
+
+    appendToFormData(formData, {
+      contentTitle: title,
+      contentDescription: content.description,
+      placeName: content.placeName,
+      carModelName: content.carModelName,
+      licensePlate: licensePlate,
+      [isAccident ? "accidentTime" : "observeTime"]: accidentTime,
+    });
+    setObjectInFormData(
+      formData,
+      isAccident ? "accidentLocation" : "observeLocation",
+      { x: content.location?.lng, y: content.location?.lat }
+    );
+
+    if (isAccident) {
+      appendToFormData(formData, {
+        bounty: String(content.bounty),
+        photos: content.photos.map(({ file }) => file as Blob),
+      });
+    } else {
+      appendToFormData(formData, { videoId: String(content.videoId) });
+    }
+
+    // FIXME: 런타임 내에서 결정되는 타입이라 자동완성이 안됨
+    const res = await API.POST<
+      typeof isAccident extends true
+        ? TPostAccidentResponse
+        : TPostObserveResponse
+    >(endPoint, { ...(await getAuthHeader(fbUser)), body: formData });
+
+    console.log(res);
   };
 
   return (
     <FormProvider {...details}>
-      <form css={styles.pageWrapper} onSubmit={handleSubmit(onSubmit)}>
+      <form
+        css={styles.pageWrapper}
+        onSubmit={handleSubmit(onSubmit)}
+        encType="multipart/form-data"
+      >
         <Box css={pageContentStyles}>
           <Box css={styles.container}>
             <Box css={styles.topArea}>
