@@ -6,6 +6,7 @@ import {
   WRITE_PATH,
   LOGIN_PATH,
   DETAIL_PATH,
+  CHAT_PATH,
 } from "./domain/constants/paths";
 import { HomePage } from "./presentation/home";
 import { SearchPage } from "./presentation/search";
@@ -14,6 +15,7 @@ import { SignUpPage } from "./presentation/auth/pages/SignUp";
 import { LoginPage } from "./presentation/auth/pages/Login";
 import { AuthProvider } from "./provider/AuthProvider";
 import { DetailPage } from "./presentation/detail";
+import { ChatPage } from "./presentation/chat";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: DETAIL_PATH,
         element: <DetailPage />,
+      },
+      {
+        path: CHAT_PATH,
+        element: <ChatPage />,
       },
     ],
   },

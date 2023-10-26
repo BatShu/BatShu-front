@@ -31,6 +31,10 @@ export const DetailPage = () => {
     photoURL: "https://images.unsplash.com/photo-1682686581362-796145f0e123",
   };
 
+  const onClick = async () => {
+    console.log("onClick");
+  };
+
   // TODO: 목격글 사고글 분기
   return (
     <Box css={pageContentStyles}>
@@ -52,7 +56,7 @@ export const DetailPage = () => {
       </Box>
 
       {/* TODO: 채팅 연결 */}
-      <AppButton>제보하기</AppButton>
+      <AppButton onClick={onClick}>제보하기</AppButton>
     </Box>
   );
 };

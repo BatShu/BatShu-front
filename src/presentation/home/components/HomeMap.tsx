@@ -9,14 +9,20 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
 import { curLocationMarker, pinMarker } from "@/presentation/configs";
+// end points
+import { GET_ACCIDENT_BY_ID } from "@/domain/endpoint";
 // types
 import { ILocation } from "@/domain/models/location";
+import { Accident } from "@/domain/models/accident";
+// lib
+import { API } from "@/data/util/fetcher";
 // store
 import { locationStore } from "@/store/locationStore";
 // components
 import AccidentDrawer from "./AccidentDrawer";
 // delete
 import { dummyAccidents } from "../temp";
+import { AppResponse } from "@/domain/models/appResponse";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -33,8 +39,17 @@ const HomeMap = (
   // useReadAccidentsByLocation(1, 1, 1);
 
   const clickMarker = useCallback(
-    (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
+    async (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
+
+      try {
+        const { data } = await API.GET<AppResponse<Accident>>(
+          GET_ACCIDENT_BY_ID(id)
+        );
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
 
       setAccidentDrawerId(id);
       // if (mapRef.current.getLevel() >= 8) {
@@ -71,6 +86,7 @@ const HomeMap = (
           ))}
           <AccidentDrawer
             accidentId={accidentDrawerId}
+            accident={data}
             onClose={() => setAccidentDrawerId(null)}
           />
         </Map>

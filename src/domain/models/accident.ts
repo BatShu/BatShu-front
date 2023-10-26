@@ -6,7 +6,8 @@ export interface Accident {
   contentTitle: string;
   contentDescription: string;
   photos: string[];
-  accidentTime: string;
-  accidentlocation: ILocation;
-  createdTime: string;
+  accidentTime: [string, string];
+  accidentLocation: ILocation;
+  createdAt: string;
+  bounty: string;
 }

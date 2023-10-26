@@ -2,9 +2,7 @@ import { AppApiError } from "@/domain/models/appError";
 
 const { VITE_API_BASE_URL } = import.meta.env;
 
-const defaultConfig: Partial<RequestInit> = {
-  credentials: "include",
-};
+const defaultConfig: Partial<RequestInit> = { credentials: "omit" };
 
 const request = async <T>(
   url: string,
