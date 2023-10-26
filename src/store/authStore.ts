@@ -19,13 +19,21 @@ onAuthStateChanged(auth, async (fbUser) => {
     return;
   }
   let appUser: AppUser | null = null;
+
+  const token = await fbUser.getIdToken();
   try {
-    appUser = await userRepository.readUserByAuth(fbUser);
+    appUser = await userRepository.readUserByUid({
+      uid: fbUser.uid,
+      token: token,
+    });
   } catch (e) {
     const err = handleError(e);
     if (err instanceof AppApiError && err.status === 400) {
       await userRepository.createUser(fbUser);
-      appUser = await userRepository.readUserByAuth(fbUser);
+      appUser = await userRepository.readUserByUid({
+        uid: fbUser.uid,
+        token: token,
+      });
     }
   }
   useAuthStore.setState({ fbUser: fbUser, appUser: appUser, init: true });

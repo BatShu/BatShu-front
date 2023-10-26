@@ -68,18 +68,25 @@ const API = {
 export const authApi = axios.create();
 authApi.defaults.baseURL = VITE_API_BASE_URL;
 authApi.defaults.withCredentials = true;
-authApi.interceptors.request.use((res) => {
+authApi.interceptors.request.use((req) => {
+  console.log(req);
+  if (req.headers["Authorization"] != null) {
+    return req;
+  }
   const fbUser = useAuthStore.getState().fbUser;
   if (fbUser == null) {
     throw new Error("User is not logged in");
   }
   const token = fbUser.getIdToken();
-  res.headers["Authorization"] = `Bearer ${token}`;
-  return res;
+  req.headers["Authorization"] = `Bearer ${token}`;
+  return req;
 });
 authApi.interceptors.response.use((res) => {
   if (res.data.ok == false || res.status >= 400) {
-    throw new Error(res.data.msg ?? "Unknown error");
+    throw new AppApiError({
+      message: res.data.msg ?? "Unknown error",
+      status: res.status,
+    });
   }
   return res;
 });
