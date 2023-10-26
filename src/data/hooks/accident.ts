@@ -2,25 +2,20 @@ import {
   GET_ACCIDENT_BY_ID,
   GET_ACCIDENT_BY_LOCATION,
 } from "@/domain/endpoint";
-import { Accident } from "@/domain/models/accident";
+import { Accident, AccidentPreview } from "@/domain/models/accident";
 import { ILocation } from "@/domain/models/location";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { API } from "../util/fetcher";
+import { API, authApi } from "../util/fetcher";
+import { AppResponse } from "@/domain/models/appResponse";
 
-export interface ReadAccidentsByLocationResponse {
-  ok: boolean;
-  data: {
-    id: number;
-    location: ILocation;
-  }[];
-}
+export type ReadAccidentsByLocationData = AccidentPreview[];
 export const useReadAccidentsByLocation = (
   location: ILocation
-): UseQueryResult<ReadAccidentsByLocationResponse> => {
+): UseQueryResult<AppResponse<ReadAccidentsByLocationData>> => {
   return useQuery({
     queryKey: ["accidents", location],
     queryFn: () =>
-      API.GET<ReadAccidentsByLocationResponse>(
+      authApi.get<AppResponse<ReadAccidentsByLocationData>>(
         GET_ACCIDENT_BY_LOCATION({
           x: location.lng,
           y: location.lat,

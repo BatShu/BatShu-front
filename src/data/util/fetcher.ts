@@ -1,4 +1,6 @@
 import { AppApiError } from "@/domain/models/appError";
+import { useAuthStore } from "@/store/authStore";
+import axios from "axios";
 
 const { VITE_API_BASE_URL } = import.meta.env;
 
@@ -63,5 +65,17 @@ const API = {
     });
   },
 };
+export const authApi = axios.create();
+authApi.defaults.baseURL = VITE_API_BASE_URL;
+authApi.defaults.withCredentials = true;
+authApi.interceptors.request.use((res) => {
+  const fbUser = useAuthStore.getState().fbUser;
+  if (fbUser == null) {
+    throw new Error("User is not logged in");
+  }
+  const token = fbUser.getIdToken();
+  res.headers["Authorization"] = `Bearer ${token}`;
+  return res;
+});
 
 export { request, API };
