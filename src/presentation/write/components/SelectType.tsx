@@ -8,19 +8,16 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { ReactComponent as SelectLogo } from "@/presentation/common/icons/asset/select-logo.svg";
 import CarImage1 from "@/presentation/common/icons/asset/car-image-1.png";
 import CarImage2 from "@/presentation/common/icons/asset/car-image-2.png";
-// api
-import { API } from "@/data/util/fetcher";
-import { POST_VIDEO_UPLOAD } from "@/domain/endpoint";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
-// types
-import { TVideoUploadResponse } from "@/domain/models/appResponse";
 // lib
 import { TFile, deleteSingleFile } from "@/lib";
 // components
 import AppButton from "@/presentation/common/components/AppButton";
 import Spacer from "@/presentation/common/atoms/Spacer";
 import UploadVideo from "./UploadVideo";
+import { accidentObserverRepository } from "@/data/backend";
+import { useMutation } from "@tanstack/react-query";
 
 interface SelectTypeProps {
   sliderRef: RefObject<Slider>;
@@ -32,24 +29,17 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
   const type = watch("type");
   const valid = type === "사고자" || !!(type === "목격자" && videoFile);
 
+  const { mutateAsync } = useMutation({
+    mutationFn: async (videoFile: TFile) =>
+      await accidentObserverRepository.updateVideo(videoFile),
+  });
   useEffect(() => {
-    (async () => {
-      if (!videoFile || !videoFile.file) return;
+    if (!videoFile || !videoFile.file) return;
 
-      const formData = new FormData();
-      formData.append("video", videoFile.file);
-
-      const {
-        data: { videoId },
-      } = await API.POST<TVideoUploadResponse>(POST_VIDEO_UPLOAD, {
-        headers: { "Content-Type": "multipart/form-data" },
-        body: formData,
-      });
-      if (videoId) {
-        setValue("content.videoId", videoId[0].id);
-      }
-    })();
-  }, [videoFile, setValue]);
+    mutateAsync(videoFile).then((videoId) => {
+      setValue("content.videoId", videoId);
+    });
+  }, [videoFile, setValue, mutateAsync]);
 
   useEffect(() => {
     if (type === "사고자") deleteSingleFile(setVideoFile);

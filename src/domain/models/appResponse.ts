@@ -6,8 +6,6 @@ export type AppResponse<T = any> = {
 
 export type TPostAccidentResponse = Omit<AppResponse, "data">;
 
-export type TVideoUploadResponse = AppResponse<{ videoId: [{ id: number }] }>;
-
 export type TPostObserveResponse = AppResponse<{
   observeId: number;
   uid: string;
