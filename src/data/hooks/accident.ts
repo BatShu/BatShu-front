@@ -1,26 +1,18 @@
-import {
-  GET_ACCIDENT_BY_ID,
-  GET_ACCIDENT_BY_LOCATION,
-} from "@/domain/endpoint";
-import { Accident, AccidentPreview } from "@/domain/models/accident";
-import { ILocation } from "@/domain/models/location";
+import { GET_ACCIDENT_BY_ID } from "@/domain/endpoint";
+import { Accident } from "@/domain/models/accident";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { API, authApi } from "../util/fetcher";
+import { API } from "../util/fetcher";
 import { AppResponse } from "@/domain/models/appResponse";
+import { accidentObserverRepository } from "../backend";
+import { ReadAccidentsByLocationDto } from "@/domain/dtos/accidentObserve";
+import { ReadAccidentsByLocationData } from "../backend/accidentObserve";
 
-export type ReadAccidentsByLocationData = AccidentPreview[];
 export const useReadAccidentsByLocation = (
-  location: ILocation
+  dto: ReadAccidentsByLocationDto
 ): UseQueryResult<AppResponse<ReadAccidentsByLocationData>> => {
   return useQuery({
-    queryKey: ["accidents", location],
-    queryFn: () =>
-      authApi.get<AppResponse<ReadAccidentsByLocationData>>(
-        GET_ACCIDENT_BY_LOCATION({
-          x: location.lng,
-          y: location.lat,
-        })
-      ),
+    queryKey: ["accidents", dto],
+    queryFn: () => accidentObserverRepository.readAccidentsByLocation(dto),
   });
 };
 

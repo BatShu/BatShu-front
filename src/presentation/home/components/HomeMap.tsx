@@ -30,7 +30,11 @@ const HomeMap = (
 
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
 
-  const { data } = useReadAccidentsByLocation(location);
+  const { data } = useReadAccidentsByLocation({
+    x: location.lng,
+    y: location.lat,
+    level: location.level,
+  });
 
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
