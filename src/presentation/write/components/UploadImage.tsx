@@ -29,11 +29,11 @@ const UploadImage = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { watch, setValue, control, trigger } = useWriteFormContext();
-  const images = watch("content.photos");
+  const images = watch("photos");
   const onDelete = useCallback(
     (delIdx: number) =>
       setValue(
-        "content.photos",
+        "photos",
         images.filter(({ url }, idx) => {
           if (idx !== delIdx) return true;
           else if (inputRef.current) {
@@ -67,7 +67,7 @@ const UploadImage = () => {
             </Typography>
             <Controller
               control={control}
-              name="content.photos"
+              name="photos"
               rules={{ required: true }}
               render={({ field: { onChange } }) => (
                 <input
@@ -79,7 +79,7 @@ const UploadImage = () => {
                   onChange={(e) =>
                     setMultipleFile(e, (newImages: TFile[]) => {
                       onChange(images.concat(newImages).slice(0, 5));
-                      trigger("content.photos");
+                      trigger("photos");
                     })
                   }
                 />

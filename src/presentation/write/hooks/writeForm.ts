@@ -12,38 +12,32 @@ import {
 
 type TWriter = "사고자" | "목격자" | null;
 
-type TContent = {
+export interface writeFormState {
+  type: TWriter;
+  contentTitle: string;
+  licensePlate: string;
+  accidentTime: [string, string];
   videoId: number | null;
   photos: TFile[];
   location: ILocation | null;
   placeName: string;
   carModelName: string;
   bounty: number;
-  description: string;
-};
-
-export interface writeFormState {
-  type: TWriter;
-  title: string;
-  licensePlate: string;
-  accidentTime: [string, string];
-  content: TContent;
+  contentDescription: string;
 }
 
 const initialState: writeFormState = {
   type: null,
-  title: "",
+  contentTitle: "",
   licensePlate: "",
   accidentTime: [dayjs().format(), dayjs().format()],
-  content: {
-    videoId: null,
-    photos: [],
-    location: null,
-    placeName: "",
-    carModelName: "",
-    bounty: 0,
-    description: "",
-  },
+  videoId: null,
+  photos: [],
+  location: null,
+  placeName: "",
+  carModelName: "",
+  bounty: 0,
+  contentDescription: "",
 };
 export const useWriteForm = (
   props?: UseFormProps<writeFormState>

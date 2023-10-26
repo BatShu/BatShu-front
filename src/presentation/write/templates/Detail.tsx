@@ -18,11 +18,11 @@ import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 import AppButton from "@/presentation/common/components/AppButton";
-import ContentWithTitle from "./ContentWithTitle";
-import AccidentDate from "./AccidentDate";
-import UploadImage from "./UploadImage";
+import ContentWithTitle from "../components/ContentWithTitle";
+import AccidentDate from "../components/AccidentDate";
+import UploadImage from "../components/UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
-import { SearchMapPreview } from "./SearchMapPreview";
+import { SearchMapPreview } from "../components/SearchMapPreview";
 
 const Detail = () => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
@@ -35,10 +35,7 @@ const Detail = () => {
     setError,
     clearErrors,
   } = useWriteFormContext();
-  const {
-    type,
-    content: { location },
-  } = watch();
+  const { type, location } = watch();
 
   const isWitness = type === "목격자";
 
@@ -46,10 +43,10 @@ const Detail = () => {
 
   useEffect(() => {
     if (!location) {
-      setError("content.location", { message: "invalid location" });
+      setError("location", { message: "invalid location" });
       return;
     }
-    clearErrors("content.location");
+    clearErrors("location");
   }, [location, setValue, setError, clearErrors]);
 
   return (
@@ -60,7 +57,7 @@ const Detail = () => {
 
       <AppTextField
         placeholder="제목을 입력해 주세요!"
-        {...register("title", { required: true })}
+        {...register("contentTitle", { required: true })}
       />
 
       <Spacer y={30} />
@@ -96,12 +93,12 @@ const Detail = () => {
             placeholder="차량종류를 입력해주세요!"
             css={styles.halfWidth(skipCarNumber)}
             disabled={skipCarNumber}
-            {...register("content.carModelName")}
+            {...register("carModelName")}
           />
           <AppButton
             onClick={() => {
               setSkipCarNumber((prev) => !prev);
-              setValue("content.carModelName", "");
+              setValue("carModelName", "");
             }}
             css={styles.skipButton(skipCarNumber)}
           >
@@ -114,7 +111,7 @@ const Detail = () => {
         <SearchMapPreview
           location={location}
           onLocationChange={(value) => {
-            setValue("content.location", value);
+            setValue("location", value);
           }}
         />
       </ContentWithTitle>
@@ -123,7 +120,7 @@ const Detail = () => {
         <ContentWithTitle title="포상금">
           <Controller
             control={control}
-            name="content.bounty"
+            name="bounty"
             render={({ field: { onChange, value } }) => (
               <AppTextField
                 placeholder="포상금을 입력해주세요!"
@@ -156,7 +153,7 @@ const Detail = () => {
           }자가 알아볼 수 있도록, 사고 내용을 자세하게 입력해주세요`}
           css={styles.memo}
           multiline
-          {...register("content.description", { required: true })}
+          {...register("contentDescription", { required: true })}
         />
       </ContentWithTitle>
 

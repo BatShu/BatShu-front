@@ -31,19 +31,19 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
 
   const { mutateAsync } = useMutation({
     mutationFn: async (videoFile: TFile) =>
-      await accidentObserverRepository.updateVideo(videoFile),
+      await accidentObserverRepository.uploadVideo(videoFile),
   });
   useEffect(() => {
     if (!videoFile || !videoFile.file) return;
 
     mutateAsync(videoFile).then((videoId) => {
-      setValue("content.videoId", videoId);
+      setValue("videoId", videoId);
     });
   }, [videoFile, setValue, mutateAsync]);
 
   useEffect(() => {
     if (type === "사고자") deleteSingleFile(setVideoFile);
-    resetField("content");
+    resetField("videoId");
   }, [type, resetField]);
 
   return (

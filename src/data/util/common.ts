@@ -1,6 +1,6 @@
 export const appendToFormData = (
   formData: FormData,
-  values: Record<string, Blob | string | Array<Blob | string>>
+  values: Record<string, any>
 ) => {
   for (const key in values) {
     const value = values[key];

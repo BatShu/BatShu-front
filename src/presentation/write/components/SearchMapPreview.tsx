@@ -32,7 +32,7 @@ export const SearchMapPreview = ({
   }, [location, address]);
 
   useEffect(() => {
-    setValue("content.placeName", placeName);
+    setValue("placeName", placeName);
   }, [setValue, placeName]);
 
   return (
