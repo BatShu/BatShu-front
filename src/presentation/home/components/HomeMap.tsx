@@ -17,6 +17,7 @@ import { locationStore } from "@/store/locationStore";
 import AccidentDrawer from "./AccidentDrawer";
 
 import { useReadAccidentsByLocation } from "@/data/hooks/accident";
+import { levelToRadius } from "@/data/util/map";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -33,7 +34,7 @@ const HomeMap = (
   const { data } = useReadAccidentsByLocation({
     x: location.lng,
     y: location.lat,
-    level: location.level,
+    radius: levelToRadius(location.level),
   });
 
   const clickMarker = useCallback(
