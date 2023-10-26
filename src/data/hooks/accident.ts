@@ -4,8 +4,10 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import { API } from "../util/fetcher";
 import { AppResponse } from "@/domain/models/appResponse";
 import { accidentObserverRepository } from "../backend";
-import { ReadAccidentsByLocationDto } from "@/domain/dtos/accidentObserve";
-import { ReadAccidentsByLocationData } from "../backend/accidentObserve";
+import {
+  ReadAccidentsByLocationData,
+  ReadAccidentsByLocationDto,
+} from "@/domain/dtos/accidentObserve";
 
 export const useReadAccidentsByLocation = (
   dto: ReadAccidentsByLocationDto
