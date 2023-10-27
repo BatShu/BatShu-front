@@ -15,8 +15,9 @@ import { ILocation } from "@/domain/models/location";
 import { locationStore } from "@/store/locationStore";
 // components
 import AccidentDrawer from "./AccidentDrawer";
-// delete
-import { dummyAccidents } from "../temp";
+
+import { useReadAccidentsByLocation } from "@/data/hooks/accident";
+import { levelToRadius } from "@/data/util/map";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -30,14 +31,18 @@ const HomeMap = (
 
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
 
-  // useReadAccidentsByLocation(1, 1, 1);
+  const { data } = useReadAccidentsByLocation({
+    x: location.lng,
+    y: location.lat,
+    radius: levelToRadius(location.level),
+  });
 
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
       setAccidentDrawerId(id);
-      // if (mapRef.current.getLevel() >= 8) {
+      // if (mapRef .current.getLevel() >= 8) {
       //   mapRef.current.setLevel(2);
       // }
       mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
@@ -46,7 +51,7 @@ const HomeMap = (
   );
 
   const markerImage = useMemo(() => pinMarker(isBatshu), [isBatshu]);
-
+  const dummyAccidents = data?.data;
   return (
     <Box css={styles.loadingPage}>
       {status.loading ? (
@@ -61,7 +66,7 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {dummyAccidents.map(({ accidentId, accidentLocation: { y, x } }) => (
+          {dummyAccidents?.map(({ accidentId, accidentLocation: { y, x } }) => (
             <MapMarker
               key={accidentId}
               position={{ lat: y, lng: x }}

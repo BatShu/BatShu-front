@@ -17,7 +17,9 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
-import Detail from "./components/Detail";
+import Detail from "./templates/Detail";
+import { useMutation } from "@tanstack/react-query";
+import { accidentObserverRepository } from "@/data/backend";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
@@ -27,13 +29,30 @@ export const WritePage = () => {
   const sliderRef = useRef<Slider>(null);
   const navigate = useNavigate();
 
-  const onSubmit = (data: writeFormState) => {
-    console.log(data);
+  const { mutate } = useMutation({
+    mutationFn: async (data: writeFormState) => {
+      const isAccident = data.type === "사고자";
+      if (isAccident) {
+        await accidentObserverRepository.postAccident(data);
+      } else {
+        await accidentObserverRepository.postObserve({
+          ...data,
+          observeTime: data.accidentTime,
+        });
+      }
+    },
+  });
+  const onSubmit = async (data: writeFormState) => {
+    mutate(data);
   };
 
   return (
     <FormProvider {...details}>
-      <form css={styles.pageWrapper} onSubmit={handleSubmit(onSubmit)}>
+      <form
+        css={styles.pageWrapper}
+        onSubmit={handleSubmit(onSubmit)}
+        encType="multipart/form-data"
+      >
         <Box css={pageContentStyles}>
           <Box css={styles.container}>
             <Box css={styles.topArea}>

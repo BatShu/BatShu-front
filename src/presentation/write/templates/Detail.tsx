@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Controller } from "react-hook-form";
 // styles
 import {
   Accordion,
@@ -10,21 +11,18 @@ import {
   InputAdornment,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { CssObject } from "@/presentation/common/styles/types";
 // icons
 import { ReactComponent as Won } from "@/presentation/common/icons/filled/Won.svg";
-
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // components
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 import AppButton from "@/presentation/common/components/AppButton";
-import ContentWithTitle from "./ContentWithTitle";
-import AccidentDate from "./AccidentDate";
-import UploadImage from "./UploadImage";
+import ContentWithTitle from "../components/ContentWithTitle";
+import AccidentDate from "../components/AccidentDate";
+import UploadImage from "../components/UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
-import { Controller } from "react-hook-form";
-import { SearchMapPreview } from "./SearchMapPreview";
+import { SearchMapPreview } from "../components/SearchMapPreview";
 
 const Detail = () => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
@@ -33,13 +31,24 @@ const Detail = () => {
     register,
     setValue,
     control,
-    formState: { isValid },
+    formState: { isValid, errors },
+    setError,
+    clearErrors,
   } = useWriteFormContext();
-  const {
-    type,
-    content: { location },
-  } = watch();
+  const { type, location } = watch();
+
   const isWitness = type === "목격자";
+
+  const formValid = isValid && !Object.keys(errors).length;
+
+  useEffect(() => {
+    if (!location) {
+      setError("location", { message: "invalid location" });
+      return;
+    }
+    clearErrors("location");
+  }, [location, setValue, setError, clearErrors]);
+
   return (
     <Box css={styles.container}>
       {!isWitness && <UploadImage />}
@@ -48,7 +57,7 @@ const Detail = () => {
 
       <AppTextField
         placeholder="제목을 입력해 주세요!"
-        {...register("title")}
+        {...register("contentTitle", { required: true })}
       />
 
       <Spacer y={30} />
@@ -74,7 +83,7 @@ const Detail = () => {
         <AppTextField
           placeholder="차량번호를 입력해주세요!"
           css={styles.halfWidth()}
-          {...register("licensePlate")}
+          {...register("licensePlate", { required: true })}
         />
       </ContentWithTitle>
 
@@ -84,12 +93,12 @@ const Detail = () => {
             placeholder="차량종류를 입력해주세요!"
             css={styles.halfWidth(skipCarNumber)}
             disabled={skipCarNumber}
-            {...register("content.carModelName")}
+            {...register("carModelName")}
           />
           <AppButton
             onClick={() => {
               setSkipCarNumber((prev) => !prev);
-              setValue("content.carModelName", "");
+              setValue("carModelName", "");
             }}
             css={styles.skipButton(skipCarNumber)}
           >
@@ -102,7 +111,7 @@ const Detail = () => {
         <SearchMapPreview
           location={location}
           onLocationChange={(value) => {
-            setValue("content.location", value);
+            setValue("location", value);
           }}
         />
       </ContentWithTitle>
@@ -111,7 +120,7 @@ const Detail = () => {
         <ContentWithTitle title="포상금">
           <Controller
             control={control}
-            name="content.bounty"
+            name="bounty"
             render={({ field: { onChange, value } }) => (
               <AppTextField
                 placeholder="포상금을 입력해주세요!"
@@ -144,11 +153,15 @@ const Detail = () => {
           }자가 알아볼 수 있도록, 사고 내용을 자세하게 입력해주세요`}
           css={styles.memo}
           multiline
-          {...register("content.description", { required: true })}
+          {...register("contentDescription", { required: true })}
         />
       </ContentWithTitle>
 
-      <AppButton css={styles.button(isValid)} disabled={!isValid} type="submit">
+      <AppButton
+        css={styles.button(formValid)}
+        disabled={!formValid}
+        type="submit"
+      >
         등록하기
       </AppButton>
     </Box>
@@ -211,4 +224,4 @@ const styles = {
       zIndex: 999,
       backgroundColor: isValid ? "#000" : "#bbb",
     }),
-} satisfies CssObject;
+};

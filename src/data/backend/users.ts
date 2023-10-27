@@ -1,23 +1,27 @@
 import { User } from "firebase/auth";
-import { API } from "../util/fetcher";
-import { getAuthHeader } from "../util/header";
+import { authApi } from "../util/fetcher";
 import { AppResponse } from "@/domain/models/appResponse";
 import { AppUser } from "@/domain/models/appUser";
 
 export class UserRepository {
-  async readUserByAuth(fbUser: User): Promise<AppUser> {
-    const headers = await getAuthHeader(fbUser);
-    const res = await API.GET<AppResponse<AppUser>>("api/user", headers);
-    return res.data;
+  async readUserByUid({
+    uid,
+    token,
+  }: {
+    uid: string;
+    token?: string;
+  }): Promise<AppUser> {
+    const res = await authApi.get<AppResponse<AppUser>>(`api/user/${uid}`, {
+      headers: {
+        Authorization: token == null ? undefined : `Bearer ${token}`,
+      },
+    });
+    return res.data.data;
   }
 
   async createUser(fbUser: User): Promise<void> {
-    const headers = await getAuthHeader(fbUser);
-    await API.POST<AppResponse>("api/user", {
-      ...headers,
-      body: JSON.stringify({
-        uid: fbUser.uid,
-      }),
+    await authApi.post("api/user", {
+      uid: fbUser.uid,
     });
   }
 }

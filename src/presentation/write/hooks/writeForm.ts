@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 // store
 import { ILocation } from "@/domain/models/location";
 // lib
@@ -12,36 +12,32 @@ import {
 
 type TWriter = "사고자" | "목격자" | null;
 
-type TContent = {
-  video: TFile | null;
-  images: TFile[];
-  location: ILocation | null;
-  carModelName: string;
-  bounty: number;
-  description: string;
-};
-
 export interface writeFormState {
   type: TWriter;
-  title: string;
+  contentTitle: string;
   licensePlate: string;
-  accidentTime: [Dayjs, Dayjs];
-  content: TContent;
+  accidentTime: [string, string];
+  videoId: number | null;
+  photos: TFile[];
+  location: ILocation | null;
+  placeName: string;
+  carModelName: string;
+  bounty: number;
+  contentDescription: string;
 }
 
 const initialState: writeFormState = {
   type: null,
-  title: "",
+  contentTitle: "",
   licensePlate: "",
-  accidentTime: [dayjs(), dayjs()],
-  content: {
-    video: null,
-    images: [],
-    location: null,
-    carModelName: "",
-    bounty: 0,
-    description: "",
-  },
+  accidentTime: [dayjs().format(), dayjs().format()],
+  videoId: null,
+  photos: [],
+  location: null,
+  placeName: "",
+  carModelName: "",
+  bounty: 0,
+  contentDescription: "",
 };
 export const useWriteForm = (
   props?: UseFormProps<writeFormState>

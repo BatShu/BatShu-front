@@ -6,7 +6,7 @@ const acceptableImageExt = ["jpg", "jpeg", "png"];
 const acceptableVideoExt = ["mp4", "wmv", "mov", "avi", "dat"];
 
 export type TFile = {
-  file: Blob | null;
+  file: Blob;
   url: string;
   [key: string]: any;
 };

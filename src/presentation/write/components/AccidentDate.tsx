@@ -24,25 +24,34 @@ const AccidentDate = () => {
     (newDate: Dayjs | null) => {
       if (!newDate) return;
       const newAccidentTime = accidentTime.map((oldDay) => {
-        return oldDay.set("date", newDate.date());
-      }) as [Dayjs, Dayjs];
+        return dayjs(oldDay).set("date", newDate.date()).format();
+      }) as [string, string];
+
       setValue("accidentTime", newAccidentTime);
-      setDate(newAccidentTime[0]);
+      setDate(dayjs(newAccidentTime[0]));
     },
     [accidentTime, setValue]
   );
-  const setFromHour = useCallback(
-    (from: number) => {
-      setValue("accidentTime.0", accidentTime[0].hour(from).minute(0));
+
+  const setAccidentValue = useCallback(
+    (isFrom: boolean, hour: number) => {
+      const idxValue = isFrom ? 0 : 1;
+      setValue(
+        `accidentTime.${idxValue}`,
+        dayjs(accidentTime[idxValue]).hour(hour).minute(0).format()
+      );
     },
-    [setValue, accidentTime]
+    [accidentTime, setValue]
+  );
+
+  const setFromHour = useCallback(
+    (from: number) => setAccidentValue(true, from),
+    [setAccidentValue]
   );
 
   const setToHour = useCallback(
-    (to: number) => {
-      setValue("accidentTime.1", accidentTime[1].hour(to).minute(0));
-    },
-    [setValue, accidentTime]
+    (to: number) => setAccidentValue(false, to),
+    [setAccidentValue]
   );
 
   useEffect(() => {

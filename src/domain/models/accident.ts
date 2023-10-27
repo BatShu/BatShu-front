@@ -10,3 +10,11 @@ export interface Accident {
   accidentlocation: ILocation;
   createdTime: string;
 }
+
+export interface AccidentPreview {
+  accidentId: number;
+  accidentLocation: {
+    x: number;
+    y: number;
+  };
+}
