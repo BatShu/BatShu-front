@@ -36,9 +36,14 @@ const SelectType = ({ sliderRef }: SelectTypeProps) => {
   useEffect(() => {
     if (!videoFile || !videoFile.file) return;
 
-    mutateAsync(videoFile).then((videoId) => {
-      setValue("videoId", videoId);
-    });
+    mutateAsync(videoFile)
+      .then((videoId) => {
+        console.log(videoId);
+        setValue("videoId", videoId);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, [videoFile, setValue, mutateAsync]);
 
   useEffect(() => {

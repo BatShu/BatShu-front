@@ -35,7 +35,7 @@ export class AccidentObserverRepository {
       POST_VIDEO_UPLOAD,
       formData
     );
-    return res.data.data.videoId[0].id;
+    return res.data.data.id;
   }
 
   async postAccident(dto: PostAccidentDto): Promise<void> {

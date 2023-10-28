@@ -10,11 +10,7 @@ export interface ReadAccidentsByLocationDto {
 
 export type ReadAccidentsByLocationData = AccidentPreview[];
 export type UpdateVideoData = {
-  videoId: [
-    {
-      id: number;
-    }
-  ];
+  id: number;
 };
 
 export type PostAccidentDto = {
