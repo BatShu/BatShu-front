@@ -4,6 +4,7 @@ import {
   ForwardedRef,
   useMemo,
   useCallback,
+  useEffect,
 } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
@@ -18,6 +19,8 @@ import AccidentDrawer from "./AccidentDrawer";
 
 import { useReadAccidentsByLocation } from "@/data/hooks/accident";
 import { levelToRadius } from "@/data/util/map";
+import useDebounceValue from "@/presentation/common/hooks/useDebounceValue";
+import { ReadAccidentsByLocationDto } from "@/domain/dtos/accidentObserve";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -27,31 +30,61 @@ const HomeMap = (
   { isBatshu = true }: HomeMapProps,
   mapRef: ForwardedRef<kakao.maps.Map>
 ) => {
-  const { location, status } = locationStore();
-
+  const { location, status, setLocation } = locationStore();
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
 
-  const { data } = useReadAccidentsByLocation({
+  const debouncedLocation = useDebounceValue<ReadAccidentsByLocationDto>({
     x: location.lng,
     y: location.lat,
     radius: levelToRadius(location.level),
   });
+  const { data } = useReadAccidentsByLocation(debouncedLocation);
 
+  const moveHandler = () => {
+    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
+    const pos = mapRef.current.getCenter();
+    setLocation({
+      ...location,
+      lng: pos.getLng(),
+      lat: pos.getLat(),
+    });
+  };
+  const zoomHandler = () => {
+    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
+    const level = mapRef.current.getLevel();
+    setLocation({ ...location, level });
+  };
+
+  useEffect(() => {
+    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
+    kakao.maps.event.addListener(mapRef.current, "center_changed", moveHandler);
+    kakao.maps.event.addListener(mapRef.current, "zoom_changed", zoomHandler);
+    return () => {
+      if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
+      kakao.maps.event.removeListener(
+        mapRef.current,
+        "center_changed",
+        moveHandler
+      );
+      kakao.maps.event.removeListener(
+        mapRef.current,
+        "zoom_changed",
+        zoomHandler
+      );
+    };
+  }, [setLocation, mapRef]);
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
       setAccidentDrawerId(id);
-      // if (mapRef .current.getLevel() >= 8) {
-      //   mapRef.current.setLevel(2);
-      // }
       mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
     },
     [mapRef]
   );
 
   const markerImage = useMemo(() => pinMarker(isBatshu), [isBatshu]);
-  const dummyAccidents = data?.data;
+  const accidents = data?.data;
   return (
     <Box css={styles.loadingPage}>
       {status.loading ? (
@@ -66,7 +99,7 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {dummyAccidents?.map(({ accidentId, accidentLocation: { y, x } }) => (
+          {accidents?.map(({ accidentId, accidentLocation: { y, x } }) => (
             <MapMarker
               key={accidentId}
               position={{ lat: y, lng: x }}
