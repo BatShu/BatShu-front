@@ -30,10 +30,15 @@ onAuthStateChanged(auth, async (fbUser) => {
     const err = handleError(e);
     if (err instanceof AppApiError && err.status === 400) {
       await userRepository.createUser(fbUser);
-      appUser = await userRepository.readUserByUid({
-        uid: fbUser.uid,
-        token: token,
-      });
+      try {
+        appUser = await userRepository.readUserByUid({
+          uid: fbUser.uid,
+          token: token,
+        });
+      } catch (e) {
+        const err = handleError(e);
+        console.log(err);
+      }
     }
   }
   useAuthStore.setState({ fbUser: fbUser, appUser: appUser, init: true });
