@@ -16,7 +16,6 @@ import {
 import { TFile } from "@/lib";
 import { Accident } from "@/domain/models/accident";
 import { Observe } from "@/domain/models/observe";
-import { appendToFormData } from "../util/common";
 
 export class AccidentObserverRepository {
   async readAccidentsByLocation(
@@ -39,14 +38,10 @@ export class AccidentObserverRepository {
   }
 
   async postAccident(dto: PostAccidentDto): Promise<void> {
-    const formData = new FormData();
-    appendToFormData(formData, dto);
-    await authApi.post<AppResponse<Accident>>(POST_ACCIDENT, formData);
+    await authApi.post<AppResponse<Accident>>(POST_ACCIDENT, dto);
   }
 
   async postObserve(dto: PostObserveDto): Promise<void> {
-    const formData = new FormData();
-    appendToFormData(formData, dto);
-    await authApi.post<AppResponse<Observe>>(POST_OBSERVE, formData);
+    await authApi.post<AppResponse<Observe>>(POST_OBSERVE, dto);
   }
 }

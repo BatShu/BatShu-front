@@ -33,11 +33,22 @@ export const WritePage = () => {
     mutationFn: async (data: writeFormState) => {
       const isAccident = data.type === "사고자";
       if (isAccident) {
-        await accidentObserverRepository.postAccident(data);
+        await accidentObserverRepository.postAccident({
+          ...data,
+          accidentLocation: {
+            x: data.location?.lng ?? 0,
+            y: data.location?.lat ?? 0,
+          },
+          accidentTime: data.time,
+        });
       } else {
         await accidentObserverRepository.postObserve({
           ...data,
-          observeTime: data.accidentTime,
+          observeLocation: {
+            x: data.location?.lng ?? 0,
+            y: data.location?.lat ?? 0,
+          },
+          observeTime: data.time,
         });
       }
     },

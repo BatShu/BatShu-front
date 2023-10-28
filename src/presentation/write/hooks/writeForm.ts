@@ -16,7 +16,7 @@ export interface writeFormState {
   type: TWriter;
   contentTitle: string;
   licensePlate: string;
-  accidentTime: [string, string];
+  time: [string, string];
   videoId: number | null;
   photos: TFile[];
   location: ILocation | null;
@@ -30,7 +30,7 @@ const initialState: writeFormState = {
   type: null,
   contentTitle: "",
   licensePlate: "",
-  accidentTime: [dayjs().format(), dayjs().format()],
+  time: [dayjs().format(), dayjs().format()],
   videoId: null,
   photos: [],
   location: null,

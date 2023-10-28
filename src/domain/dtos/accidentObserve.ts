@@ -1,6 +1,6 @@
 import { TFile } from "@/lib";
 import { AccidentPreview } from "../models/accident";
-import { ILocation } from "../models/location";
+import { ILocationDto } from "./location";
 
 export interface ReadAccidentsByLocationDto {
   x: number;
@@ -18,7 +18,8 @@ export type PostAccidentDto = {
   contentDescription: string;
   licensePlate: string;
   accidentTime: [string, string];
-  location: ILocation | null;
+
+  accidentLocation: ILocationDto | null;
   placeName: string;
   carModelName: string;
   bounty: number;
@@ -30,7 +31,7 @@ export type PostObserveDto = {
   contentDescription: string;
   licensePlate: string;
   observeTime: [string, string];
-  location: ILocation | null;
+  observeLocation: ILocationDto | null;
   placeName: string;
   carModelName: string;
   videoId: number | null;
