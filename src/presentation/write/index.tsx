@@ -14,43 +14,39 @@ import {
 } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
+// types
+import { PostAccidentDto, PostObserveDto } from "@/domain/dtos/accidentObserve";
+// api
+import { useMutation } from "@tanstack/react-query";
+import { accidentObserverRepository } from "@/data/backend";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
 import Detail from "./templates/Detail";
-import { useMutation } from "@tanstack/react-query";
-import { accidentObserverRepository } from "@/data/backend";
+
 import { enqueueSnackbar } from "notistack";
 
 const useWriteMutation = () => {
   return useMutation({
     mutationFn: async (data: writeFormState) => {
       const isAccident = data.type === "사고자";
-      if (isAccident) {
-        await accidentObserverRepository.postAccident({
-          accidentLocation: {
-            x: data.location?.lng ?? 0,
-            y: data.location?.lat ?? 0,
-          },
-          accidentTime: data.time,
-          contentTitle: data.contentTitle,
-          contentDescription: data.contentDescription,
-          licensePlate: data.licensePlate,
-          placeName: data.placeName,
-          carModelName: data.carModelName,
-          bounty: data.bounty,
-          photos: data.photos,
-        });
-      } else {
-        await accidentObserverRepository.postObserve({
-          ...data,
-          observeLocation: {
-            x: data.location?.lng ?? 0,
-            y: data.location?.lat ?? 0,
-          },
-          observeTime: data.time,
-        });
-      }
+
+      const { postAccident, postObserve } = accidentObserverRepository;
+
+      const formData = Object.entries(data).reduce((acc, [key, val]) => {
+        if (key === "location") {
+          val = { x: val?.lng ?? 0, y: val?.lat ?? 0 };
+          key = isAccident ? "accidentLocation" : "observeLocation";
+        } else if (key === "time") {
+          key = isAccident ? "accidentTime" : "observeTime";
+        }
+
+        acc[key as keyof (PostAccidentDto | PostObserveDto)] = val;
+
+        return acc;
+      }, {} as PostAccidentDto & PostObserveDto);
+
+      await (isAccident ? postAccident : postObserve)(formData);
     },
   });
 };
