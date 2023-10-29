@@ -82,6 +82,5 @@ const styles = {
       "&:hover": {
         background: isBatshu ? "#000" : "#2FC1E1",
       },
-      zIndex: 1,
     }),
 };
