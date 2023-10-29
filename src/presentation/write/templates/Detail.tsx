@@ -24,7 +24,10 @@ import UploadImage from "../components/UploadImage";
 import Spacer from "@/presentation/common/atoms/Spacer";
 import { SearchMapPreview } from "../components/SearchMapPreview";
 
-const Detail = () => {
+interface DetailProps {
+  isLoading: boolean;
+}
+const Detail = ({ isLoading }: DetailProps) => {
   const [skipCarNumber, setSkipCarNumber] = useState(false);
   const {
     watch,
@@ -161,6 +164,7 @@ const Detail = () => {
         css={styles.button(formValid)}
         disabled={!formValid}
         type="submit"
+        loading={isLoading}
       >
         등록하기
       </AppButton>

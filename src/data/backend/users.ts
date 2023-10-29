@@ -20,8 +20,17 @@ export class UserRepository {
   }
 
   async createUser(fbUser: User): Promise<void> {
-    await authApi.post("api/user", {
-      uid: fbUser.uid,
-    });
+    const token = await fbUser.getIdToken();
+    await authApi.post(
+      "api/user",
+      {
+        uid: fbUser.uid,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 }

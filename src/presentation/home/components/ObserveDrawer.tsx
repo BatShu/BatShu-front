@@ -11,50 +11,51 @@ import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
-import { Accident } from "@/domain/models/accident";
-import { useReadAccidentById } from "@/data/hooks/accident";
+import { useReadObserveById } from "@/data/hooks/accident";
+import { Observe } from "@/domain/models/observe";
 
-interface AccidentDrawerProps {
-  accidentId: number | null;
+interface ObserveDrawerProps {
+  observeId: number | null;
   onOpen?: () => void;
   onClose: () => void;
 }
 
-const AccidentDrawer = ({
-  accidentId,
-  onOpen,
-  onClose,
-}: AccidentDrawerProps) => {
-  const { data: accident } = useReadAccidentById(accidentId);
+const ObserveDrawer = ({ observeId, onOpen, onClose }: ObserveDrawerProps) => {
+  const { data: observe } = useReadObserveById(observeId);
 
   return (
     <SwipeableDrawer
-      open={!!accidentId}
+      open={!!observeId}
       onOpen={onOpen ?? onClose}
       anchor="bottom"
       onClose={onClose}
       swipeAreaWidth={444}
       disableSwipeToOpen
     >
-      {accident && <AccidentDrawerDetail accident={accident} />}
+      {observe && <ObserveDrawerDetail observe={observe} />}
     </SwipeableDrawer>
   );
 };
 
-const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
+const ObserveDrawerDetail = ({ observe }: { observe: Observe }) => {
   const navigate = useNavigate();
 
   const { data: addressData } = useKakaoMapAddressSearch({
-    lat: accident.accidentLocation.y,
-    lng: accident.accidentLocation.x,
+    lat: observe.observeLocation.y,
+    lng: observe.observeLocation.x,
   });
 
   const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
-  const { createdAt, photoUrls, carModelName, licensePlate, accidentTime } =
-    accident;
+  const {
+    createdAt,
+    thumbnailUrl,
+    carModelName,
+    licensePlate,
+    observeEndTime,
+  } = observe;
   const routeToDetail = () => {
-    navigate(`/accident/${accident.id}`, {
-      state: { ...accident, placeName: addressName },
+    navigate(`/observe/${observe.videoId}`, {
+      state: { ...observe, placeName: addressName },
     });
   };
   return (
@@ -67,7 +68,7 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
         </Box>
 
         <Box className="content middle">
-          <img className="accident-image" src={photoUrls[0]} />
+          <img className="accident-image" src={thumbnailUrl} />
           <Box className="info">
             <Box css={styles.chip} className="car-number">
               <Typography css={css(`font-size:10px`)}>
@@ -81,9 +82,7 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
             <Box css={[styles.chip, css(`width:fit-content;`)]}>
               <TimeCircle2 css={styles.icon} />
               <span>
-                {dayjs(accidentTime[1].split(":")[0]).format(
-                  DATE_FORMAT_DETAIL_CHIP
-                )}
+                {dayjs(observeEndTime).format(DATE_FORMAT_DETAIL_CHIP)}
               </span>
             </Box>
 
@@ -107,7 +106,8 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
     </Box>
   );
 };
-export default AccidentDrawer;
+
+export default ObserveDrawer;
 
 const styles = {
   drawer: css({

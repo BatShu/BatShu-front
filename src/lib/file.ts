@@ -1,15 +1,8 @@
-import axios from "axios";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { enqueueSnackbar } from "notistack";
 
 const acceptableImageExt = ["jpg", "jpeg", "png"];
 const acceptableVideoExt = ["mp4", "wmv", "mov", "avi", "dat"];
-
-export type TFile = {
-  file: Blob;
-  url: string;
-  [key: string]: any;
-};
 
 const checkAcceptableExt = (fileName: string, acceptableArr: string[]) => {
   const fileExtIdx = fileName.lastIndexOf(".");
@@ -20,7 +13,7 @@ const checkAcceptableExt = (fileName: string, acceptableArr: string[]) => {
 
 const setSingleFile = (
   event: ChangeEvent<HTMLInputElement>,
-  setFileState: Dispatch<SetStateAction<TFile | null>>,
+  setFileState: Dispatch<SetStateAction<Blob | null>>,
   type: "image" | "video" = "image"
 ) => {
   event.preventDefault();
@@ -32,10 +25,9 @@ const setSingleFile = (
     type === "image" ? acceptableImageExt : acceptableVideoExt;
 
   const file = target.files[0];
-  const url = URL.createObjectURL(file);
 
   if (checkAcceptableExt(file.name, acceptableArray)) {
-    setFileState({ file, url });
+    setFileState(file);
   } else {
     enqueueSnackbar(`${acceptableArray.join(", ")}파일만 가능합니다!`);
   }
@@ -59,8 +51,7 @@ const setMultipleFile = (
 
   const newFiles = [...files].map((file) => {
     if (checkAcceptableExt(file.name, acceptableArray)) {
-      const url = URL.createObjectURL(file);
-      return { file, url };
+      return file;
     } else {
       enqueueSnackbar(`${acceptableArray.join(", ")}파일만 가능합니다!`);
     }
@@ -70,43 +61,23 @@ const setMultipleFile = (
 
 // execute URL.revokeObjectURL to prevent memory leak
 const deleteSingleFile = (
-  setFileState: Dispatch<SetStateAction<TFile | null>>
+  setFileState: Dispatch<SetStateAction<Blob | null>>
 ) => {
-  setFileState((file) => {
-    if (file) URL.revokeObjectURL(file.url);
+  setFileState(() => {
     return null;
   });
 };
 
 const deleteMultipleFileByIndex = (
   index: number,
-  setFileState: Dispatch<SetStateAction<TFile[]>>
+  setFileState: Dispatch<SetStateAction<Blob[]>>
 ) => {
   setFileState((prev) =>
-    prev.filter(({ url }, idx) => {
+    prev.filter((_, idx) => {
       if (idx !== index) return true;
-      else {
-        URL.revokeObjectURL(url);
-        return false;
-      }
+      return false;
     })
   );
-};
-
-const urlToFile = async (image: TFile): Promise<Blob> => {
-  const { file, url } = image;
-  if (file) return file;
-
-  const { data } = await axios(url, { responseType: "blob" });
-
-  const fileName = url.split("/").pop()?.split(".")[0];
-  const ext = url.split(".").pop()?.split("?")[0];
-
-  const convertedFile = new File([data], `${fileName}.${ext}`, {
-    type: `image/${ext}`,
-  });
-
-  return convertedFile;
 };
 
 export {
@@ -114,5 +85,4 @@ export {
   setMultipleFile,
   deleteSingleFile,
   deleteMultipleFileByIndex,
-  urlToFile,
 };

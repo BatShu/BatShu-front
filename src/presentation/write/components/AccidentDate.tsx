@@ -17,7 +17,7 @@ const AccidentDate = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const { watch, setValue } = useWriteFormContext();
   const type = watch("type");
-  const accidentTime = watch("accidentTime");
+  const accidentTime = watch("time");
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const updateOnlyDate = useCallback(
@@ -27,7 +27,7 @@ const AccidentDate = () => {
         return dayjs(oldDay).set("date", newDate.date()).format();
       }) as [string, string];
 
-      setValue("accidentTime", newAccidentTime);
+      setValue("time", newAccidentTime);
       setDate(dayjs(newAccidentTime[0]));
     },
     [accidentTime, setValue]
@@ -37,7 +37,7 @@ const AccidentDate = () => {
     (isFrom: boolean, hour: number) => {
       const idxValue = isFrom ? 0 : 1;
       setValue(
-        `accidentTime.${idxValue}`,
+        `time.${idxValue}`,
         dayjs(accidentTime[idxValue]).hour(hour).minute(0).format()
       );
     },

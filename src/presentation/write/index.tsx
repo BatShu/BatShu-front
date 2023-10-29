@@ -20,7 +20,40 @@ import DotsHeader from "./components/DotsHeader";
 import Detail from "./templates/Detail";
 import { useMutation } from "@tanstack/react-query";
 import { accidentObserverRepository } from "@/data/backend";
+import { enqueueSnackbar } from "notistack";
 
+const useWriteMutation = () => {
+  return useMutation({
+    mutationFn: async (data: writeFormState) => {
+      const isAccident = data.type === "사고자";
+      if (isAccident) {
+        await accidentObserverRepository.postAccident({
+          accidentLocation: {
+            x: data.location?.lng ?? 0,
+            y: data.location?.lat ?? 0,
+          },
+          accidentTime: data.time,
+          contentTitle: data.contentTitle,
+          contentDescription: data.contentDescription,
+          licensePlate: data.licensePlate,
+          placeName: data.placeName,
+          carModelName: data.carModelName,
+          bounty: data.bounty,
+          photos: data.photos,
+        });
+      } else {
+        await accidentObserverRepository.postObserve({
+          ...data,
+          observeLocation: {
+            x: data.location?.lng ?? 0,
+            y: data.location?.lat ?? 0,
+          },
+          observeTime: data.time,
+        });
+      }
+    },
+  });
+};
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
 
@@ -29,21 +62,16 @@ export const WritePage = () => {
   const sliderRef = useRef<Slider>(null);
   const navigate = useNavigate();
 
-  const { mutate } = useMutation({
-    mutationFn: async (data: writeFormState) => {
-      const isAccident = data.type === "사고자";
-      if (isAccident) {
-        await accidentObserverRepository.postAccident(data);
-      } else {
-        await accidentObserverRepository.postObserve({
-          ...data,
-          observeTime: data.accidentTime,
-        });
-      }
-    },
-  });
+  const { mutateAsync, isLoading } = useWriteMutation();
   const onSubmit = async (data: writeFormState) => {
-    mutate(data);
+    mutateAsync(data)
+      .then(() => {
+        enqueueSnackbar("신고가 완료되었습니다.", { variant: "success" });
+        navigate(-1);
+      })
+      .catch(() => {
+        enqueueSnackbar("신고에 실패했습니다.", { variant: "error" });
+      });
   };
 
   return (
@@ -79,7 +107,7 @@ export const WritePage = () => {
                 </Box>
 
                 <Box css={styles.content}>
-                  <Detail />
+                  <Detail isLoading={isLoading} />
                 </Box>
               </Slider>
             </Box>

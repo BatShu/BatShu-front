@@ -7,8 +7,17 @@ export const appendToFormData = (
     if (!value) continue;
 
     if (Array.isArray(value)) {
-      value.forEach((item) => formData.append(key, item));
-    } else formData.append(key, value);
+      value.forEach((v) => {
+        formData.append(key, v);
+      });
+      continue;
+    }
+    if (value instanceof Object) {
+      setObjectInFormData(formData, key, value);
+      continue;
+    }
+
+    formData.append(key, value);
   }
 };
 

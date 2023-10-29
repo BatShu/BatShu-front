@@ -6,11 +6,11 @@ import { CssObject } from "@/presentation/common/styles/types";
 import { ReactComponent as Upload } from "@/presentation/common/icons/outlined/Upload.svg";
 import { ReactComponent as TickCircle } from "@/presentation/common/icons/outlined/Tick Circle.svg";
 // lib
-import { TFile, setSingleFile } from "@/lib";
+import { setSingleFile } from "@/lib";
 
 interface UploadVideoProps {
   valid: boolean;
-  setVideoFile: Dispatch<SetStateAction<TFile | null>>;
+  setVideoFile: Dispatch<SetStateAction<Blob | null>>;
 }
 
 const UploadVideo = ({ valid = false, setVideoFile }: UploadVideoProps) => {

@@ -11,7 +11,6 @@ export const AuthProvider = () => {
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(user);
     if (!init) return;
     if (location.pathname === LOGIN_PATH || location.pathname === SIGNUP_PATH) {
       if (user == null) return;

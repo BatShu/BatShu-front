@@ -1,27 +1,48 @@
-import {
-  useState,
-  forwardRef,
-  ForwardedRef,
-  useMemo,
-  useCallback,
-} from "react";
+import { useState, forwardRef, ForwardedRef } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
-import { curLocationMarker, pinMarker } from "@/presentation/configs";
-// types
-import { ILocation } from "@/domain/models/location";
+import { curLocationMarker } from "@/presentation/configs";
 // store
 import { locationStore } from "@/store/locationStore";
-// components
-import AccidentDrawer from "./AccidentDrawer";
-
-import { useReadAccidentsByLocation } from "@/data/hooks/accident";
 import { levelToRadius } from "@/data/util/map";
+import useDebounceValue from "@/presentation/common/hooks/useDebounceValue";
+import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
+import { MapAccidents } from "./MapAccidents";
+import { MapObserves } from "./MapObserves";
 
 interface HomeMapProps {
   isBatshu?: boolean;
 }
+
+const useReadMapData = () => {
+  const { location } = locationStore();
+  const [center, setCenter] = useState<ReadByLocationDto>({
+    x: location.lng,
+    y: location.lat,
+    radius: levelToRadius(location.level),
+  });
+  const debouncedLocation = useDebounceValue<ReadByLocationDto>(center);
+
+  const moveHandler = (map: kakao.maps.Map) => {
+    const pos = map.getCenter();
+    setCenter((prev) => ({
+      x: pos.getLng(),
+      y: pos.getLat(),
+      radius: prev.radius,
+    }));
+  };
+  const zoomHandler = (map: kakao.maps.Map) => {
+    const level = map.getLevel();
+    setCenter((prev) => ({ ...prev, radius: levelToRadius(level) }));
+  };
+
+  return {
+    debouncedLocation,
+    moveHandler,
+    zoomHandler,
+  };
+};
 
 const HomeMap = (
   { isBatshu = true }: HomeMapProps,
@@ -29,29 +50,7 @@ const HomeMap = (
 ) => {
   const { location, status } = locationStore();
 
-  const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
-
-  const { data } = useReadAccidentsByLocation({
-    x: location.lng,
-    y: location.lat,
-    radius: levelToRadius(location.level),
-  });
-
-  const clickMarker = useCallback(
-    (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
-      if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-
-      setAccidentDrawerId(id);
-      // if (mapRef .current.getLevel() >= 8) {
-      //   mapRef.current.setLevel(2);
-      // }
-      mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
-    },
-    [mapRef]
-  );
-
-  const markerImage = useMemo(() => pinMarker(isBatshu), [isBatshu]);
-  const dummyAccidents = data?.data;
+  const { debouncedLocation, zoomHandler, moveHandler } = useReadMapData();
   return (
     <Box css={styles.loadingPage}>
       {status.loading ? (
@@ -62,22 +61,24 @@ const HomeMap = (
           <CircularProgress css={styles.progress} />
         </>
       ) : (
-        <Map center={location} level={4} css={styles.map} isPanto ref={mapRef}>
+        <Map
+          center={location}
+          level={4}
+          maxLevel={7}
+          css={styles.map}
+          isPanto
+          ref={mapRef}
+          onZoomChanged={zoomHandler}
+          onCenterChanged={moveHandler}
+        >
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {dummyAccidents?.map(({ accidentId, accidentLocation: { y, x } }) => (
-            <MapMarker
-              key={accidentId}
-              position={{ lat: y, lng: x }}
-              image={markerImage}
-              onClick={() => clickMarker(accidentId, { lat: y, lng: x })}
-            />
-          ))}
-          <AccidentDrawer
-            accidentId={accidentDrawerId}
-            onClose={() => setAccidentDrawerId(null)}
-          />
+          {isBatshu ? (
+            <MapObserves location={debouncedLocation} mapRef={mapRef} />
+          ) : (
+            <MapAccidents location={debouncedLocation} mapRef={mapRef} />
+          )}
         </Map>
       )}
     </Box>

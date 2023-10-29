@@ -1,20 +1,18 @@
-import { TFile } from "@/lib";
 import { AccidentPreview } from "../models/accident";
-import { ILocation } from "../models/location";
+import { ILocationDto } from "./location";
+import { ObservePreview } from "../models/observe";
 
-export interface ReadAccidentsByLocationDto {
+export interface ReadByLocationDto {
   x: number;
   y: number;
   radius: number;
 }
 
 export type ReadAccidentsByLocationData = AccidentPreview[];
+
+export type ReadObservesByLocationData = ObservePreview[];
 export type UpdateVideoData = {
-  videoId: [
-    {
-      id: number;
-    }
-  ];
+  id: number;
 };
 
 export type PostAccidentDto = {
@@ -22,11 +20,12 @@ export type PostAccidentDto = {
   contentDescription: string;
   licensePlate: string;
   accidentTime: [string, string];
-  location: ILocation | null;
+
+  accidentLocation: ILocationDto | null;
   placeName: string;
   carModelName: string;
   bounty: number;
-  photos: TFile[];
+  photos: Blob[];
 };
 
 export type PostObserveDto = {
@@ -34,7 +33,7 @@ export type PostObserveDto = {
   contentDescription: string;
   licensePlate: string;
   observeTime: [string, string];
-  location: ILocation | null;
+  observeLocation: ILocationDto | null;
   placeName: string;
   carModelName: string;
   videoId: number | null;

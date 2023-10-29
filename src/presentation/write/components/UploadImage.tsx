@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Controller } from "react-hook-form";
 // styles
@@ -9,7 +9,7 @@ import { ReactComponent as AddSquare } from "@/presentation/common/icons/outline
 import { ReactComponent as MinusCircle } from "@/presentation/common/icons/outlined/Minus Circle.svg";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
-import { TFile, setMultipleFile } from "@/lib";
+import { setMultipleFile } from "@/lib";
 
 interface ImageBoxProps {
   src: string;
@@ -30,15 +30,18 @@ const UploadImage = () => {
 
   const { watch, setValue, control, trigger } = useWriteFormContext();
   const images = watch("photos");
+  const urls = useMemo(
+    () => images.map((file) => URL.createObjectURL(file)),
+    [images]
+  );
   const onDelete = useCallback(
     (delIdx: number) =>
       setValue(
         "photos",
-        images.filter(({ url }, idx) => {
+        images.filter((_, idx) => {
           if (idx !== delIdx) return true;
           else if (inputRef.current) {
             inputRef.current.value = "";
-            URL.revokeObjectURL(url);
             return false;
           }
         }),
@@ -77,7 +80,7 @@ const UploadImage = () => {
                   hidden
                   ref={inputRef}
                   onChange={(e) =>
-                    setMultipleFile(e, (newImages: TFile[]) => {
+                    setMultipleFile(e, (newImages: Blob[]) => {
                       onChange(images.concat(newImages).slice(0, 5));
                       trigger("photos");
                     })
@@ -88,15 +91,17 @@ const UploadImage = () => {
           </Box>
         </SwiperSlide>
 
-        {images.map(({ url }, idx) => (
-          <SwiperSlide key={`${url}${idx}`}>
-            <Zoom in>
-              <Box css={styles.box}>
-                <ImageBox src={url} onDelete={() => onDelete(idx)} />
-              </Box>
-            </Zoom>
-          </SwiperSlide>
-        ))}
+        {urls.map((url, idx) => {
+          return (
+            <SwiperSlide key={`${url}${idx}`}>
+              <Zoom in>
+                <Box css={styles.box}>
+                  <ImageBox src={url} onDelete={() => onDelete(idx)} />
+                </Box>
+              </Zoom>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </Box>
   );
