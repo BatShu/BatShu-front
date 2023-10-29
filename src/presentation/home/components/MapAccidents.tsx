@@ -24,7 +24,7 @@ export const MapAccidents = ({ location, mapRef }: MapAccidentsProps) => {
     },
     [mapRef]
   );
-  const markerImage = pinMarker(true);
+  const markerImage = pinMarker(false);
   return (
     <>
       {accidents.map(({ accidentId, accidentLocation: { y, x } }) => (
