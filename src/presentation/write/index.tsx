@@ -14,12 +14,17 @@ import {
 } from "@/presentation/write/hooks/writeForm";
 // icons
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
+// types
+import { PostAccidentDto, PostObserveDto } from "@/domain/dtos/accidentObserve";
+import { TFile } from "@/lib";
+// lib
+import { useMutation } from "@tanstack/react-query";
+import { accidentObserverRepository } from "@/data/backend";
+import { levelToRadius } from "@/data/util/map";
 // components
 import SelectType from "./components/SelectType";
 import DotsHeader from "./components/DotsHeader";
 import Detail from "./templates/Detail";
-import { useMutation } from "@tanstack/react-query";
-import { accidentObserverRepository } from "@/data/backend";
 
 export const WritePage = () => {
   const [curPage, setCurPage] = useState(0);
@@ -32,14 +37,25 @@ export const WritePage = () => {
   const { mutate } = useMutation({
     mutationFn: async (data: writeFormState) => {
       const isAccident = data.type === "사고자";
-      if (isAccident) {
-        await accidentObserverRepository.postAccident(data);
-      } else {
-        await accidentObserverRepository.postObserve({
-          ...data,
-          observeTime: data.accidentTime,
-        });
-      }
+
+      const { postAccident, postObserve } = accidentObserverRepository;
+
+      const formData = Object.entries(data).reduce((acc, [k, v]) => {
+        if (k === "location") {
+          v = { x: v.lat, y: v.lng, radius: levelToRadius(v.level) };
+          k = isAccident ? "accidentLocation" : "observeLocation";
+        } else if (k === "accidentTime") {
+          k = isAccident ? "accidentTime" : "observeTime";
+        } else if (k === "photos") {
+          v = v.map(({ file }: TFile) => file);
+        }
+
+        acc[k as keyof (PostAccidentDto | PostObserveDto)] = v;
+
+        return acc;
+      }, {} as PostAccidentDto & PostObserveDto);
+
+      await (isAccident ? postAccident : postObserve)(formData);
     },
   });
   const onSubmit = async (data: writeFormState) => {

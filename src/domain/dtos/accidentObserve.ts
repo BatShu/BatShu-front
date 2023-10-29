@@ -22,7 +22,7 @@ export type PostAccidentDto = {
   contentDescription: string;
   licensePlate: string;
   accidentTime: [string, string];
-  location: ILocation | null;
+  accidentLocation: ILocation | null;
   placeName: string;
   carModelName: string;
   bounty: number;
@@ -34,7 +34,7 @@ export type PostObserveDto = {
   contentDescription: string;
   licensePlate: string;
   observeTime: [string, string];
-  location: ILocation | null;
+  observeLocation: ILocation | null;
   placeName: string;
   carModelName: string;
   videoId: number | null;
