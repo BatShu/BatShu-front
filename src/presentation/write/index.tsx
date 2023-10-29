@@ -20,16 +20,10 @@ import DotsHeader from "./components/DotsHeader";
 import Detail from "./templates/Detail";
 import { useMutation } from "@tanstack/react-query";
 import { accidentObserverRepository } from "@/data/backend";
+import { enqueueSnackbar } from "notistack";
 
-export const WritePage = () => {
-  const [curPage, setCurPage] = useState(0);
-
-  const details = useWriteForm();
-  const handleSubmit = details.handleSubmit;
-  const sliderRef = useRef<Slider>(null);
-  const navigate = useNavigate();
-
-  const { mutate } = useMutation({
+const useWriteMutation = () => {
+  return useMutation({
     mutationFn: async (data: writeFormState) => {
       const isAccident = data.type === "사고자";
       if (isAccident) {
@@ -59,8 +53,25 @@ export const WritePage = () => {
       }
     },
   });
+};
+export const WritePage = () => {
+  const [curPage, setCurPage] = useState(0);
+
+  const details = useWriteForm();
+  const handleSubmit = details.handleSubmit;
+  const sliderRef = useRef<Slider>(null);
+  const navigate = useNavigate();
+
+  const { mutateAsync, isLoading } = useWriteMutation();
   const onSubmit = async (data: writeFormState) => {
-    mutate(data);
+    mutateAsync(data)
+      .then(() => {
+        enqueueSnackbar("신고가 완료되었습니다.", { variant: "success" });
+        navigate(-1);
+      })
+      .catch(() => {
+        enqueueSnackbar("신고에 실패했습니다.", { variant: "error" });
+      });
   };
 
   return (
@@ -96,7 +107,7 @@ export const WritePage = () => {
                 </Box>
 
                 <Box css={styles.content}>
-                  <Detail />
+                  <Detail isLoading={isLoading} />
                 </Box>
               </Slider>
             </Box>
