@@ -8,7 +8,7 @@ export interface Accident {
   photoUrls: string[];
   accidentTime: [string, string];
   createdAt: string;
-  accidentlocation: ILocationDto;
+  accidentLocation: ILocationDto;
   carModelName: string;
   licensePlate: string;
   bounty: number;

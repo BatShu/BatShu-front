@@ -45,8 +45,8 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const navigate = useNavigate();
 
   const { data: addressData } = useKakaoMapAddressSearch({
-    lat: accident.accidentlocation.y,
-    lng: accident.accidentlocation.x,
+    lat: accident.accidentLocation.y,
+    lng: accident.accidentLocation.x,
   });
 
   const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
