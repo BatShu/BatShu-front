@@ -54,7 +54,7 @@ const ObserveDrawerDetail = ({ observe }: { observe: Observe }) => {
     observeEndTime,
   } = observe;
   const routeToDetail = () => {
-    navigate(`/detail/${observe.videoId}`, {
+    navigate(`/observe/${observe.videoId}`, {
       state: { ...observe, placeName: addressName },
     });
   };

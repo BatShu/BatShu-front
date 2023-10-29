@@ -11,8 +11,8 @@ import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
-// TODO: delete
-import { dummyDetail } from "../temp";
+import { Accident } from "@/domain/models/accident";
+import { useReadAccidentById } from "@/data/hooks/accident";
 
 interface AccidentDrawerProps {
   accidentId: number | null;
@@ -25,24 +25,7 @@ const AccidentDrawer = ({
   onOpen,
   onClose,
 }: AccidentDrawerProps) => {
-  // useReadAccidentById(accidentId);
-  const {
-    carModelName,
-    licensePlate,
-    accidentTime,
-    photoUrls,
-    createdAt,
-    accidentLocation: { y: lat, x: lng },
-  } = dummyDetail;
-  const router = useNavigate();
-
-  const { data } = useKakaoMapAddressSearch({ lat, lng });
-
-  const routeToDetail = () => {
-    router(`/detail/${accidentId}`, {
-      state: { dummyDetail, placeName: data?.address_name },
-    });
-  };
+  const { data: accident } = useReadAccidentById(accidentId);
 
   return (
     <SwipeableDrawer
@@ -53,57 +36,77 @@ const AccidentDrawer = ({
       swipeAreaWidth={444}
       disableSwipeToOpen
     >
-      <Box css={styles.drawer}>
-        <Divider css={styles.divider} />
-        <Box css={styles.contentWrapper}>
-          <Box className="content">
-            <Typography className="status">● 요청중</Typography>
-            <Typography className="date">{createdAt.split("T")[0]}</Typography>
-          </Box>
-
-          <Box className="content middle">
-            <img className="accident-image" src={photoUrls[0]} />
-            <Box className="info">
-              <Box css={styles.chip} className="car-number">
-                <Typography css={css(`font-size:10px`)}>
-                  {carModelName}
-                </Typography>
-                <Typography css={css(`font-size:20px;font-weight:bold;`)}>
-                  {licensePlate}
-                </Typography>
-              </Box>
-
-              <Box css={[styles.chip, css(`width:fit-content;`)]}>
-                <TimeCircle2 css={styles.icon} />
-                <span>
-                  {dayjs(accidentTime[1].split(":")[0]).format(
-                    DATE_FORMAT_DETAIL_CHIP
-                  )}
-                </span>
-              </Box>
-
-              <Box css={styles.chip}>
-                <Frame36 css={styles.icon} />
-                <span>{data?.address_name}</span>
-              </Box>
-            </Box>
-          </Box>
-
-          <Box className="content">
-            <AppButton
-              css={[styles.button, styles.detail]}
-              onClick={routeToDetail}
-            >
-              자세히 보기
-            </AppButton>
-            <AppButton css={styles.button}>제보하기</AppButton>
-          </Box>
-        </Box>
-      </Box>
+      {accident && <AccidentDrawerDetail accident={accident} />}
     </SwipeableDrawer>
   );
 };
 
+const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
+  const navigate = useNavigate();
+
+  const { data: addressData } = useKakaoMapAddressSearch({
+    lat: accident.accidentlocation.y,
+    lng: accident.accidentlocation.x,
+  });
+
+  const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
+  const { createdAt, photoUrls, carModelName, licensePlate, accidentTime } =
+    accident;
+  const routeToDetail = () => {
+    navigate(`/accident/${accident.id}`, {
+      state: { ...accident, placeName: addressName },
+    });
+  };
+  return (
+    <Box css={styles.drawer}>
+      <Divider css={styles.divider} />
+      <Box css={styles.contentWrapper}>
+        <Box className="content">
+          <Typography className="status">● 요청중</Typography>
+          <Typography className="date">{createdAt.split("T")[0]}</Typography>
+        </Box>
+
+        <Box className="content middle">
+          <img className="accident-image" src={photoUrls[0]} />
+          <Box className="info">
+            <Box css={styles.chip} className="car-number">
+              <Typography css={css(`font-size:10px`)}>
+                {carModelName}
+              </Typography>
+              <Typography css={css(`font-size:20px;font-weight:bold;`)}>
+                {licensePlate}
+              </Typography>
+            </Box>
+
+            <Box css={[styles.chip, css(`width:fit-content;`)]}>
+              <TimeCircle2 css={styles.icon} />
+              <span>
+                {dayjs(accidentTime[1].split(":")[0]).format(
+                  DATE_FORMAT_DETAIL_CHIP
+                )}
+              </span>
+            </Box>
+
+            <Box css={styles.chip}>
+              <Frame36 css={styles.icon} />
+              <span>{addressName}</span>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box className="content">
+          <AppButton
+            css={[styles.button, styles.detail]}
+            onClick={routeToDetail}
+          >
+            자세히 보기
+          </AppButton>
+          <AppButton css={styles.button}>제보하기</AppButton>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 export default AccidentDrawer;
 
 const styles = {

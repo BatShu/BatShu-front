@@ -6,6 +6,13 @@ export const appendToFormData = (
     const value = values[key];
     if (!value) continue;
 
+    if (Array.isArray(value)) {
+      value.forEach((v, idx) => {
+        formData.append(`${key}[${idx}]`, v);
+      });
+      continue;
+    }
+
     formData.append(key, value);
   }
 };
