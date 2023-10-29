@@ -4,7 +4,6 @@ import {
   ForwardedRef,
   useMemo,
   useCallback,
-  useEffect,
 } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
@@ -26,10 +25,7 @@ interface HomeMapProps {
   isBatshu?: boolean;
 }
 
-const useReadMapData = (
-  mapRef: ForwardedRef<kakao.maps.Map>,
-  isBatshu: boolean
-) => {
+const useReadMapData = (isObserve: boolean) => {
   const { location } = locationStore();
   const [center, setCenter] = useState<ReadByLocationDto>({
     x: location.lng,
@@ -39,43 +35,27 @@ const useReadMapData = (
   const debouncedLocation = useDebounceValue<ReadByLocationDto>(center);
   const queryResult = useReadAccidentsOrObservesByLocation(
     debouncedLocation,
-    isBatshu
+    isObserve
   );
 
-  const moveHandler = () => {
-    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-    const pos = mapRef.current.getCenter();
+  const moveHandler = (map: kakao.maps.Map) => {
+    const pos = map.getCenter();
     setCenter((prev) => ({
       x: pos.getLng(),
       y: pos.getLat(),
       radius: prev.radius,
     }));
   };
-  const zoomHandler = () => {
-    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-    const level = mapRef.current.getLevel();
+  const zoomHandler = (map: kakao.maps.Map) => {
+    const level = map.getLevel();
     setCenter((prev) => ({ ...prev, radius: levelToRadius(level) }));
   };
 
-  useEffect(() => {
-    if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-    kakao.maps.event.addListener(mapRef.current, "center_changed", moveHandler);
-    kakao.maps.event.addListener(mapRef.current, "zoom_changed", zoomHandler);
-    return () => {
-      if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-      kakao.maps.event.removeListener(
-        mapRef.current,
-        "center_changed",
-        moveHandler
-      );
-      kakao.maps.event.removeListener(
-        mapRef.current,
-        "zoom_changed",
-        zoomHandler
-      );
-    };
-  }, [mapRef]);
-  return queryResult;
+  return {
+    ...queryResult,
+    moveHandler,
+    zoomHandler,
+  };
 };
 
 const HomeMap = (
@@ -85,7 +65,7 @@ const HomeMap = (
   const { location, status } = locationStore();
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
 
-  const { data } = useReadMapData(mapRef, isBatshu);
+  const { data, zoomHandler, moveHandler } = useReadMapData(isBatshu);
 
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
@@ -109,7 +89,16 @@ const HomeMap = (
           <CircularProgress css={styles.progress} />
         </>
       ) : (
-        <Map center={location} level={4} css={styles.map} isPanto ref={mapRef}>
+        <Map
+          center={location}
+          level={4}
+          maxLevel={7}
+          css={styles.map}
+          isPanto
+          ref={mapRef}
+          onZoomChanged={zoomHandler}
+          onCenterChanged={moveHandler}
+        >
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
