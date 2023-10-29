@@ -51,7 +51,11 @@ export class AccidentObserverRepository {
   async postAccident(dto: PostAccidentDto): Promise<void> {
     const formData = new FormData();
     appendToFormData(formData, dto);
-    await authApi.post<AppResponse<Accident>>(POST_ACCIDENT, dto);
+    await authApi.post<AppResponse<Accident>>(POST_ACCIDENT, dto, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
   async postObserve(dto: PostObserveDto): Promise<void> {

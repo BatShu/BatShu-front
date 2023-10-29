@@ -34,12 +34,18 @@ export const WritePage = () => {
       const isAccident = data.type === "사고자";
       if (isAccident) {
         await accidentObserverRepository.postAccident({
-          ...data,
           accidentLocation: {
             x: data.location?.lng ?? 0,
             y: data.location?.lat ?? 0,
           },
           accidentTime: data.time,
+          contentTitle: data.contentTitle,
+          contentDescription: data.contentDescription,
+          licensePlate: data.licensePlate,
+          placeName: data.placeName,
+          carModelName: data.carModelName,
+          bounty: data.bounty,
+          photos: data.photos,
         });
       } else {
         await accidentObserverRepository.postObserve({

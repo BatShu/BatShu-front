@@ -51,8 +51,7 @@ const setMultipleFile = (
 
   const newFiles = [...files].map((file) => {
     if (checkAcceptableExt(file.name, acceptableArray)) {
-      const url = URL.createObjectURL(file);
-      return { file, url };
+      return file;
     } else {
       enqueueSnackbar(`${acceptableArray.join(", ")}파일만 가능합니다!`);
     }
