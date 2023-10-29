@@ -15,7 +15,6 @@ import {
   ReadObservesByLocationData,
   UpdateVideoData,
 } from "@/domain/dtos/accidentObserve";
-import { TFile } from "@/lib";
 import { Accident } from "@/domain/models/accident";
 import { Observe } from "@/domain/models/observe";
 import { appendToFormData } from "../util/common";
@@ -39,9 +38,9 @@ export class AccidentObserverRepository {
     return res.data.data;
   }
 
-  async uploadVideo(videoFile: TFile): Promise<number> {
+  async uploadVideo(videoFile: Blob): Promise<number> {
     const formData = new FormData();
-    formData.append("video", videoFile.file);
+    formData.append("video", videoFile);
     const res = await authApi.post<AppResponse<UpdateVideoData>>(
       POST_VIDEO_UPLOAD,
       formData

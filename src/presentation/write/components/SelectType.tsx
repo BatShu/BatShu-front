@@ -11,7 +11,7 @@ import CarImage2 from "@/presentation/common/icons/asset/car-image-2.png";
 // store
 import { useWriteFormContext } from "@/presentation/write/hooks/writeForm";
 // lib
-import { TFile, deleteSingleFile } from "@/lib";
+import { deleteSingleFile } from "@/lib";
 // components
 import AppButton from "@/presentation/common/components/AppButton";
 import Spacer from "@/presentation/common/atoms/Spacer";
@@ -24,17 +24,17 @@ interface SelectTypeProps {
 }
 
 const SelectType = ({ sliderRef }: SelectTypeProps) => {
-  const [videoFile, setVideoFile] = useState<TFile | null>(null);
+  const [videoFile, setVideoFile] = useState<Blob | null>(null);
   const { watch, resetField, setValue } = useWriteFormContext();
   const type = watch("type");
   const valid = type === "사고자" || !!(type === "목격자" && videoFile);
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (videoFile: TFile) =>
+    mutationFn: async (videoFile: Blob) =>
       await accidentObserverRepository.uploadVideo(videoFile),
   });
   useEffect(() => {
-    if (!videoFile || !videoFile.file) return;
+    if (videoFile == null) return;
 
     mutateAsync(videoFile)
       .then((videoId) => {

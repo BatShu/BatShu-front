@@ -1,8 +1,6 @@
 import dayjs from "dayjs";
 // store
 import { ILocation } from "@/domain/models/location";
-// lib
-import { TFile } from "@/lib";
 import {
   UseFormProps,
   UseFormReturn,
@@ -18,7 +16,7 @@ export interface writeFormState {
   licensePlate: string;
   time: [string, string];
   videoId: number | null;
-  photos: TFile[];
+  photos: Blob[];
   location: ILocation | null;
   placeName: string;
   carModelName: string;

@@ -1,4 +1,3 @@
-import { TFile } from "@/lib";
 import { AccidentPreview } from "../models/accident";
 import { ILocationDto } from "./location";
 import { ObservePreview } from "../models/observe";
@@ -26,7 +25,7 @@ export type PostAccidentDto = {
   placeName: string;
   carModelName: string;
   bounty: number;
-  photos: TFile[];
+  photos: Blob[];
 };
 
 export type PostObserveDto = {
