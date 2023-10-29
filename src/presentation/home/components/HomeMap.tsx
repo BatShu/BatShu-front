@@ -1,31 +1,21 @@
-import {
-  useState,
-  forwardRef,
-  ForwardedRef,
-  useMemo,
-  useCallback,
-} from "react";
+import { useState, forwardRef, ForwardedRef } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
-import { curLocationMarker, pinMarker } from "@/presentation/configs";
-// types
-import { ILocation } from "@/domain/models/location";
+import { curLocationMarker } from "@/presentation/configs";
 // store
 import { locationStore } from "@/store/locationStore";
-// components
-import AccidentDrawer from "./AccidentDrawer";
-
-import { useReadAccidentsOrObservesByLocation } from "@/data/hooks/accident";
 import { levelToRadius } from "@/data/util/map";
 import useDebounceValue from "@/presentation/common/hooks/useDebounceValue";
 import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
+import { MapAccidents } from "./MapAccidents";
+import { MapObserves } from "./MapObserves";
 
 interface HomeMapProps {
   isBatshu?: boolean;
 }
 
-const useReadMapData = (isObserve: boolean) => {
+const useReadMapData = () => {
   const { location } = locationStore();
   const [center, setCenter] = useState<ReadByLocationDto>({
     x: location.lng,
@@ -33,10 +23,6 @@ const useReadMapData = (isObserve: boolean) => {
     radius: levelToRadius(location.level),
   });
   const debouncedLocation = useDebounceValue<ReadByLocationDto>(center);
-  const queryResult = useReadAccidentsOrObservesByLocation(
-    debouncedLocation,
-    isObserve
-  );
 
   const moveHandler = (map: kakao.maps.Map) => {
     const pos = map.getCenter();
@@ -52,7 +38,7 @@ const useReadMapData = (isObserve: boolean) => {
   };
 
   return {
-    ...queryResult,
+    debouncedLocation,
     moveHandler,
     zoomHandler,
   };
@@ -63,22 +49,8 @@ const HomeMap = (
   mapRef: ForwardedRef<kakao.maps.Map>
 ) => {
   const { location, status } = locationStore();
-  const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
 
-  const { data, zoomHandler, moveHandler } = useReadMapData(isBatshu);
-
-  const clickMarker = useCallback(
-    (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
-      if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
-
-      setAccidentDrawerId(id);
-      mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
-    },
-    [mapRef]
-  );
-
-  const markerImage = useMemo(() => pinMarker(isBatshu), [isBatshu]);
-  const accidents = data?.data;
+  const { debouncedLocation, zoomHandler, moveHandler } = useReadMapData();
   return (
     <Box css={styles.loadingPage}>
       {status.loading ? (
@@ -102,18 +74,11 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {accidents?.map(({ accidentId, accidentLocation: { y, x } }) => (
-            <MapMarker
-              key={accidentId}
-              position={{ lat: y, lng: x }}
-              image={markerImage}
-              onClick={() => clickMarker(accidentId, { lat: y, lng: x })}
-            />
-          ))}
-          <AccidentDrawer
-            accidentId={accidentDrawerId}
-            onClose={() => setAccidentDrawerId(null)}
-          />
+          {isBatshu ? (
+            <MapObserves location={debouncedLocation} mapRef={mapRef} />
+          ) : (
+            <MapAccidents location={debouncedLocation} mapRef={mapRef} />
+          )}
         </Map>
       )}
     </Box>

@@ -1,6 +1,7 @@
 import { TFile } from "@/lib";
 import { AccidentPreview } from "../models/accident";
 import { ILocationDto } from "./location";
+import { ObservePreview } from "../models/observe";
 
 export interface ReadByLocationDto {
   x: number;
@@ -9,6 +10,8 @@ export interface ReadByLocationDto {
 }
 
 export type ReadAccidentsByLocationData = AccidentPreview[];
+
+export type ReadObservesByLocationData = ObservePreview[];
 export type UpdateVideoData = {
   id: number;
 };

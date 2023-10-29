@@ -13,12 +13,12 @@ export const levelToRadius = (level: number): number => {
         case 5:
           return 100;
         case 6:
-          return 200;
+          return 250;
         case 7:
           return 500;
         default:
           return 500;
       }
-    })() * 4
+    })() * 16
   );
 };

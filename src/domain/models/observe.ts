@@ -9,3 +9,10 @@ export interface Observe {
   accidentlocation: ILocation;
   createdTime: string;
 }
+export interface ObservePreview {
+  observeId: number;
+  observeLocation: {
+    x: number;
+    y: number;
+  };
+}
