@@ -1,18 +1,18 @@
-import { User } from "firebase/auth";
-import { ILocation } from "./location";
+import { ILocationDto } from "../dtos/location";
 export interface Observe {
-  author: User;
+  videoId: number;
+  videoUrl: string;
+  thumbnailUrl: string;
   contentTitle: string;
   contentDescription: string;
-  photos: string[];
-  accidentTime: string;
-  accidentlocation: ILocation;
-  createdTime: string;
+  carModelName: string;
+  licensePlate: string;
+  observeStartTime: string;
+  observeEndTime: string;
+  observeLocation: ILocationDto;
+  createdAt: string;
 }
 export interface ObservePreview {
   observeId: number;
-  observeLocation: {
-    x: number;
-    y: number;
-  };
+  observeLocation: ILocationDto;
 }

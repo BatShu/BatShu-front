@@ -55,4 +55,17 @@ export class AccidentObserverRepository {
   async postObserve(dto: PostObserveDto): Promise<void> {
     await authApi.post<AppResponse<Observe>>(POST_OBSERVE, dto);
   }
+
+  async readObserveById(observeId: number): Promise<Observe> {
+    const res = await authApi.get<AppResponse<Observe>>(
+      `api/observe/${observeId}`
+    );
+    return res.data.data;
+  }
+  async readAccidentById(accidentId: number): Promise<Accident> {
+    const res = await authApi.get<AppResponse<Accident>>(
+      `api/accident/${accidentId}`
+    );
+    return res.data.data;
+  }
 }

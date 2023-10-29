@@ -1,13 +1,12 @@
-import { GET_ACCIDENT_BY_ID } from "@/domain/endpoint";
 import { Accident } from "@/domain/models/accident";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { API } from "../util/fetcher";
 import { accidentObserverRepository } from "../backend";
 import {
   ReadAccidentsByLocationData,
   ReadByLocationDto,
   ReadObservesByLocationData,
 } from "@/domain/dtos/accidentObserve";
+import { Observe } from "@/domain/models/observe";
 
 export const useReadAccidentsByLocation = (
   dto: ReadByLocationDto
@@ -27,15 +26,22 @@ export const useReadObservesByLocation = (
   });
 };
 
-export interface ReadAccidentByIdResponse {
-  ok: boolean;
-  data: Accident;
-}
 export const useReadAccidentById = (
-  accidentId: number
-): UseQueryResult<ReadAccidentByIdResponse> => {
+  accidentId: number | null
+): UseQueryResult<Accident> => {
   return useQuery({
-    queryFn: () =>
-      API.GET<ReadAccidentByIdResponse>(GET_ACCIDENT_BY_ID(accidentId)),
+    queryKey: ["accident", accidentId],
+    enabled: accidentId != null,
+    queryFn: () => accidentObserverRepository.readAccidentById(accidentId ?? 0),
+  });
+};
+
+export const useReadObserveById = (
+  observeId: number | null
+): UseQueryResult<Observe> => {
+  return useQuery({
+    queryKey: ["observe", observeId],
+    enabled: observeId != null,
+    queryFn: () => accidentObserverRepository.readObserveById(observeId ?? 0),
   });
 };

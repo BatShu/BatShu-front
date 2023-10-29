@@ -3,8 +3,8 @@ import { ILocation } from "@/domain/models/location";
 import { pinMarker } from "@/presentation/configs";
 import { ForwardedRef, useState, useCallback } from "react";
 import { MapMarker } from "react-kakao-maps-sdk";
-import AccidentDrawer from "./AccidentDrawer";
 import { useReadObservesByLocation } from "@/data/hooks/accident";
+import ObserveDrawer from "./ObserveDrawer";
 
 interface MapObservesProps {
   location: ReadByLocationDto;
@@ -13,17 +13,16 @@ interface MapObservesProps {
 export const MapObserves = ({ location, mapRef }: MapObservesProps) => {
   const { data } = useReadObservesByLocation(location);
   const observes = data ?? [];
-  const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
+  const [activeObserveId, setActiveObserveId] = useState<number | null>(null);
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
-      setAccidentDrawerId(id);
+      setActiveObserveId(id);
       mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
     },
     [mapRef]
   );
-  console.log(observes);
   const markerImage = pinMarker(true);
   return (
     <>
@@ -35,9 +34,9 @@ export const MapObserves = ({ location, mapRef }: MapObservesProps) => {
           onClick={() => clickMarker(observeId, { lat: y, lng: x })}
         />
       ))}
-      <AccidentDrawer
-        accidentId={accidentDrawerId}
-        onClose={() => setAccidentDrawerId(null)}
+      <ObserveDrawer
+        observeId={activeObserveId}
+        onClose={() => setActiveObserveId(null)}
       />
     </>
   );
