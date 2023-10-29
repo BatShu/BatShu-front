@@ -6,15 +6,21 @@ import { AppResponse } from "@/domain/models/appResponse";
 import { accidentObserverRepository } from "../backend";
 import {
   ReadAccidentsByLocationData,
-  ReadAccidentsByLocationDto,
+  ReadByLocationDto,
 } from "@/domain/dtos/accidentObserve";
 
-export const useReadAccidentsByLocation = (
-  dto: ReadAccidentsByLocationDto
+export const useReadAccidentsOrObservesByLocation = (
+  dto: ReadByLocationDto,
+  isObserve: boolean
 ): UseQueryResult<AppResponse<ReadAccidentsByLocationData>> => {
   return useQuery({
-    queryKey: ["accidents", dto],
-    queryFn: () => accidentObserverRepository.readAccidentsByLocation(dto),
+    queryKey: ["accidents", dto, isObserve],
+    queryFn: () => {
+      if (isObserve) {
+        return accidentObserverRepository.readObservesByLocation(dto);
+      }
+      return accidentObserverRepository.readAccidentsByLocation(dto);
+    },
   });
 };
 

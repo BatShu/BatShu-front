@@ -1,5 +1,6 @@
 import {
   GET_ACCIDENT_BY_LOCATION,
+  GET_OBSERVE_BY_LOCATION,
   POST_ACCIDENT,
   POST_OBSERVE,
   POST_VIDEO_UPLOAD,
@@ -10,7 +11,7 @@ import {
   PostAccidentDto,
   PostObserveDto,
   ReadAccidentsByLocationData,
-  ReadAccidentsByLocationDto,
+  ReadByLocationDto,
   UpdateVideoData,
 } from "@/domain/dtos/accidentObserve";
 import { TFile } from "@/lib";
@@ -19,10 +20,19 @@ import { Observe } from "@/domain/models/observe";
 
 export class AccidentObserverRepository {
   async readAccidentsByLocation(
-    dto: ReadAccidentsByLocationDto
+    dto: ReadByLocationDto
   ): Promise<ReadAccidentsByLocationData> {
     const res = await authApi.get<AppResponse<ReadAccidentsByLocationData>>(
       GET_ACCIDENT_BY_LOCATION(dto)
+    );
+    return res.data.data;
+  }
+
+  async readObservesByLocation(
+    dto: ReadByLocationDto
+  ): Promise<ReadAccidentsByLocationData> {
+    const res = await authApi.get<AppResponse<ReadAccidentsByLocationData>>(
+      GET_OBSERVE_BY_LOCATION(dto)
     );
     return res.data.data;
   }

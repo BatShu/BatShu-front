@@ -17,42 +17,44 @@ import { locationStore } from "@/store/locationStore";
 // components
 import AccidentDrawer from "./AccidentDrawer";
 
-import { useReadAccidentsByLocation } from "@/data/hooks/accident";
+import { useReadAccidentsOrObservesByLocation } from "@/data/hooks/accident";
 import { levelToRadius } from "@/data/util/map";
 import useDebounceValue from "@/presentation/common/hooks/useDebounceValue";
-import { ReadAccidentsByLocationDto } from "@/domain/dtos/accidentObserve";
+import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
 
 interface HomeMapProps {
   isBatshu?: boolean;
 }
 
-const HomeMap = (
-  { isBatshu = true }: HomeMapProps,
-  mapRef: ForwardedRef<kakao.maps.Map>
+const useReadMapData = (
+  mapRef: ForwardedRef<kakao.maps.Map>,
+  isBatshu: boolean
 ) => {
-  const { location, status, setLocation } = locationStore();
-  const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
-
-  const debouncedLocation = useDebounceValue<ReadAccidentsByLocationDto>({
+  const { location } = locationStore();
+  const [center, setCenter] = useState<ReadByLocationDto>({
     x: location.lng,
     y: location.lat,
     radius: levelToRadius(location.level),
   });
-  const { data } = useReadAccidentsByLocation(debouncedLocation);
+  const debouncedLocation = useDebounceValue<ReadByLocationDto>(center);
+  const queryResult = useReadAccidentsOrObservesByLocation(
+    debouncedLocation,
+    isBatshu
+  );
 
   const moveHandler = () => {
     if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
     const pos = mapRef.current.getCenter();
-    setLocation({
-      ...location,
-      lng: pos.getLng(),
-      lat: pos.getLat(),
-    });
+    setCenter((prev) => ({
+      x: pos.getLng(),
+      y: pos.getLat(),
+      radius: prev.radius,
+    }));
   };
   const zoomHandler = () => {
     if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
     const level = mapRef.current.getLevel();
-    setLocation({ ...location, level });
+    setCenter((prev) => ({ ...prev, radius: levelToRadius(level) }));
   };
 
   useEffect(() => {
@@ -72,7 +74,19 @@ const HomeMap = (
         zoomHandler
       );
     };
-  }, [setLocation, mapRef]);
+  }, [mapRef]);
+  return queryResult;
+};
+
+const HomeMap = (
+  { isBatshu = true }: HomeMapProps,
+  mapRef: ForwardedRef<kakao.maps.Map>
+) => {
+  const { location, status } = locationStore();
+  const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
+
+  const { data } = useReadMapData(mapRef, isBatshu);
+
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;

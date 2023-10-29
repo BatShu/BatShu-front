@@ -1,7 +1,8 @@
 import { queryWrapper } from "@/lib";
-import { ILocation } from "../models/location";
+import { ReadByLocationDto } from "../dtos/accidentObserve";
 
-export const GET_OBSERVE_BY_LOCATION = queryWrapper<ILocation>("api/observe");
+export const GET_OBSERVE_BY_LOCATION =
+  queryWrapper<ReadByLocationDto>("api/observe");
 export const GET_OBSERVE_BY_ID = (observeId: number) =>
   `api/observe/${observeId}`;
 export const GET_VIDEO_STATUS = (videoId: number) =>

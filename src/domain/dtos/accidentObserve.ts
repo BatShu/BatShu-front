@@ -2,7 +2,7 @@ import { TFile } from "@/lib";
 import { AccidentPreview } from "../models/accident";
 import { ILocationDto } from "./location";
 
-export interface ReadAccidentsByLocationDto {
+export interface ReadByLocationDto {
   x: number;
   y: number;
   radius: number;
