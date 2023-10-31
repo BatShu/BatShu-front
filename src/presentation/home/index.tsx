@@ -7,7 +7,7 @@ import Splash from "../common/layout/Splash";
 import HomeMap from "./components/HomeMap";
 import HomeHeader from "./components/HomeHeader";
 import HomeBottomUtil from "./components/HomeBottomUtil";
-import HomeNavigationBar from "./components/HomeNaviationBar";
+import AppNavigationBar from "../common/components/AppNaviationBar";
 
 export const HomePage = (): ReactElement => {
   const [isBatshu, setIsBatshu] = useState(false);
@@ -28,7 +28,7 @@ export const HomePage = (): ReactElement => {
           <Box css={styles.menuBar}>
             <HomeBottomUtil mapRef={mapRef} />
 
-            <HomeNavigationBar />
+            <AppNavigationBar />
           </Box>
         </Box>
       </Box>

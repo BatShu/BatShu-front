@@ -11,7 +11,7 @@ import { ReactComponent as InstagramIcon } from "@/presentation/common/icons/out
 import { ReactComponent as ProfileSquareIcon } from "@/presentation/common/icons/outlined/Profile Square.svg";
 import { useSignOut } from "@/data/hooks/auth";
 
-const HomeNavigationBar = () => {
+const AppNavigationBar = () => {
   const navigate = useNavigate();
   // for test
   const { mutate: signOut } = useSignOut();
@@ -59,7 +59,7 @@ const HomeNavigationBar = () => {
   );
 };
 
-export default HomeNavigationBar;
+export default AppNavigationBar;
 
 const actionStyles: SerializedStyles = css({
   color: "#c1c1c1",
