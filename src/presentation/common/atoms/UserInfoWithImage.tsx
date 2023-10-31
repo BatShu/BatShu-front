@@ -1,5 +1,5 @@
 // styles
-import { Box, Typography, css } from "@mui/material";
+import { Box, Skeleton, Typography, css } from "@mui/material";
 // components
 import SkeletonImage from "./SkeletonImage";
 
@@ -17,6 +17,15 @@ const UserInfoWithImage = ({ profileImage, name }: UserInfoWithImageProps) => {
         imgCss={styles.profileImage}
       />
       <Typography css={styles.text}>{name}</Typography>
+    </Box>
+  );
+};
+
+export const UserInfoWithImageSkeleton = () => {
+  return (
+    <Box css={styles.container}>
+      <Skeleton variant="rounded" css={styles.profileImage} />
+      <Skeleton css={styles.nameSkeleton} />
     </Box>
   );
 };
@@ -43,5 +52,12 @@ const styles = {
     whiteSpace: "nowrap",
     maxWidth: "120px",
     textOverflow: "ellipsis",
+  }),
+
+  // skeleton
+  nameSkeleton: css({
+    width: "120px",
+    height: "30px",
+    borderRadius: "10px",
   }),
 };

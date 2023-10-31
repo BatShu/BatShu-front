@@ -11,6 +11,7 @@ export interface Observe {
   observeEndTime: string;
   observeLocation: ILocationDto;
   createdAt: string;
+  uid: string;
 }
 export interface ObservePreview {
   observeId: number;
