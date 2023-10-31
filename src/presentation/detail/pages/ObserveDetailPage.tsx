@@ -1,11 +1,10 @@
 import { Observe } from "@/domain/models/observe";
 import AppButton from "@/presentation/common/components/AppButton";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
-import { dummyDetail } from "@/presentation/home/temp";
 import { css } from "@emotion/react";
 import { Box } from "@mui/material";
 import DetailAccidentImage from "../components/DetailAccidentImage";
-import DetailChips from "../components/DetailChips";
+import { ObserveDetailChips } from "../components/DetailChips";
 import DetailContent from "../components/DetailContent";
 import DetailLocation from "../components/DetailLocation";
 import DetailUserInfo, {
@@ -42,12 +41,12 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
 
         <DetailAccidentImage photos={[observe.thumbnailUrl]} />
 
-        <DetailChips data={dummyDetail} />
+        <ObserveDetailChips observe={observe} />
 
-        <DetailContent data={dummyDetail} />
+        <DetailContent data={observe} />
 
         <DetailLocation
-          accidentLocation={observe.observeLocation}
+          location={observe.observeLocation}
           placeName={placeName}
         />
       </Box>

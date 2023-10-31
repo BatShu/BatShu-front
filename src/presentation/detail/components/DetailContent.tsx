@@ -1,10 +1,12 @@
 // styles
 import { Box, Typography, css } from "@mui/material";
-// types
-import type { dummyDetail } from "../../home/temp";
 
 interface DetailContentProps {
-  data: typeof dummyDetail;
+  data: {
+    contentTitle: string;
+    createdAt: string;
+    contentDescription: string;
+  };
 }
 
 const DetailContent = ({ data }: DetailContentProps) => {

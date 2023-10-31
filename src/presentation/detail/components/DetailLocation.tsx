@@ -4,21 +4,17 @@ import { Box, Typography, css } from "@mui/material";
 // icons
 import { ReactComponent as Frame36 } from "@/presentation/common/icons/outlined/Frame 36.svg";
 import { natshuMarker } from "@/presentation/configs";
-// types
-import type { dummyDetail } from "../../home/temp";
 // components
 import DetailChip from "./DetailChip";
+import { ILocationDto } from "@/domain/dtos/location";
 
 interface DetailLocationProps {
-  accidentLocation: (typeof dummyDetail)["accidentLocation"];
+  location: ILocationDto;
   placeName: string;
 }
 
-const DetailLocation = ({
-  accidentLocation,
-  placeName,
-}: DetailLocationProps) => {
-  const center = { lat: accidentLocation.y, lng: accidentLocation.x };
+const DetailLocation = ({ location, placeName }: DetailLocationProps) => {
+  const center = { lat: location.y, lng: location.x };
 
   return (
     <Box css={styles.container}>

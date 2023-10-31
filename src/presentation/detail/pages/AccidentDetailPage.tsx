@@ -1,12 +1,11 @@
 import { Accident } from "@/domain/models/accident";
 import AppButton from "@/presentation/common/components/AppButton";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
-import { dummyDetail } from "@/presentation/home/temp";
 import { css } from "@emotion/react";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DetailAccidentImage from "../components/DetailAccidentImage";
-import DetailChips from "../components/DetailChips";
+import { AccidentDetailChips } from "../components/DetailChips";
 import DetailContent from "../components/DetailContent";
 import DetailLocation from "../components/DetailLocation";
 import DetailUserInfo, {
@@ -44,12 +43,12 @@ export const AccdientDetailPage = ({ accident }: AccidentDetailPageProps) => {
 
         <DetailAccidentImage photos={accident.photoUrls} />
 
-        <DetailChips data={dummyDetail} />
+        <AccidentDetailChips accident={accident} />
 
-        <DetailContent data={dummyDetail} />
+        <DetailContent data={accident} />
 
         <DetailLocation
-          accidentLocation={accident.accidentLocation}
+          location={accident.accidentLocation}
           placeName={placeName}
         />
       </Box>
