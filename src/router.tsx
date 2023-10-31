@@ -20,6 +20,7 @@ import {
   ObserveDetailPageFallback,
 } from "./presentation/detail";
 import ChatPage from "./presentation/chat";
+import { ChatDetailPageFallback } from "./presentation/chat/pages/ChatDetailPage";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +48,16 @@ export const router = createBrowserRouter([
       },
       {
         path: CHAT_PATH,
-        element: <ChatPage />,
+        children: [
+          {
+            path: "",
+            element: <ChatPage />,
+          },
+          {
+            path: ":roomId",
+            element: <ChatDetailPageFallback />,
+          },
+        ],
       },
       {
         path: ACCIDENT_DETAIL_PATH,

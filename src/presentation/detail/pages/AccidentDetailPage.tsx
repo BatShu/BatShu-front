@@ -15,6 +15,8 @@ import DetailUserInfo, {
 import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Left 1.svg";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { useReadUserById } from "@/data/hooks/user";
+import { useCreateRoomMutation } from "@/data/hooks/chat";
+import { useAuthStore } from "@/store/authStore";
 
 interface AccidentDetailPageProps {
   accident: Accident;
@@ -22,14 +24,26 @@ interface AccidentDetailPageProps {
 export const AccdientDetailPage = ({ accident }: AccidentDetailPageProps) => {
   const navigate = useNavigate();
   const { data: author } = useReadUserById(accident.uid);
+  const { fbUser } = useAuthStore();
   const { data: addressData } = useKakaoMapAddressSearch({
     lat: accident.accidentLocation.y,
     lng: accident.accidentLocation.x,
   });
 
+  const { mutateAsync, isLoading } = useCreateRoomMutation();
+
+  const handleConnectChat = async () => {
+    const roomId = await mutateAsync({
+      uid: fbUser?.uid ?? "",
+      id: accident.id,
+      reportUid: accident.uid,
+      isAccident: true,
+    });
+    navigate(`/chat/${roomId}`);
+  };
+
   const placeName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
 
-  // TODO: 목격글 사고글 분기
   return (
     <Box css={pageContentStyles}>
       <Left1 onClick={() => navigate(-1)} css={css(`cursor:pointer;`)} />
@@ -53,8 +67,9 @@ export const AccdientDetailPage = ({ accident }: AccidentDetailPageProps) => {
         />
       </Box>
 
-      {/* TODO: 채팅 연결 */}
-      <AppButton>제보하기</AppButton>
+      <AppButton onClick={handleConnectChat} loading={isLoading}>
+        제보하기
+      </AppButton>
     </Box>
   );
 };

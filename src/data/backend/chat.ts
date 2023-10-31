@@ -4,12 +4,18 @@ import { Room } from "@/domain/models/room";
 import { AppResponse } from "@/domain/models/appResponse";
 
 export class ChatRepository {
-  async postRoom(dto: PostRoomDto) {
-    await authApi.post("api/room", dto);
+  async postRoom(dto: PostRoomDto): Promise<number> {
+    const res = await authApi.post<AppResponse<number>>("api/room", dto);
+    return res.data.data;
   }
 
-  async getRoom(uid: string): Promise<Room[]> {
-    const res = await authApi.get<AppResponse<Room[]>>(`api/room/${uid}`);
+  async getRooms(): Promise<Room[]> {
+    const res = await authApi.get<AppResponse<Room[]>>(`api/room`);
+    return res.data.data;
+  }
+
+  async getRoom(roomId: number): Promise<Room> {
+    const res = await authApi.get<AppResponse<Room>>(`api/room/${roomId}`);
     return res.data.data;
   }
 }

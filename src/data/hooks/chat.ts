@@ -2,11 +2,20 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { chatRepository } from "../backend";
 import { PostRoomDto } from "@/domain/dtos/chat";
 
-export const useReadRoomsQuery = (uid: string) => {
+export const useReadRoomsQuery = () => {
   return useQuery({
-    queryKey: ["room", uid],
+    queryKey: ["room"],
     queryFn: async () => {
-      return await chatRepository.getRoom(uid);
+      return await chatRepository.getRooms();
+    },
+  });
+};
+
+export const useReadRoomQuery = (roomId: number) => {
+  return useQuery({
+    queryKey: ["room", roomId],
+    queryFn: async () => {
+      return await chatRepository.getRoom(roomId);
     },
   });
 };
@@ -14,7 +23,7 @@ export const useReadRoomsQuery = (uid: string) => {
 export const useCreateRoomMutation = () => {
   return useMutation({
     mutationFn: async (dto: PostRoomDto) => {
-      await chatRepository.postRoom(dto);
+      return await chatRepository.postRoom(dto);
     },
   });
 };

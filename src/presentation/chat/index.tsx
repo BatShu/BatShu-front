@@ -1,4 +1,3 @@
-import { useState, useRef, ReactElement } from "react";
 // styles
 import { Box, css } from "@mui/material";
 import { pageContentStyles } from "../common/styles/pageStyles";
@@ -6,12 +5,9 @@ import { pageContentStyles } from "../common/styles/pageStyles";
 import Splash from "../common/layout/Splash";
 import AppNavigationBar from "../common/components/AppNaviationBar";
 import { useReadRoomsQuery } from "@/data/hooks/chat";
-import { useAuthStore } from "@/store/authStore";
 
 const ChatPage = () => {
-  const { appUser } = useAuthStore();
-  if (appUser === null) throw new Error("로그인이 필요합니다.");
-  const { data: rooms } = useReadRoomsQuery(appUser.uid);
+  const { data: rooms } = useReadRoomsQuery();
   return (
     <Box css={styles.pageWrapper}>
       <Splash />

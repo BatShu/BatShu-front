@@ -15,6 +15,8 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 import { useNavigate } from "react-router-dom";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { useReadUserById } from "@/data/hooks/user";
+import { useCreateRoomMutation } from "@/data/hooks/chat";
+import { useAuthStore } from "@/store/authStore";
 interface ObserveDetailPageProps {
   observe: Observe;
 }
@@ -25,8 +27,20 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
     lat: observe.observeLocation.y,
     lng: observe.observeLocation.x,
   });
+  const { fbUser } = useAuthStore();
 
   const placeName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
+  const { mutateAsync, isLoading } = useCreateRoomMutation();
+
+  const handleConnectChat = async () => {
+    const roomId = await mutateAsync({
+      uid: fbUser?.uid ?? "",
+      id: observe.videoId,
+      reportUid: observe.uid,
+      isAccident: true,
+    });
+    navigate(`/chat/${roomId}`);
+  };
 
   return (
     <Box css={pageContentStyles}>
@@ -51,8 +65,9 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
         />
       </Box>
 
-      {/* TODO: 채팅 연결 */}
-      <AppButton>제보하기</AppButton>
+      <AppButton onClick={handleConnectChat} loading={isLoading}>
+        제보하기
+      </AppButton>
     </Box>
   );
 };
