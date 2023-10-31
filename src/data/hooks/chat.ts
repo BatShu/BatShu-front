@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { chatRepository } from "../backend";
 import { PostRoomDto } from "@/domain/dtos/chat";
 
-export const useReadRoomQuery = (uid: string) => {
+export const useReadRoomsQuery = (uid: string) => {
   return useQuery({
     queryKey: ["room", uid],
     queryFn: async () => {
