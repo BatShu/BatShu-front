@@ -17,6 +17,7 @@ export default defineConfig({
       svgrOptions: {
         replaceAttrValues: {
           "#2D264B": "currentColor",
+          black: "currentColor",
         },
       },
     }),

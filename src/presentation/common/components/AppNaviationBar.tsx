@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { SerializedStyles, css } from "@emotion/react";
 // constants
@@ -13,6 +13,7 @@ import { useSignOut } from "@/data/hooks/auth";
 
 const AppNavigationBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   // for test
   const { mutate: signOut } = useSignOut();
   return (
@@ -23,24 +24,25 @@ const AppNavigationBar = () => {
         background: "#fff",
         boxShadow: "4px 4px 6px 0px rgba(161, 161, 161, 0.03)",
       })}
-      value={"홈"}
+      value={location.pathname}
     >
       <BottomNavigationAction
         label="홈"
-        value={"홈"}
+        value={HOME_PATH}
         icon={<LogoIcon />}
         css={actionStyles}
         onClick={() => navigate(HOME_PATH)}
       />
       <BottomNavigationAction
         label="채팅"
-        value={"채팅"}
+        value={CHAT_PATH}
         icon={<Message1Icon />}
         css={actionStyles}
         onClick={() => navigate(CHAT_PATH)}
       />
       <BottomNavigationAction
         label="글쓰기"
+        value={WRITE_PATH}
         icon={<PenIcon />}
         css={actionStyles}
         onClick={() => navigate(WRITE_PATH)}
