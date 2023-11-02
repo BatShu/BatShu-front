@@ -1,5 +1,7 @@
 import { ILocationDto } from "../dtos/location";
-export interface Observe {
+import { AppUser } from "./appUser";
+
+export interface Observe extends Exclude<AppUser, "email"> {
   videoId: number;
   videoUrl: string;
   thumbnailUrl: string;

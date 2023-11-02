@@ -1,7 +1,6 @@
 import { Observe } from "@/domain/models/observe";
 import AppButton from "@/presentation/common/components/AppButton";
 import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
-import { dummyDetail } from "@/presentation/home/temp";
 import { css } from "@emotion/react";
 import { Box } from "@mui/material";
 import DetailAccidentImage from "../components/DetailAccidentImage";
@@ -24,27 +23,22 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
   });
 
   const placeName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
-  // TODO: delete
-  const tempAuthor = {
-    uid: "0",
-    email: "[이메일]",
-    displayName: "마라탕 좋아",
-    photoURL: "https://images.unsplash.com/photo-1682686581362-796145f0e123",
-  };
 
-  // TODO: 목격글 사고글 분기
   return (
     <Box css={pageContentStyles}>
       <Left1 onClick={() => navigate(-1)} css={css(`cursor:pointer;`)} />
 
       <Box css={styles.container}>
-        <DetailUserInfo author={tempAuthor} />
+        <DetailUserInfo
+          displayName={observe.displayName}
+          photoURL={observe.googleProfilePhotoUrl}
+        />
 
         <DetailAccidentImage photos={[observe.thumbnailUrl]} />
 
-        <DetailChips data={dummyDetail} />
+        <DetailChips observe={observe} />
 
-        <DetailContent data={dummyDetail} />
+        <DetailContent data={observe} />
 
         <DetailLocation
           accidentLocation={observe.observeLocation}

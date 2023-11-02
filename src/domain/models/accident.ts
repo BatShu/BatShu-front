@@ -1,8 +1,7 @@
 import { ILocationDto } from "../dtos/location";
 import { AppUser } from "./appUser";
-export interface Accident {
+export interface Accident extends Exclude<AppUser, "email"> {
   id: number;
-  author: AppUser;
   contentTitle: string;
   contentDescription: string;
   photoUrls: string[];

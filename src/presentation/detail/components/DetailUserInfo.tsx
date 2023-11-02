@@ -3,17 +3,14 @@ import { Box, Typography, css } from "@mui/material";
 import UserInfoWithImage from "@/presentation/common/atoms/UserInfoWithImage";
 
 interface DetailUserInfoProps {
-  // author: (typeof dummyDetail)["author"];
-  author: { [key: string]: any };
+  displayName: string | null;
+  photoURL: string;
 }
 
-const DetailUserInfo = ({ author }: DetailUserInfoProps) => {
+const DetailUserInfo = ({ displayName, photoURL }: DetailUserInfoProps) => {
   return (
     <Box css={styles.userInfo}>
-      <UserInfoWithImage
-        profileImage={author.photoURL}
-        name={author.displayName}
-      />
+      <UserInfoWithImage profileImage={photoURL} name={displayName} />
       <Typography className="status">● 요청중</Typography>
     </Box>
   );

@@ -11,7 +11,7 @@ import {
   useReadObservesByLocation,
 } from "@/data/hooks/accident";
 // components
-import AccidentDrawer from "./AccidentDrawer";
+import { AccidentDrawer } from "./AccidentDrawer";
 
 interface MapResultsProps {
   isBatshu: boolean;

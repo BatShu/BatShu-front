@@ -6,30 +6,49 @@ import { ReactComponent as Frame39 } from "@/presentation/common/icons/outlined/
 import { ReactComponent as TimeCircle2 } from "@/presentation/common/icons/outlined/Time Circle 2.svg";
 import { ReactComponent as Dollar } from "@/presentation/common/icons/outlined/Dollar Circle.svg";
 // types
-import type { dummyDetail } from "../../home/temp";
+import type { Accident } from "@/domain/models/accident";
+import type { Observe } from "@/domain/models/observe";
 // constants
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // components
 import DetailChip from "./DetailChip";
 
 interface DetailChipsProps {
-  data: typeof dummyDetail;
+  accident?: Accident;
+  observe?: Observe;
 }
 
-const DetailChips = ({ data }: DetailChipsProps) => {
-  const { carModelName, licensePlate, bounty, accidentTime } = data;
-
+const DetailChips = ({ accident, observe }: DetailChipsProps) => {
   return (
     <Box css={styles.chipArea}>
-      <DetailChip Adornment={Frame39} text={carModelName} />
-      <DetailChip Adornment={Frame39} text={licensePlate} />
-      <DetailChip Adornment={Dollar} text={`${bounty.toLocaleString()}원`} />
-      <DetailChip
-        Adornment={TimeCircle2}
-        text={dayjs(accidentTime[1].split(":")[0]).format(
-          DATE_FORMAT_DETAIL_CHIP
-        )}
-      />
+      {accident && (
+        <>
+          <DetailChip Adornment={Frame39} text={accident.carModelName} />
+          <DetailChip Adornment={Frame39} text={accident.licensePlate} />
+          <DetailChip
+            Adornment={Dollar}
+            text={`${accident.bounty.toLocaleString()}원`}
+          />
+          <DetailChip
+            Adornment={TimeCircle2}
+            text={dayjs(accident.accidentTime[1].split(":")[0]).format(
+              DATE_FORMAT_DETAIL_CHIP
+            )}
+          />
+        </>
+      )}
+      {observe && (
+        <>
+          <DetailChip Adornment={Frame39} text={observe.carModelName} />
+          <DetailChip Adornment={Frame39} text={observe.licensePlate} />
+          <DetailChip
+            Adornment={TimeCircle2}
+            text={dayjs(observe.observeStartTime.split(":")[0]).format(
+              DATE_FORMAT_DETAIL_CHIP
+            )}
+          />
+        </>
+      )}
     </Box>
   );
 };

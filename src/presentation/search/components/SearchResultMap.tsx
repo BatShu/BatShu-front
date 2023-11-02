@@ -15,7 +15,8 @@ import { isSameDate } from "@/lib";
 // constants
 import { pinMarker } from "@/presentation/configs";
 // components
-import AccidentDrawer from "@/presentation/home/components/AccidentDrawer";
+import { AccidentDrawer } from "@/presentation/home/components/AccidentDrawer";
+import { ObserveDrawer } from "@/presentation/home/components/AccidentDrawer";
 
 const SearchResultMap = () => {
   const {
@@ -27,13 +28,19 @@ const SearchResultMap = () => {
   const { data: observeData } = useReadObservesByLocation(searchValue);
 
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
+  const [observeDrawerId, setObserveDrawerId] = useState<number | null>(null);
+
   const mapRef = useRef<kakao.maps.Map>(null);
 
   const clickMarker = useCallback(
-    (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
+    (
+      id: number,
+      { lat, lng }: Pick<ILocation, "lat" | "lng">,
+      isAccident: boolean
+    ) => {
       if (!mapRef || typeof mapRef === "function" || !mapRef.current) return;
 
-      setAccidentDrawerId(id);
+      isAccident ? setAccidentDrawerId(id) : setObserveDrawerId(id);
       mapRef.current.panTo(new kakao.maps.LatLng(lat, lng));
     },
     [mapRef]
@@ -85,7 +92,7 @@ const SearchResultMap = () => {
             key={observeId}
             position={{ lat: y, lng: x }}
             image={pinMarker(true)}
-            onClick={() => clickMarker(observeId, { lat: y, lng: x })}
+            onClick={() => clickMarker(observeId, { lat: y, lng: x }, false)}
           />
         ))}
         {searchAccidentResult.map(
@@ -94,7 +101,7 @@ const SearchResultMap = () => {
               key={accidentId}
               position={{ lat: y, lng: x }}
               image={pinMarker(false)}
-              onClick={() => clickMarker(accidentId, { lat: y, lng: x })}
+              onClick={() => clickMarker(accidentId, { lat: y, lng: x }, true)}
             />
           )
         )}
@@ -102,6 +109,10 @@ const SearchResultMap = () => {
       <AccidentDrawer
         accidentId={accidentDrawerId}
         onClose={() => setAccidentDrawerId(null)}
+      />
+      <ObserveDrawer
+        observeId={observeDrawerId}
+        onClose={() => setObserveDrawerId(null)}
       />
     </Box>
   );
