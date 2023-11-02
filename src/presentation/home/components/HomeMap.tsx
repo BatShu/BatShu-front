@@ -10,8 +10,7 @@ import { debounce } from "lodash";
 import { locationStore } from "@/store/locationStore";
 import { levelToRadius } from "@/data/util/map";
 import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
-import { MapAccidents } from "./MapAccidents";
-import { MapObserves } from "./MapObserves";
+import { MapResults } from "./MapResults";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -88,11 +87,11 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {isBatshu ? (
-            <MapObserves location={debouncedLocation} mapRef={mapRef} />
-          ) : (
-            <MapAccidents location={debouncedLocation} mapRef={mapRef} />
-          )}
+          <MapResults
+            isBatshu={isBatshu}
+            location={debouncedLocation}
+            mapRef={mapRef}
+          />
         </Map>
       )}
     </Box>
