@@ -55,8 +55,8 @@ const SearchResultMap = () => {
       observeData?.filter(
         (data) =>
           data.licensePlate === licensePlate &&
-          (isSameDate(data.accidentTime[0], date) ||
-            isSameDate(data.accidentTime[1], date))
+          (isSameDate(data.observeTime[0], date) ||
+            isSameDate(data.observeTime[1], date))
       ) ?? [],
     [observeData, licensePlate, date]
   );
