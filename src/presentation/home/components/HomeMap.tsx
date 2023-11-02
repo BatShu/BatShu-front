@@ -65,7 +65,7 @@ const HomeMap = (
 
   const { debouncedLocation, zoomHandler, moveHandler } = useReadMapData();
   return (
-    <Box css={styles.loadingPage}>
+    <Box css={styles.container}>
       {status.loading ? (
         <>
           <Typography variant="body2" css={styles.text}>
@@ -101,7 +101,7 @@ const HomeMap = (
 export default forwardRef(HomeMap);
 
 const styles = {
-  loadingPage: css({
+  container: css({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

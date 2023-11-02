@@ -3,6 +3,7 @@ import {
   SIGNUP_PATH,
   HOME_PATH,
   SEARCH_PATH,
+  SEARCH_RESULT_PATH,
   WRITE_PATH,
   LOGIN_PATH,
   ACCIDENT_DETAIL_PATH,
@@ -10,6 +11,7 @@ import {
 } from "./domain/constants/paths";
 import { HomePage } from "./presentation/home";
 import { SearchPage } from "./presentation/search";
+import { SearchResultPage } from "./presentation/search/pages/SearchResultPage";
 import { WritePage } from "./presentation/write";
 import { SignUpPage } from "./presentation/auth/pages/SignUp";
 import { LoginPage } from "./presentation/auth/pages/Login";
@@ -30,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: SEARCH_PATH,
         element: <SearchPage />,
+      },
+      {
+        path: SEARCH_RESULT_PATH,
+        element: <SearchResultPage />,
       },
       {
         path: WRITE_PATH,

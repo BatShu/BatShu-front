@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export const updateOnlyDate = (prevDate: Dayjs, newDate: Dayjs) => {
   const year = newDate.get("year");
@@ -14,3 +14,13 @@ export const updateOnlyDate = (prevDate: Dayjs, newDate: Dayjs) => {
 
 export const setExactTimeOnDate = (date: Dayjs, time: number) =>
   date.set("hour", time).set("minutes", 0).set("seconds", 0).format();
+
+export const isSameDate = (date1: Dayjs | string, date2: Dayjs | string) => {
+  const date = dayjs(date1);
+
+  return (
+    date.isSame(dayjs(date2), "year") &&
+    date.isSame(dayjs(date2), "month") &&
+    date.isSame(dayjs(date2), "date")
+  );
+};

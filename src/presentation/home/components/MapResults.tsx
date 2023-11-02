@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, ForwardedRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState, useCallback, ForwardedRef } from "react";
 import { MapMarker } from "react-kakao-maps-sdk";
 // types
 import { ILocation } from "@/domain/models/location";
@@ -21,14 +20,10 @@ interface MapResultsProps {
 }
 
 export const MapResults = ({ isBatshu, location, mapRef }: MapResultsProps) => {
-  const [params, _] = useSearchParams();
-
   const { data: accidentData } = useReadAccidentsByLocation(location);
   const { data: observeData } = useReadObservesByLocation(location);
 
   const [accidentDrawerId, setAccidentDrawerId] = useState<number | null>(null);
-  const [accidents, setAccidents] = useState(accidentData ?? []);
-  const [observes, setObserves] = useState(observeData ?? []);
 
   const clickMarker = useCallback(
     (id: number, { lat, lng }: Pick<ILocation, "lat" | "lng">) => {
@@ -40,16 +35,9 @@ export const MapResults = ({ isBatshu, location, mapRef }: MapResultsProps) => {
     [mapRef]
   );
 
+  const accidents = accidentData ?? [];
+  const observes = observeData ?? [];
   const markerImage = pinMarker(isBatshu);
-
-  useEffect(() => {
-    if (!params.size) return;
-    const x = params.get("x");
-    const y = params.get("y");
-    const carNumber = params.get("carNumber");
-    const date = params.get("date");
-    console.log(x, y, carNumber, date);
-  }, [params]);
 
   return (
     <>

@@ -11,8 +11,8 @@ import { SEARCH_PATH } from "@/domain/constants/paths";
 import { AppTextField } from "@/presentation/common/components/AppTextField";
 
 interface HomeHeaderProps {
-  isBatshu: boolean;
-  setIsBatshu: Dispatch<SetStateAction<boolean>>;
+  isBatshu?: boolean;
+  setIsBatshu?: Dispatch<SetStateAction<boolean>>;
 }
 
 const HomeHeader = ({ isBatshu = true, setIsBatshu }: HomeHeaderProps) => {
@@ -34,21 +34,23 @@ const HomeHeader = ({ isBatshu = true, setIsBatshu }: HomeHeaderProps) => {
           ),
           readOnly: true,
         }}
-        css={styles.input}
+        css={styles.input(!!setIsBatshu)}
         onClick={() => navigate(SEARCH_PATH)}
       />
 
-      <IconButton
-        css={styles.icon(isBatshu)}
-        onClick={() => {
-          setIsBatshu((prev) => {
-            enqueueSnackbar(`${!prev ? "목격" : "사고"}글을 보여드릴게요!`);
-            return !prev;
-          });
-        }}
-      >
-        {isBatshu ? "B" : "N"}
-      </IconButton>
+      {setIsBatshu && (
+        <IconButton
+          css={styles.icon(isBatshu)}
+          onClick={() => {
+            setIsBatshu((prev) => {
+              enqueueSnackbar(`${!prev ? "목격" : "사고"}글을 보여드릴게요!`);
+              return !prev;
+            });
+          }}
+        >
+          {isBatshu ? "B" : "N"}
+        </IconButton>
+      )}
     </Box>
   );
 };
@@ -59,10 +61,11 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
   }),
-  input: css({
-    width: "85%",
-    height: "44px",
-  }),
+  input: (isHome: boolean) =>
+    css({
+      width: isHome ? "85%" : "100%",
+      height: "44px",
+    }),
   icon: (isBatshu: boolean) =>
     css({
       display: "flex",

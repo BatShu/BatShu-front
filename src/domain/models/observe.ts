@@ -15,4 +15,6 @@ export interface Observe {
 export interface ObservePreview {
   observeId: number;
   observeLocation: ILocationDto;
+  licensePlate: string;
+  accidentTime: [string, string];
 }

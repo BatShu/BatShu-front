@@ -18,4 +18,6 @@ export interface Accident {
 export interface AccidentPreview {
   accidentId: number;
   accidentLocation: ILocationDto;
+  licensePlate: string;
+  accidentTime: [string, string];
 }
