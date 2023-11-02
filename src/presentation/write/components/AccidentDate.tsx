@@ -24,7 +24,11 @@ const AccidentDate = () => {
     (newDate: Dayjs | null) => {
       if (!newDate) return;
       const newAccidentTime = accidentTime.map((oldDay) => {
-        return dayjs(oldDay).set("date", newDate.date()).format();
+        return dayjs(oldDay)
+          .set("year", newDate.year())
+          .set("month", newDate.month())
+          .set("date", newDate.date())
+          .format();
       }) as [string, string];
 
       setValue("time", newAccidentTime);
