@@ -25,6 +25,8 @@ import Spacer from "../common/atoms/Spacer";
 import InputChip from "../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import SearchMap from "../common/maps/SearchMap";
+import { queryWrapper } from "@/lib";
+import { HOME_PATH } from "@/domain/constants/paths";
 
 interface SearchForm {
   location: ILocation | null;
@@ -57,8 +59,23 @@ export const SearchPage = (): ReactElement => {
   const location = watch("location");
   const navigate = useNavigate();
   const { data: address } = useKakaoMapAddressSearch(location);
+
   const onSubmit = (data: SearchForm) => {
-    console.log(data);
+    const {
+      location,
+      carNumber: { head, middle, rear },
+      date,
+    } = data;
+    const carNumber = head.concat(middle).concat(rear);
+
+    navigate(
+      queryWrapper(HOME_PATH)({
+        x: location?.lat,
+        y: location?.lng,
+        carNumber,
+        date: date?.format().split("T")[0],
+      })
+    );
   };
 
   return (
@@ -112,7 +129,7 @@ export const SearchPage = (): ReactElement => {
               ),
               readOnly: true,
             }}
-            css={styles.inputSelect(location == null)}
+            css={styles.inputSelect(location != null)}
             onClick={() => setShowMap(true)}
           />
 
