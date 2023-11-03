@@ -16,7 +16,7 @@ import { isSameDate } from "@/lib";
 import { pinMarker } from "@/presentation/configs";
 // components
 import { AccidentDrawer } from "@/presentation/home/components/AccidentDrawer";
-import { ObserveDrawer } from "@/presentation/home/components/AccidentDrawer";
+import ObserveDrawer from "@/presentation/home/components/ObserveDrawer";
 
 const SearchResultMap = () => {
   const {
