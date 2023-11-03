@@ -12,7 +12,7 @@ import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
 import { Accident } from "@/domain/models/accident";
-import { useReadAccidentById } from "@/data/hooks/accident";
+import { useReadAccidentById } from "@/data/hooks/accidentObserve";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
 interface AccidentDrawerProps {
   accidentId: number | null;

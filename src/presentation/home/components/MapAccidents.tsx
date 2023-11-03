@@ -4,7 +4,7 @@ import { AccidentDrawer } from "./AccidentDrawer";
 import { ILocation } from "@/domain/models/location";
 import { useState, useCallback, ForwardedRef } from "react";
 import { pinMarker } from "@/presentation/configs";
-import { useReadAccidentsByLocation } from "@/data/hooks/accident";
+import { useReadAccidentsByLocation } from "@/data/hooks/accidentObserve";
 
 interface MapAccidentsProps {
   location: ReadByLocationDto;

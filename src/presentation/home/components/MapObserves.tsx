@@ -3,7 +3,7 @@ import { ILocation } from "@/domain/models/location";
 import { pinMarker } from "@/presentation/configs";
 import { ForwardedRef, useState, useCallback } from "react";
 import { MapMarker } from "react-kakao-maps-sdk";
-import { useReadObservesByLocation } from "@/data/hooks/accident";
+import { useReadObservesByLocation } from "@/data/hooks/accidentObserve";
 import ObserveDrawer from "./ObserveDrawer";
 
 interface MapObservesProps {

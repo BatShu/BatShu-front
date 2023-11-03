@@ -5,6 +5,7 @@ import { pageContentStyles } from "../common/styles/pageStyles";
 import Splash from "../common/layout/Splash";
 import AppNavigationBar from "../common/components/AppNaviationBar";
 import { useReadRoomsQuery } from "@/data/hooks/chat";
+import { ChatPreview } from "./components/ChatPreview";
 
 const ChatPage = () => {
   const { data: rooms } = useReadRoomsQuery();
@@ -14,12 +15,7 @@ const ChatPage = () => {
 
       <Box css={pageContentStyles}>
         {rooms?.map((room) => {
-          return (
-            <Box key={room.roomId}>
-              <Box>{room.lastChat}</Box>
-              <Box>{room.lastChatCreatedAt}</Box>
-            </Box>
-          );
+          return <ChatPreview key={room.roomId} room={room} />;
         })}
         <Box css={styles.bottomMenu}>
           <Box css={styles.menuBar}>

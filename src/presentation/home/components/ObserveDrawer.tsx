@@ -11,7 +11,7 @@ import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
-import { useReadObserveById } from "@/data/hooks/accident";
+import { useReadObserveById } from "@/data/hooks/accidentObserve";
 import { Observe } from "@/domain/models/observe";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
 

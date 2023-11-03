@@ -114,6 +114,7 @@ const styles = {
     display: flex;
     gap: 18px;
     flex-direction: column;
+    background-color: #fff;
   `,
   toolbarContainer: css`
     display: flex;

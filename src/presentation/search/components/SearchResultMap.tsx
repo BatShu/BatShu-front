@@ -7,7 +7,7 @@ import { enqueueSnackbar } from "notistack";
 import {
   useReadAccidentsByLocation,
   useReadObservesByLocation,
-} from "@/data/hooks/accident";
+} from "@/data/hooks/accidentObserve";
 // types
 import { ILocation } from "@/domain/models/location";
 // lib
