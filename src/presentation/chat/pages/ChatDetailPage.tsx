@@ -1,6 +1,12 @@
-import { useReadRoomQuery } from "@/data/hooks/chat";
+import { useReadRoomWithIncidentQuery } from "@/data/hooks/chat";
+import { Box } from "@mui/material";
 import { ReactElement } from "react";
 import { useParams } from "react-router-dom";
+import {
+  ChatDetailHeader,
+  ChatDetailHeaderSkeleton,
+} from "../components/ChatDetailHeader";
+import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -17,6 +23,23 @@ interface ChatDetailPageProps {
 export const ChatDetailPage = ({
   roomId,
 }: ChatDetailPageProps): ReactElement => {
-  const { data } = useReadRoomQuery(roomId);
-  return <>{data?.roomId}</>;
+  const { data, isLoading } = useReadRoomWithIncidentQuery(roomId);
+
+  if (isLoading) {
+    return (
+      <>
+        <ChatDetailHeaderSkeleton />
+      </>
+    );
+  }
+
+  if (data == null) {
+    throw new Error("data is null");
+  }
+  return (
+    <>
+      <ChatDetailHeader incident={data.incident} />
+      <Box css={pageContentStyles}>hi</Box>
+    </>
+  );
 };

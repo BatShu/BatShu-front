@@ -1,3 +1,4 @@
+import { LOGIN_PATH } from "@/domain/constants/paths";
 import { AppApiError } from "@/domain/models/appError";
 import { handleError } from "@/lib";
 import { useAuthStore } from "@/store/authStore";
@@ -18,6 +19,7 @@ authApi.interceptors.request.use(async (req) => {
   }
   const fbUser = useAuthStore.getState().fbUser;
   if (fbUser == null) {
+    location.href = LOGIN_PATH;
     return Promise.reject(new Error("User is not logged in"));
   }
   const token = await fbUser.getIdToken();

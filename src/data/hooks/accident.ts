@@ -45,3 +45,19 @@ export const useReadObserveById = (
     queryFn: () => accidentObserverRepository.readObserveById(observeId ?? 0),
   });
 };
+
+export const useReadAccidentOrObserveById = (
+  id: number | null,
+  isAccident: boolean
+): UseQueryResult<Accident | Observe> => {
+  return useQuery({
+    queryKey: ["accidentOrObserve", isAccident, id],
+    enabled: id != null,
+    queryFn: () => {
+      if (isAccident) {
+        return accidentObserverRepository.readAccidentById(id ?? 0);
+      }
+      return accidentObserverRepository.readObserveById(id ?? 0);
+    },
+  });
+};

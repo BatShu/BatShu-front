@@ -57,7 +57,7 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const handleConnectChat = async () => {
     const data = await mutateAsync({
       id: accident.id,
-      isAccident: false,
+      isAccident: true,
     });
     navigate(`/chat/${data.roomId}`);
   };
