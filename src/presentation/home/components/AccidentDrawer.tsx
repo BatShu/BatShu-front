@@ -13,6 +13,7 @@ import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 import AppButton from "@/presentation/common/components/AppButton";
 import { Accident } from "@/domain/models/accident";
 import { useReadAccidentById } from "@/data/hooks/accident";
+import { useCreateRoomMutation } from "@/data/hooks/chat";
 interface AccidentDrawerProps {
   accidentId: number | null;
   onOpen?: () => void;
@@ -51,6 +52,15 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
   const { createdAt, photoUrls, carModelName, licensePlate, accidentTime } =
     accident;
+  const { mutateAsync, isLoading } = useCreateRoomMutation();
+
+  const handleConnectChat = async () => {
+    const data = await mutateAsync({
+      id: accident.id,
+      isAccident: false,
+    });
+    navigate(`/chat/${data.roomId}`);
+  };
   const routeToDetail = () => {
     navigate(`/accident/${accident.id}`, {
       state: { ...accident, placeName: addressName },
@@ -100,7 +110,13 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
           >
             자세히 보기
           </AppButton>
-          <AppButton css={styles.button}>제보하기</AppButton>
+          <AppButton
+            css={styles.button}
+            onClick={handleConnectChat}
+            loading={isLoading}
+          >
+            제보하기
+          </AppButton>
         </Box>
       </Box>
     </Box>

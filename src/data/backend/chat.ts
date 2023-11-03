@@ -1,11 +1,11 @@
-import { PostRoomDto } from "@/domain/dtos/chat";
+import { PostRoomData, PostRoomDto } from "@/domain/dtos/chat";
 import { authApi } from "../util/fetcher";
 import { Room } from "@/domain/models/room";
 import { AppResponse } from "@/domain/models/appResponse";
 
 export class ChatRepository {
-  async postRoom(dto: PostRoomDto): Promise<number> {
-    const res = await authApi.post<AppResponse<number>>("api/room", dto);
+  async postRoom(dto: PostRoomDto): Promise<PostRoomData> {
+    const res = await authApi.post<AppResponse<PostRoomData>>("api/room", dto);
     return res.data.data;
   }
 
