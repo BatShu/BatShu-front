@@ -5,12 +5,13 @@ import { Box, css } from "@mui/material";
 import { ReactComponent as Frame39 } from "@/presentation/common/icons/outlined/Frame 39.svg";
 import { ReactComponent as TimeCircle2 } from "@/presentation/common/icons/outlined/Time Circle 2.svg";
 import { ReactComponent as Dollar } from "@/presentation/common/icons/outlined/Dollar Circle.svg";
+// types
+import type { Accident } from "@/domain/models/accident";
+import type { Observe } from "@/domain/models/observe";
 // constants
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // components
 import DetailChip from "./DetailChip";
-import { Accident } from "@/domain/models/accident";
-import { Observe } from "@/domain/models/observe";
 
 interface AccidentDetailChipsProps {
   accident: Accident;

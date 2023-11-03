@@ -1,6 +1,6 @@
 import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
 import { MapMarker } from "react-kakao-maps-sdk";
-import AccidentDrawer from "./AccidentDrawer";
+import { AccidentDrawer } from "./AccidentDrawer";
 import { ILocation } from "@/domain/models/location";
 import { useState, useCallback, ForwardedRef } from "react";
 import { pinMarker } from "@/presentation/configs";

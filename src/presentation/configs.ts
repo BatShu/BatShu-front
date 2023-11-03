@@ -62,3 +62,5 @@ export const MuiDateCalendarOptions: LocalizationProviderProps<any, any> = {
 export const DATE_FORMAT_WRITE = "YYYY년 MM월 DD일 ddd요일" as const;
 export const DATE_FORMAT_SEARCH = "YYYY-MM-DD" as const;
 export const DATE_FORMAT_DETAIL_CHIP = "MM월 D일, HH시";
+
+export const MOVE_MAP_DELAY = 200 as const;

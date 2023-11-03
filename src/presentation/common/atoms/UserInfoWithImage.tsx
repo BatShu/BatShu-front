@@ -5,7 +5,7 @@ import SkeletonImage from "./SkeletonImage";
 
 interface UserInfoWithImageProps {
   profileImage: string;
-  name: string;
+  name: string | null;
 }
 
 const UserInfoWithImage = ({ profileImage, name }: UserInfoWithImageProps) => {

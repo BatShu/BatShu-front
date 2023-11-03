@@ -1,12 +1,11 @@
 // styles
 import { Box, Typography, css } from "@mui/material";
+// types
+import type { Accident } from "@/domain/models/accident";
+import type { Observe } from "@/domain/models/observe";
 
 interface DetailContentProps {
-  data: {
-    contentTitle: string;
-    createdAt: string;
-    contentDescription: string;
-  };
+  data: Accident | Observe;
 }
 
 const DetailContent = ({ data }: DetailContentProps) => {

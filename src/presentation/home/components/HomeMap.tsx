@@ -1,15 +1,16 @@
-import { useState, forwardRef, ForwardedRef } from "react";
+import { useState, useMemo, forwardRef, ForwardedRef } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 // styles
 import { Box, CircularProgress, Typography, css } from "@mui/material";
-import { curLocationMarker } from "@/presentation/configs";
+// constants
+import { MOVE_MAP_DELAY, curLocationMarker } from "@/presentation/configs";
+// lib
+import { debounce } from "lodash";
 // store
 import { locationStore } from "@/store/locationStore";
 import { levelToRadius } from "@/data/util/map";
-import useDebounceValue from "@/presentation/common/hooks/useDebounceValue";
 import { ReadByLocationDto } from "@/domain/dtos/accidentObserve";
-import { MapAccidents } from "./MapAccidents";
-import { MapObserves } from "./MapObserves";
+import { MapResults } from "./MapResults";
 
 interface HomeMapProps {
   isBatshu?: boolean;
@@ -17,25 +18,37 @@ interface HomeMapProps {
 
 const useReadMapData = () => {
   const { location } = locationStore();
-  const [center, setCenter] = useState<ReadByLocationDto>({
-    x: location.lng,
-    y: location.lat,
-    radius: levelToRadius(location.level),
-  });
-  const debouncedLocation = useDebounceValue<ReadByLocationDto>(center);
+  const [debouncedLocation, setDebouncedLocation] = useState<ReadByLocationDto>(
+    {
+      x: location.lng,
+      y: location.lat,
+      radius: levelToRadius(location.level),
+    }
+  );
 
-  const moveHandler = (map: kakao.maps.Map) => {
-    const pos = map.getCenter();
-    setCenter((prev) => ({
-      x: pos.getLng(),
-      y: pos.getLat(),
-      radius: prev.radius,
-    }));
-  };
-  const zoomHandler = (map: kakao.maps.Map) => {
-    const level = map.getLevel();
-    setCenter((prev) => ({ ...prev, radius: levelToRadius(level) }));
-  };
+  const moveHandler = useMemo(
+    () =>
+      debounce((map: kakao.maps.Map) => {
+        const pos = map.getCenter();
+        setDebouncedLocation((prev) => ({
+          x: pos.getLng(),
+          y: pos.getLat(),
+          radius: prev.radius,
+        }));
+      }, MOVE_MAP_DELAY),
+    []
+  );
+
+  const zoomHandler = useMemo(
+    () => (map: kakao.maps.Map) => {
+      const level = map.getLevel();
+      setDebouncedLocation((prev) => ({
+        ...prev,
+        radius: levelToRadius(level),
+      }));
+    },
+    []
+  );
 
   return {
     debouncedLocation,
@@ -52,7 +65,7 @@ const HomeMap = (
 
   const { debouncedLocation, zoomHandler, moveHandler } = useReadMapData();
   return (
-    <Box css={styles.loadingPage}>
+    <Box css={styles.container}>
       {status.loading ? (
         <>
           <Typography variant="body2" css={styles.text}>
@@ -74,11 +87,11 @@ const HomeMap = (
           {!status.error && (
             <MapMarker position={location} image={curLocationMarker} />
           )}
-          {isBatshu ? (
-            <MapObserves location={debouncedLocation} mapRef={mapRef} />
-          ) : (
-            <MapAccidents location={debouncedLocation} mapRef={mapRef} />
-          )}
+          <MapResults
+            isBatshu={isBatshu}
+            location={debouncedLocation}
+            mapRef={mapRef}
+          />
         </Map>
       )}
     </Box>
@@ -88,7 +101,7 @@ const HomeMap = (
 export default forwardRef(HomeMap);
 
 const styles = {
-  loadingPage: css({
+  container: css({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

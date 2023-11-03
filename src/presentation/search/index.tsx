@@ -16,6 +16,10 @@ import { ReactComponent as Calender1 } from "@/presentation/common/icons/outline
 import { ReactComponent as Up2 } from "@/presentation/common/icons/outlined/Up 2.svg";
 // types
 import { ILocation } from "@/domain/models/location";
+// constants
+import { SEARCH_RESULT_PATH } from "@/domain/constants/paths";
+// hooks
+import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 // components
 import { AppTextField } from "../common/components/AppTextField";
 import AppButton from "../common/components/AppButton";
@@ -23,7 +27,6 @@ import Spacer from "../common/atoms/Spacer";
 import InputChip from "../common/atoms/InputChip";
 import AppDateCalendar from "@/presentation/common/components/AppDateCalendar";
 import SearchMap from "../common/maps/SearchMap";
-import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 
 interface SearchForm {
   location: ILocation | null;
@@ -56,8 +59,23 @@ export const SearchPage = (): ReactElement => {
   const location = watch("location");
   const navigate = useNavigate();
   const { data: address } = useKakaoMapAddressSearch(location);
+
   const onSubmit = (data: SearchForm) => {
-    console.log(data);
+    if (!data.location || !data.date) return;
+
+    const {
+      location,
+      carNumber: { head, middle, rear },
+      date,
+    } = data;
+
+    navigate(SEARCH_RESULT_PATH, {
+      state: {
+        location,
+        licensePlate: head.concat(middle).concat(rear),
+        date: date.format(),
+      },
+    });
   };
 
   return (
@@ -111,7 +129,7 @@ export const SearchPage = (): ReactElement => {
               ),
               readOnly: true,
             }}
-            css={styles.inputSelect(location == null)}
+            css={styles.inputSelect(location != null)}
             onClick={() => setShowMap(true)}
           />
 
