@@ -42,6 +42,15 @@ export const useReadRoomWithIncidentQuery = (roomId: number) => {
   });
 };
 
+export const useReadMessageQuery = (roomId: number) => {
+  return useQuery({
+    queryKey: ["message", roomId],
+    queryFn: async () => {
+      return await chatRepository.getMessage(roomId);
+    },
+  });
+};
+
 export const useCreateRoomMutation = () => {
   return useMutation({
     mutationFn: async (dto: PostRoomDto) => {
