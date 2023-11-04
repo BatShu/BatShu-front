@@ -1,4 +1,3 @@
-import { LOGIN_PATH } from "@/domain/constants/paths";
 import { AppApiError } from "@/domain/models/appError";
 import { handleError } from "@/lib";
 import { useAuthStore } from "@/store/authStore";

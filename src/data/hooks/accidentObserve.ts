@@ -54,7 +54,7 @@ export const useReadAccidentOrObserveById = (
   return useQuery({
     queryKey: ["accidentOrObserve", isAccident, id],
     enabled: id != null,
-    queryFn: () => {
+    queryFn: async () => {
       if (isAccident) {
         return accidentObserverRepository.readAccidentById(id ?? 0);
       }
