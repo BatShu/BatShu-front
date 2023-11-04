@@ -1,9 +1,11 @@
 import { useReadAccidentOrObserveAddress } from "@/data/hooks/accidentObserve";
 import { useReadUserById } from "@/data/hooks/user";
+import { CHAT_PATH } from "@/domain/constants/paths";
 import { Room } from "@/domain/models/room";
-import { Avatar, Box, Typography, css } from "@mui/material";
+import { Avatar, Box, Button, Typography, css } from "@mui/material";
 import dayjs from "dayjs";
 import { ReactElement } from "react";
+import { Link } from "react-router-dom";
 
 interface ChatPreviewProps {
   room: Room;
@@ -29,39 +31,45 @@ export const ChatPreview = ({ room }: ChatPreviewProps): ReactElement => {
     return `${Math.floor(minDiffer / 60 / 24)}일 전`;
   };
   return (
-    <Box css={styles.chatPreviewContainer}>
-      <Avatar
-        src={user?.googleProfilephotoURL}
-        alt="avatar"
-        css={styles.avatar}
-      />
-      <Box css={styles.detailContainer}>
-        <Box css={styles.detailHeaderContainer}>
-          <Typography css={styles.nickname}>{user?.displayName}</Typography>
-          <Typography css={styles.locationChip}>
-            {address?.region_2depth_name} {address?.region_3depth_name}
-          </Typography>
-          <Box sx={{ flex: 1 }} />
-          <Typography css={styles.timeAgo}>
-            {getTimeAgo(room.lastChatCreatedAt)}
+    <Link to={`${CHAT_PATH}/${room.roomId}`} css={styles.link}>
+      <Button css={styles.chatPreviewContainer}>
+        <Avatar
+          src={user?.googleProfilephotoURL}
+          alt="avatar"
+          css={styles.avatar}
+        />
+        <Box css={styles.detailContainer}>
+          <Box css={styles.detailHeaderContainer}>
+            <Typography css={styles.nickname}>{user?.displayName}</Typography>
+            <Typography css={styles.locationChip}>
+              {address?.region_2depth_name} {address?.region_3depth_name}
+            </Typography>
+            <Box sx={{ flex: 1 }} />
+            <Typography css={styles.timeAgo}>
+              {getTimeAgo(room.lastChatCreatedAt)}
+            </Typography>
+          </Box>
+          <Typography css={styles.chat} variant="h6">
+            {room.lastChat}
           </Typography>
         </Box>
-        <Typography css={styles.chat} variant="h6">
-          {room.lastChat}
-        </Typography>
-      </Box>
-    </Box>
+      </Button>
+    </Link>
   );
 };
 
 const styles = {
+  link: css`
+    text-decoration: none;
+  `,
   chatPreviewContainer: css`
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 16px;
-    padding: 12px;
+    padding: 12px 30px;
+    border-bottom: 1px solid var(--white-outline, #e9e9e9);
   `,
   avatar: css`
     width: 52px;

@@ -2,21 +2,24 @@
 import { Box, css } from "@mui/material";
 import { pageContentStyles } from "../common/styles/pageStyles";
 // components
-import Splash from "../common/layout/Splash";
 import AppNavigationBar from "../common/components/AppNaviationBar";
 import { useReadRoomsQuery } from "@/data/hooks/chat";
 import { ChatPreview } from "./components/ChatPreview";
-
+import { ReactComponent as BatshuIcon } from "@/presentation/common/icons/logo-long-black.svg";
 const ChatPage = () => {
   const { data: rooms } = useReadRoomsQuery();
   return (
     <Box css={styles.pageWrapper}>
-      <Splash />
-
-      <Box css={pageContentStyles}>
+      <Box css={styles.header}>
+        <BatshuIcon css={styles.headerLogo} />
+      </Box>
+      <Box>
         {rooms?.map((room) => {
           return <ChatPreview key={room.roomId} room={room} />;
         })}
+      </Box>
+
+      <Box css={pageContentStyles}>
         <Box css={styles.bottomMenu}>
           <Box css={styles.menuBar}>
             <AppNavigationBar />
@@ -30,6 +33,8 @@ const styles = {
   pageWrapper: css({
     position: "relative",
     height: "100vh",
+    display: "flex",
+    flexDirection: "column",
   }),
   bottomMenu: css({
     position: "relative",
@@ -44,6 +49,12 @@ const styles = {
     bottom: "36px",
     left: 0,
   }),
+  header: css`
+    padding: 16px 24px;
+  `,
+  headerLogo: css`
+    width: 100px;
+  `,
 };
 
 export default ChatPage;

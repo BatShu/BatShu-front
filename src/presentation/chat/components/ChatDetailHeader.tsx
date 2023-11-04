@@ -9,6 +9,7 @@ import { ReactComponent as CarIcon } from "@/presentation/common/icons/asset/Car
 import { Incident, isAccident } from "@/domain/models/incident";
 import dayjs from "dayjs";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
+import { Link } from "react-router-dom";
 
 interface ChatDetailHeaderProps {
   incident: Incident;
@@ -24,9 +25,11 @@ export const ChatDetailHeader = ({
   return (
     <Box css={styles.headerContainer}>
       <Box css={styles.toolbarContainer}>
-        <IconButton css={styles.icon}>
-          <BackIcon />
-        </IconButton>
+        <Link to={".."}>
+          <IconButton css={styles.icon}>
+            <BackIcon />
+          </IconButton>
+        </Link>
         <IconButton css={styles.icon}>
           <MoreIcon />
         </IconButton>
