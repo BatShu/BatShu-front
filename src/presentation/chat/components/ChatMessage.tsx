@@ -1,5 +1,6 @@
 import { useReadUserById } from "@/data/hooks/user";
 import { AppMessage } from "@/domain/models/appMessage";
+import { useAuthStore } from "@/store/authStore";
 import { Avatar, Box, Typography, css } from "@mui/material";
 import { ReactElement } from "react";
 
@@ -8,11 +9,16 @@ interface ChatMessageProps {
 }
 export const ChatMessage = ({ message }: ChatMessageProps): ReactElement => {
   const { data: sendor } = useReadUserById(message.sendUserUid);
+
+  const { appUser } = useAuthStore();
+  const isSelf = appUser?.uid == message.sendUserUid;
   return (
-    <Box css={styles.messageContainer}>
-      <Avatar src={sendor?.googleProfilephotoURL} css={styles.avatar} />
+    <Box css={styles.messageContainer(isSelf)}>
+      {!isSelf && (
+        <Avatar src={sendor?.googleProfilephotoURL} css={styles.avatar} />
+      )}
       <Box css={styles.typoContainer}>
-        <Typography>{sendor?.displayName}</Typography>
+        {!isSelf && <Typography>{sendor?.displayName}</Typography>}
         <Typography css={styles.message}>{message.message}</Typography>
       </Box>
     </Box>
@@ -20,9 +26,10 @@ export const ChatMessage = ({ message }: ChatMessageProps): ReactElement => {
 };
 
 const styles = {
-  messageContainer: css`
+  messageContainer: (isSelf: boolean) => css`
     display: flex;
-    align-items: start;
+    align-items: center;
+    justify-content: ${isSelf ? "flex-end" : "flex-start"};
     gap: 16px;
   `,
   avatar: css`
