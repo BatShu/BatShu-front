@@ -50,5 +50,7 @@ const styles = {
     font-weight: 600;
     line-height: normal;
     letter-spacing: -0.41px;
+    overflow-x: hidden;
+    word-break: break-all;
   `,
 };

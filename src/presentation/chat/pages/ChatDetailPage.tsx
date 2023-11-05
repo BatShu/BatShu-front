@@ -74,6 +74,11 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
     return new SocketRepository(roomId, handleReceive);
   }, [roomId]);
 
+  useEffect(() => {
+    return () => {
+      socketRepository.disconnect();
+    };
+  }, [socketRepository]);
   return (
     <>
       <Box css={styles.messageContainer} ref={ref}>
