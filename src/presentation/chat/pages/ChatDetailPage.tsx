@@ -14,6 +14,7 @@ import { ChatBar } from "../components/ChatBar";
 import { SocketRepository } from "@/data/backend/socket";
 import { SendMessageDto } from "@/domain/dtos/socket";
 import { ChatMessage } from "../components/ChatMessage";
+import { AppMessage } from "@/domain/models/appMessage";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -87,9 +88,12 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   return (
     <>
       <Box css={styles.messageContainer} ref={ref}>
-        {messages?.chatList.toReversed().map((message) => {
-          return <ChatMessage key={message.createdAt} message={message} />;
-        })}
+        {messages?.chatList
+          .slice()
+          .reverse()
+          .map((message: AppMessage) => {
+            return <ChatMessage key={message.createdAt} message={message} />;
+          })}
       </Box>
 
       <ChatBar roomId={roomId} socketRepository={socketRepository} />
