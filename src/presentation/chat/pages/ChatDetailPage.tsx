@@ -14,8 +14,6 @@ import { ChatBar } from "../components/ChatBar";
 import { SocketRepository } from "@/data/backend/socket";
 import { SendMessageDto } from "@/domain/dtos/socket";
 import { ChatMessage } from "../components/ChatMessage";
-import { useQueryClient } from "@tanstack/react-query";
-import { GetMessageData } from "@/domain/dtos/chat";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
