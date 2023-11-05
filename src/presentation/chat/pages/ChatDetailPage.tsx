@@ -1,4 +1,7 @@
-import { useReadRoomWithIncidentQuery } from "@/data/hooks/chat";
+import {
+  useReadMessageQuery,
+  useReadRoomWithIncidentQuery,
+} from "@/data/hooks/chat";
 import { Box } from "@mui/material";
 import { ReactElement } from "react";
 import { useParams } from "react-router-dom";
@@ -39,7 +42,24 @@ export const ChatDetailPage = ({
   return (
     <>
       <ChatDetailHeader incident={data.incident} />
-      <Box css={pageContentStyles}>hi</Box>
+      <Box css={pageContentStyles}>
+        <ChatDetail roomId={roomId} />
+      </Box>
     </>
+  );
+};
+
+interface ChatDetailProps {
+  roomId: number;
+}
+const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
+  const { data: messages } = useReadMessageQuery(roomId);
+
+  return (
+    <Box>
+      {messages?.chatList.map((message) => {
+        return <Box>{message.message}</Box>;
+      })}
+    </Box>
   );
 };
