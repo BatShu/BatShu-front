@@ -113,7 +113,7 @@ const CommonChips = ({ incident }: ChatDetailHeaderProps): ReactElement => {
 
 const styles = {
   headerContainer: css`
-    padding: 20px 12px;
+    padding: 20px 12px 10px 12px;
     display: flex;
     gap: 18px;
     flex-direction: column;
@@ -145,6 +145,8 @@ const styles = {
     font-weight: 600;
     line-height: normal;
     letter-spacing: -0.41px;
+    display: flex;
+    align-items: center;
   `,
   chipsSurface: css`
     display: flex;
