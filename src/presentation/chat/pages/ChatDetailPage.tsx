@@ -2,14 +2,16 @@ import {
   useReadMessageQuery,
   useReadRoomWithIncidentQuery,
 } from "@/data/hooks/chat";
-import { Box } from "@mui/material";
-import { ReactElement } from "react";
+import { Box, css } from "@mui/material";
+import { ReactElement, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import {
   ChatDetailHeader,
   ChatDetailHeaderSkeleton,
 } from "../components/ChatDetailHeader";
-import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
+import { ChatBar } from "../components/ChatBar";
+import { SocketRepository } from "@/data/backend/socket";
+import { SendMessageDto } from "@/domain/dtos/socket";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -41,8 +43,8 @@ export const ChatDetailPage = ({
   }
   return (
     <>
-      <ChatDetailHeader incident={data.incident} />
-      <Box css={pageContentStyles}>
+      <Box css={styles.pageWrapper}>
+        <ChatDetailHeader incident={data.incident} />
         <ChatDetail roomId={roomId} />
       </Box>
     </>
@@ -55,11 +57,41 @@ interface ChatDetailProps {
 const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   const { data: messages } = useReadMessageQuery(roomId);
 
+  const handleReceive = (dto: SendMessageDto) => {
+    console.log(dto);
+  };
+  const socketRepository = useMemo(() => {
+    return new SocketRepository(roomId, handleReceive);
+  }, [roomId]);
+
   return (
-    <Box>
-      {messages?.chatList.map((message) => {
-        return <Box>{message.message}</Box>;
-      })}
+    <Box css={styles.detailContainer}>
+      <Box css={styles.messageContainer}>
+        {messages?.chatList.map((message) => {
+          return <Box>{message.message}</Box>;
+        })}
+      </Box>
+
+      <ChatBar roomId={roomId} socketRepository={socketRepository} />
     </Box>
   );
+};
+
+const styles = {
+  pageWrapper: css`
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  `,
+  detailContainer: css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  `,
+  messageContainer: css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  `,
 };
