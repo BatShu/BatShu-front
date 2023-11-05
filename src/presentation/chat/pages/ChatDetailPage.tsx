@@ -3,7 +3,7 @@ import {
   useReadRoomWithIncidentQuery,
 } from "@/data/hooks/chat";
 import { Box, css } from "@mui/material";
-import { ReactElement, useMemo } from "react";
+import { ReactElement, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   ChatDetailHeader,
@@ -56,8 +56,17 @@ interface ChatDetailProps {
   roomId: number;
 }
 const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
-  const { data: messages } = useReadMessageQuery(roomId);
+  const ref = useRef<HTMLDivElement>(null);
+  const { data: messages, isPreviousData } = useReadMessageQuery(roomId);
 
+  const scrollToBottom = (isPreviousData: boolean) => {
+    if (ref.current && !isPreviousData) {
+      ref.current.scrollTop = ref.current.scrollHeight;
+    }
+  };
+  useEffect(() => {
+    scrollToBottom(isPreviousData);
+  }, [messages, isPreviousData]);
   const handleReceive = (dto: SendMessageDto) => {
     console.log(dto);
   };
@@ -67,7 +76,7 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
 
   return (
     <>
-      <Box css={styles.messageContainer}>
+      <Box css={styles.messageContainer} ref={ref}>
         {messages?.chatList.reverse().map((message) => {
           return <ChatMessage key={message.createdAt} message={message} />;
         })}

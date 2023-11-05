@@ -119,7 +119,7 @@ const styles = {
     background: #f9f9f9;
     display: flex;
     height: 36px;
-    padding: 9px 127px 8px 18px;
+    padding: 9px 18ㅔx 8px 18px;
     align-items: center;
     font-family: Pretendard;
     font-size: 16px;
