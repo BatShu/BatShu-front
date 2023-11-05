@@ -21,7 +21,7 @@ export const ChatPreview = ({ room }: ChatPreviewProps): ReactElement => {
     if (date == null || date == "") {
       return "";
     }
-    const minDiffer = dayjs().diff(dayjs(date)) / 1000;
+    const minDiffer = dayjs().diff(dayjs(date)) / (1000 * 60);
     if (minDiffer < 60) {
       return `${Math.floor(minDiffer)}분 전`;
     }
@@ -140,5 +140,6 @@ const styles = {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
   `,
 };

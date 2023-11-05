@@ -12,6 +12,7 @@ import {
 import { ChatBar } from "../components/ChatBar";
 import { SocketRepository } from "@/data/backend/socket";
 import { SendMessageDto } from "@/domain/dtos/socket";
+import { ChatMessage } from "../components/ChatMessage";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -65,15 +66,15 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   }, [roomId]);
 
   return (
-    <Box css={styles.detailContainer}>
+    <>
       <Box css={styles.messageContainer}>
-        {messages?.chatList.map((message) => {
-          return <Box>{message.message}</Box>;
+        {messages?.chatList.reverse().map((message) => {
+          return <ChatMessage key={message.createdAt} message={message} />;
         })}
       </Box>
 
       <ChatBar roomId={roomId} socketRepository={socketRepository} />
-    </Box>
+    </>
   );
 };
 
@@ -84,14 +85,13 @@ const styles = {
     display: flex;
     flex-direction: column;
   `,
-  detailContainer: css`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  `,
   messageContainer: css`
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 20px 24px;
+    overflow-y: scroll;
+    gap: 20px;
+    padding-bottom: 70px;
   `,
 };
