@@ -16,7 +16,6 @@ import { ReactComponent as Left1 } from "@/presentation/common/icons/outlined/Le
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { useReadUserById } from "@/data/hooks/user";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
-import { useAuthStore } from "@/store/authStore";
 
 interface AccidentDetailPageProps {
   accident: Accident;
@@ -24,7 +23,6 @@ interface AccidentDetailPageProps {
 export const AccdientDetailPage = ({ accident }: AccidentDetailPageProps) => {
   const navigate = useNavigate();
   const { data: author } = useReadUserById(accident.uid);
-  const { fbUser } = useAuthStore();
   const { data: addressData } = useKakaoMapAddressSearch({
     lat: accident.accidentLocation.y,
     lng: accident.accidentLocation.x,
@@ -33,13 +31,11 @@ export const AccdientDetailPage = ({ accident }: AccidentDetailPageProps) => {
   const { mutateAsync, isLoading } = useCreateRoomMutation();
 
   const handleConnectChat = async () => {
-    const roomId = await mutateAsync({
-      uid: fbUser?.uid ?? "",
+    const data = await mutateAsync({
       id: accident.id,
-      reportUid: accident.uid,
       isAccident: true,
     });
-    navigate(`/chat/${roomId}`);
+    navigate(`/chat/${data.roomId}`);
   };
 
   const placeName = addressData?.address_name ?? "주소를 불러오는 중입니다.";

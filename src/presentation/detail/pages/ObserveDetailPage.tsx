@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { useReadUserById } from "@/data/hooks/user";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
-import { useAuthStore } from "@/store/authStore";
 interface ObserveDetailPageProps {
   observe: Observe;
 }
@@ -27,19 +26,16 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
     lat: observe.observeLocation.y,
     lng: observe.observeLocation.x,
   });
-  const { fbUser } = useAuthStore();
 
   const placeName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
   const { mutateAsync, isLoading } = useCreateRoomMutation();
 
   const handleConnectChat = async () => {
-    const roomId = await mutateAsync({
-      uid: fbUser?.uid ?? "",
+    const data = await mutateAsync({
       id: observe.videoId,
-      reportUid: observe.uid,
-      isAccident: true,
+      isAccident: false,
     });
-    navigate(`/chat/${roomId}`);
+    navigate(`/chat/${data.roomId}`);
   };
 
   return (

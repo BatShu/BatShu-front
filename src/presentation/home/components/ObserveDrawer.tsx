@@ -11,8 +11,9 @@ import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
-import { useReadObserveById } from "@/data/hooks/accident";
+import { useReadObserveById } from "@/data/hooks/accidentObserve";
 import { Observe } from "@/domain/models/observe";
+import { useCreateRoomMutation } from "@/data/hooks/chat";
 
 interface ObserveDrawerProps {
   observeId: number | null;
@@ -53,6 +54,16 @@ const ObserveDrawerDetail = ({ observe }: { observe: Observe }) => {
     licensePlate,
     observeEndTime,
   } = observe;
+
+  const { mutateAsync, isLoading } = useCreateRoomMutation();
+
+  const handleConnectChat = async () => {
+    const data = await mutateAsync({
+      id: observe.videoId,
+      isAccident: false,
+    });
+    navigate(`/chat/${data.roomId}`);
+  };
   const routeToDetail = () => {
     navigate(`/observe/${observe.videoId}`, {
       state: { ...observe, placeName: addressName },
@@ -100,7 +111,13 @@ const ObserveDrawerDetail = ({ observe }: { observe: Observe }) => {
           >
             자세히 보기
           </AppButton>
-          <AppButton css={styles.button}>제보하기</AppButton>
+          <AppButton
+            css={styles.button}
+            onClick={handleConnectChat}
+            loading={isLoading}
+          >
+            제보하기
+          </AppButton>
         </Box>
       </Box>
     </Box>

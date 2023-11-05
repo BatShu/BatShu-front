@@ -12,17 +12,10 @@ import { DATE_FORMAT_DETAIL_CHIP } from "@/presentation/configs";
 // component
 import AppButton from "@/presentation/common/components/AppButton";
 import { Accident } from "@/domain/models/accident";
-import { useReadAccidentById, useReadObserveById } from "@/data/hooks/accident";
-import { Observe } from "@/domain/models/observe";
-
+import { useReadAccidentById } from "@/data/hooks/accidentObserve";
+import { useCreateRoomMutation } from "@/data/hooks/chat";
 interface AccidentDrawerProps {
   accidentId: number | null;
-  onOpen?: () => void;
-  onClose: () => void;
-}
-
-interface ObserveDrawerProps {
-  observeId: number | null;
   onOpen?: () => void;
   onClose: () => void;
 }
@@ -48,29 +41,6 @@ export const AccidentDrawer = ({
   );
 };
 
-export const ObserveDrawer = ({
-  observeId,
-  onOpen,
-  onClose,
-}: ObserveDrawerProps) => {
-  const { data: observe } = useReadObserveById(observeId);
-
-  return (
-    <SwipeableDrawer
-      open={!!observeId}
-      onOpen={onOpen ?? onClose}
-      anchor="bottom"
-      onClose={onClose}
-      swipeAreaWidth={444}
-      disableSwipeToOpen
-    >
-      {observe && (
-        <ObserveDrawerDetail observeId={observeId} observe={observe} />
-      )}
-    </SwipeableDrawer>
-  );
-};
-
 const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const navigate = useNavigate();
 
@@ -82,6 +52,15 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
   const { createdAt, photoUrls, carModelName, licensePlate, accidentTime } =
     accident;
+  const { mutateAsync, isLoading } = useCreateRoomMutation();
+
+  const handleConnectChat = async () => {
+    const data = await mutateAsync({
+      id: accident.id,
+      isAccident: true,
+    });
+    navigate(`/chat/${data.roomId}`);
+  };
   const routeToDetail = () => {
     navigate(`/accident/${accident.id}`, {
       state: { ...accident, placeName: addressName },
@@ -131,88 +110,13 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
           >
             자세히 보기
           </AppButton>
-          <AppButton css={styles.button}>제보하기</AppButton>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-const ObserveDrawerDetail = ({
-  observeId,
-  observe,
-}: {
-  observeId: number | null;
-  observe: Observe;
-}) => {
-  const navigate = useNavigate();
-
-  const { data: addressData } = useKakaoMapAddressSearch({
-    lat: observe.observeLocation.y,
-    lng: observe.observeLocation.x,
-  });
-
-  const addressName = addressData?.address_name ?? "주소를 불러오는 중입니다.";
-  const {
-    createdAt,
-    thumbnailUrl,
-    carModelName,
-    licensePlate,
-    observeStartTime,
-  } = observe;
-
-  const routeToDetail = () => {
-    if (!observeId) return;
-
-    navigate(`/observe/${observeId}`, {
-      state: { ...observe, placeName: addressName },
-    });
-  };
-  return (
-    <Box css={styles.drawer}>
-      <Divider css={styles.divider} />
-      <Box css={styles.contentWrapper}>
-        <Box className="content">
-          <Typography className="status">● 요청중</Typography>
-          <Typography className="date">{createdAt.split("T")[0]}</Typography>
-        </Box>
-
-        <Box className="content middle">
-          <img className="accident-image" src={thumbnailUrl} />
-          <Box className="info">
-            <Box css={styles.chip} className="car-number">
-              <Typography css={css(`font-size:10px`)}>
-                {carModelName}
-              </Typography>
-              <Typography css={css(`font-size:20px;font-weight:bold;`)}>
-                {licensePlate}
-              </Typography>
-            </Box>
-
-            <Box css={[styles.chip, css(`width:fit-content;`)]}>
-              <TimeCircle2 css={styles.icon} />
-              <span>
-                {dayjs(observeStartTime.split(":")[0]).format(
-                  DATE_FORMAT_DETAIL_CHIP
-                )}
-              </span>
-            </Box>
-
-            <Box css={styles.chip}>
-              <Frame36 css={styles.icon} />
-              <span>{addressName}</span>
-            </Box>
-          </Box>
-        </Box>
-
-        <Box className="content">
           <AppButton
-            css={[styles.button, styles.detail]}
-            onClick={routeToDetail}
+            css={styles.button}
+            onClick={handleConnectChat}
+            loading={isLoading}
           >
-            자세히 보기
+            제보하기
           </AppButton>
-          <AppButton css={styles.button}>제보하기</AppButton>
         </Box>
       </Box>
     </Box>

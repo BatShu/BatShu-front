@@ -1,3 +1,6 @@
-import { User } from "firebase/auth";
-
-export type AppUser = User;
+export interface AppUser {
+  uid: string;
+  email: string;
+  displayName: string;
+  googleProfilephotoURL: string;
+}

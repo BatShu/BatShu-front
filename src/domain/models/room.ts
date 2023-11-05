@@ -1,8 +1,8 @@
 export interface Room {
-  roomId: 14;
-  displayName: string;
-  googleProfilePhotoUrl: string;
-  placeName: string;
+  roomId: number;
+  uid: string;
+  id: number;
+  isAccident: boolean;
   lastChat: string;
   lastChatCreatedAt: string;
 }

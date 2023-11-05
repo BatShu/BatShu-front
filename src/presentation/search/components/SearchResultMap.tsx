@@ -7,7 +7,7 @@ import { enqueueSnackbar } from "notistack";
 import {
   useReadAccidentsByLocation,
   useReadObservesByLocation,
-} from "@/data/hooks/accident";
+} from "@/data/hooks/accidentObserve";
 // types
 import { ILocation } from "@/domain/models/location";
 // lib
@@ -16,7 +16,7 @@ import { isSameDate } from "@/lib";
 import { pinMarker } from "@/presentation/configs";
 // components
 import { AccidentDrawer } from "@/presentation/home/components/AccidentDrawer";
-import { ObserveDrawer } from "@/presentation/home/components/AccidentDrawer";
+import ObserveDrawer from "@/presentation/home/components/ObserveDrawer";
 
 const SearchResultMap = () => {
   const {

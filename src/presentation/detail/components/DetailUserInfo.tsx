@@ -13,7 +13,7 @@ const DetailUserInfo = ({ author }: DetailUserInfoProps) => {
   return (
     <Box css={styles.userInfo}>
       <UserInfoWithImage
-        profileImage={author.photoURL ?? ""}
+        profileImage={author.googleProfilephotoURL ?? ""}
         name={author.displayName ?? "익명"}
       />
       <Typography className="status">● 요청중</Typography>

@@ -1,6 +1,16 @@
+import { AppMessage } from "../models/appMessage";
+
 export interface PostRoomDto {
-  uid: string;
-  reportUid: string;
   isAccident: boolean;
   id: number;
+}
+
+export interface PostRoomData {
+  roomId: number;
+}
+
+export interface GetMessageData {
+  accidentOrObserve: boolean;
+  id: number;
+  chatList: AppMessage[];
 }

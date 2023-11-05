@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { chatRepository } from "../backend";
+import { accidentObserverRepository, chatRepository } from "../backend";
 import { PostRoomDto } from "@/domain/dtos/chat";
 
 export const useReadRoomsQuery = () => {
@@ -11,11 +11,42 @@ export const useReadRoomsQuery = () => {
   });
 };
 
-export const useReadRoomQuery = (roomId: number) => {
+export const useReadRoomWithIncidentQuery = (roomId: number) => {
   return useQuery({
     queryKey: ["room", roomId],
     queryFn: async () => {
-      return await chatRepository.getRoom(roomId);
+      const room = await chatRepository.getRoom(roomId);
+      if (room.isAccident) {
+        const incident = await accidentObserverRepository.readAccidentById(
+          room.id
+        );
+        return {
+          ...room,
+          incident: {
+            ...incident,
+            isAccident: true,
+          },
+        };
+      }
+      const incident = await accidentObserverRepository.readObserveById(
+        room.id
+      );
+      return {
+        ...room,
+        incident: {
+          ...incident,
+          isAccident: false,
+        },
+      };
+    },
+  });
+};
+
+export const useReadMessageQuery = (roomId: number) => {
+  return useQuery({
+    queryKey: ["message", roomId],
+    queryFn: async () => {
+      return await chatRepository.getMessage(roomId);
     },
   });
 };
