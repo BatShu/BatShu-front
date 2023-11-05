@@ -6,5 +6,4 @@ export const pageContentStyles = css({
   width: "100%",
   height: "100%",
   padding: "20px 28px",
-  position: "relative",
 });
