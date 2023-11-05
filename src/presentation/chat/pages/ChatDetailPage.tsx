@@ -1,9 +1,10 @@
 import {
   useReadMessageQuery,
+  useReadMessageQueryUpdater,
   useReadRoomWithIncidentQuery,
 } from "@/data/hooks/chat";
 import { Box, css } from "@mui/material";
-import { ReactElement, useEffect, useMemo, useRef } from "react";
+import { ReactElement, useCallback, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   ChatDetailHeader,
@@ -13,6 +14,8 @@ import { ChatBar } from "../components/ChatBar";
 import { SocketRepository } from "@/data/backend/socket";
 import { SendMessageDto } from "@/domain/dtos/socket";
 import { ChatMessage } from "../components/ChatMessage";
+import { useQueryClient } from "@tanstack/react-query";
+import { GetMessageData } from "@/domain/dtos/chat";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -59,6 +62,7 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   const ref = useRef<HTMLDivElement>(null);
   const { data: messages, isPreviousData } = useReadMessageQuery(roomId);
 
+  const updateQueryData = useReadMessageQueryUpdater();
   const scrollToBottom = (isPreviousData: boolean) => {
     if (ref.current && !isPreviousData) {
       ref.current.scrollTop = ref.current.scrollHeight;
@@ -67,12 +71,15 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   useEffect(() => {
     scrollToBottom(isPreviousData);
   }, [messages, isPreviousData]);
-  const handleReceive = (dto: SendMessageDto) => {
-    console.log(dto);
-  };
+  const handleReceive = useCallback(
+    (dto: SendMessageDto) => {
+      updateQueryData(roomId, dto);
+    },
+    [updateQueryData, roomId]
+  );
   const socketRepository = useMemo(() => {
     return new SocketRepository(roomId, handleReceive);
-  }, [roomId]);
+  }, [roomId, handleReceive]);
 
   useEffect(() => {
     return () => {
@@ -82,7 +89,7 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
   return (
     <>
       <Box css={styles.messageContainer} ref={ref}>
-        {messages?.chatList.reverse().map((message) => {
+        {messages?.chatList.toReversed().map((message) => {
           return <ChatMessage key={message.createdAt} message={message} />;
         })}
       </Box>
