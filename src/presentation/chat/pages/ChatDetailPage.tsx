@@ -1,15 +1,20 @@
 import {
   useReadMessageQuery,
+  useReadMessageQueryUpdater,
   useReadRoomWithIncidentQuery,
 } from "@/data/hooks/chat";
-import { Box } from "@mui/material";
-import { ReactElement } from "react";
+import { Box, css } from "@mui/material";
+import { ReactElement, useCallback, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   ChatDetailHeader,
   ChatDetailHeaderSkeleton,
 } from "../components/ChatDetailHeader";
-import { pageContentStyles } from "@/presentation/common/styles/pageStyles";
+import { ChatBar } from "../components/ChatBar";
+import { SocketRepository } from "@/data/backend/socket";
+import { SendMessageDto } from "@/domain/dtos/socket";
+import { ChatMessage } from "../components/ChatMessage";
+import { AppMessage } from "@/domain/models/appMessage";
 
 export const ChatDetailPageFallback = (): ReactElement => {
   const { roomId } = useParams();
@@ -41,8 +46,8 @@ export const ChatDetailPage = ({
   }
   return (
     <>
-      <ChatDetailHeader incident={data.incident} />
-      <Box css={pageContentStyles}>
+      <Box css={styles.pageWrapper}>
+        <ChatDetailHeader incident={data.incident} />
         <ChatDetail roomId={roomId} />
       </Box>
     </>
@@ -53,13 +58,63 @@ interface ChatDetailProps {
   roomId: number;
 }
 const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
-  const { data: messages } = useReadMessageQuery(roomId);
+  const ref = useRef<HTMLDivElement>(null);
+  const { data: messages, isPreviousData } = useReadMessageQuery(roomId);
 
-  return (
-    <Box>
-      {messages?.chatList.map((message) => {
-        return <Box>{message.message}</Box>;
-      })}
-    </Box>
+  const updateQueryData = useReadMessageQueryUpdater();
+  const scrollToBottom = (isPreviousData: boolean) => {
+    if (ref.current && !isPreviousData) {
+      ref.current.scrollTop = ref.current.scrollHeight;
+    }
+  };
+  useEffect(() => {
+    scrollToBottom(isPreviousData);
+  }, [messages, isPreviousData]);
+  const handleReceive = useCallback(
+    (dto: SendMessageDto) => {
+      updateQueryData(roomId, dto);
+    },
+    [updateQueryData, roomId]
   );
+  const socketRepository = useMemo(() => {
+    return new SocketRepository(roomId, handleReceive);
+  }, [roomId, handleReceive]);
+
+  useEffect(() => {
+    return () => {
+      socketRepository.disconnect();
+    };
+  }, [socketRepository]);
+  return (
+    <>
+      <Box css={styles.messageContainer} ref={ref}>
+        {messages?.chatList
+          .slice()
+          .reverse()
+          .map((message: AppMessage) => {
+            return <ChatMessage key={message.createdAt} message={message} />;
+          })}
+      </Box>
+
+      <ChatBar roomId={roomId} socketRepository={socketRepository} />
+    </>
+  );
+};
+
+const styles = {
+  pageWrapper: css`
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  `,
+  messageContainer: css`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 24px;
+    overflow-y: scroll;
+    gap: 20px;
+    padding-bottom: 70px;
+  `,
 };

@@ -21,7 +21,7 @@ export const ChatPreview = ({ room }: ChatPreviewProps): ReactElement => {
     if (date == null || date == "") {
       return "";
     }
-    const minDiffer = dayjs().diff(dayjs(date)) / 1000;
+    const minDiffer = dayjs().diff(dayjs(date)) / (1000 * 60);
     if (minDiffer < 60) {
       return `${Math.floor(minDiffer)}분 전`;
     }
@@ -63,13 +63,13 @@ const styles = {
     text-decoration: none;
   `,
   chatPreviewContainer: css`
-    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 16px;
     padding: 12px 30px;
     border-bottom: 1px solid var(--white-outline, #e9e9e9);
+    width: 100%;
   `,
   avatar: css`
     width: 52px;
@@ -77,12 +77,12 @@ const styles = {
     border-radius: 8px;
   `,
   detailContainer: css`
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 12px;
     flex: 1;
+    overflow: hidden;
   `,
   detailHeaderContainer: css`
     display: flex;
@@ -136,9 +136,10 @@ const styles = {
     font-weight: 500;
     line-height: normal;
     letter-spacing: -0.41px;
-    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
+    width: 100%;
   `,
 };

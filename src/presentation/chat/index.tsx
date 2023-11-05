@@ -8,20 +8,19 @@ import { ChatPreview } from "./components/ChatPreview";
 import { ReactComponent as BatshuIcon } from "@/presentation/common/icons/logo-long-black.svg";
 import { ChatEmpty } from "./components/ChatEmpty";
 const ChatPage = () => {
-  const { data: rooms } = useReadRoomsQuery();
-  console.log(rooms);
+  const { data: rooms, isLoading } = useReadRoomsQuery();
   return (
     <Box css={styles.pageWrapper}>
       <Box css={styles.header}>
         <BatshuIcon css={styles.headerLogo} />
       </Box>
       <Box>
-        {rooms?.length ? (
-          rooms.map((room) => {
+        {!isLoading && rooms?.length == 0 ? (
+          <ChatEmpty />
+        ) : (
+          rooms?.map((room) => {
             return <ChatPreview key={room.roomId} room={room} />;
           })
-        ) : (
-          <ChatEmpty />
         )}
       </Box>
 

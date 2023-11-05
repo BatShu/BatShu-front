@@ -1,6 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accidentObserverRepository, chatRepository } from "../backend";
-import { PostRoomDto } from "@/domain/dtos/chat";
+import { GetMessageData, PostRoomDto } from "@/domain/dtos/chat";
+import { SendMessageDto } from "@/domain/dtos/socket";
+import { useCallback } from "react";
 
 export const useReadRoomsQuery = () => {
   return useQuery({
@@ -49,6 +51,33 @@ export const useReadMessageQuery = (roomId: number) => {
       return await chatRepository.getMessage(roomId);
     },
   });
+};
+
+export const useReadMessageQueryUpdater = () => {
+  const queryClient = useQueryClient();
+  return useCallback(
+    (roomId: number, dto: SendMessageDto) => {
+      queryClient.setQueryData(
+        ["message", roomId],
+        (oldData: GetMessageData | undefined) => {
+          if (oldData == null) {
+            return oldData;
+          }
+          return {
+            ...oldData,
+            chatList: [
+              {
+                ...dto,
+                createdAt: new Date().toISOString(),
+              },
+              ...oldData.chatList,
+            ],
+          };
+        }
+      );
+    },
+    [queryClient]
+  );
 };
 
 export const useCreateRoomMutation = () => {
