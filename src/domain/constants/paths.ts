@@ -7,3 +7,4 @@ export const LOGIN_PATH = "/login" as const;
 export const ACCIDENT_DETAIL_PATH = "/accident/:accidentId" as const;
 export const OBSERVE_DETAIL_PATH = "/observe/:accidentId" as const;
 export const CHAT_PATH = "/chat" as const;
+export const PROFILE_PATH = "/profile" as const;

@@ -9,6 +9,7 @@ import {
   ACCIDENT_DETAIL_PATH,
   OBSERVE_DETAIL_PATH,
   CHAT_PATH,
+  PROFILE_PATH,
 } from "./domain/constants/paths";
 import { HomePage } from "./presentation/home";
 import { SearchPage } from "./presentation/search";
@@ -23,6 +24,7 @@ import {
 } from "./presentation/detail";
 import ChatPage from "./presentation/chat";
 import { ChatDetailPageFallback } from "./presentation/chat/pages/ChatDetailPage";
+import ProfilePage from "./presentation/profile";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +53,10 @@ export const router = createBrowserRouter([
       {
         path: LOGIN_PATH,
         element: <LoginPage />,
+      },
+      {
+        path: PROFILE_PATH,
+        element: <ProfilePage />,
       },
       {
         path: CHAT_PATH,

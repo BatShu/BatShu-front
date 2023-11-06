@@ -2,20 +2,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { SerializedStyles, css } from "@emotion/react";
 // constants
-import { CHAT_PATH, HOME_PATH, WRITE_PATH } from "@/domain/constants/paths";
+import {
+  CHAT_PATH,
+  HOME_PATH,
+  PROFILE_PATH,
+  WRITE_PATH,
+} from "@/domain/constants/paths";
 // icons
 import { ReactComponent as LogoIcon } from "@/presentation/common/icons/logo.svg";
 import { ReactComponent as Message1Icon } from "@/presentation/common/icons/outlined/Message 1.svg";
 import { ReactComponent as PenIcon } from "@/presentation/common/icons/outlined/Pen.svg";
 import { ReactComponent as InstagramIcon } from "@/presentation/common/icons/outlined/Instagram.svg";
 import { ReactComponent as ProfileSquareIcon } from "@/presentation/common/icons/outlined/Profile Square.svg";
-import { useSignOut } from "@/data/hooks/auth";
 
 const AppNavigationBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // for test
-  const { mutate: signOut } = useSignOut();
   return (
     <BottomNavigation
       showLabels
@@ -54,9 +56,10 @@ const AppNavigationBar = () => {
       />
       <BottomNavigationAction
         label="프로필"
+        value={PROFILE_PATH}
         icon={<ProfileSquareIcon />}
         css={actionStyles}
-        onClick={() => signOut()}
+        onClick={() => navigate(PROFILE_PATH)}
       />
     </BottomNavigation>
   );
