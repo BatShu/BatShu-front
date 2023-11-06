@@ -2,11 +2,13 @@ import { css } from "@emotion/react";
 import { Box } from "@mui/material";
 import AppNavigationBar from "../common/components/AppNaviationBar";
 import { pageContentStyles } from "../common/styles/pageStyles";
+import { ProfileHeader } from "./ProfileHeader";
 
 const ProfilePage = () => {
   return (
     <Box css={styles.pageWrapper}>
       <Box css={pageContentStyles}>
+        <ProfileHeader />
         <Box css={styles.bottomMenu}>
           <Box css={styles.menuBar}>
             <AppNavigationBar />
