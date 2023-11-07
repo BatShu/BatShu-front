@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useKakaoMapAddressSearch } from "@/hooks/useKakaoMapSearch";
 import { useReadUserById } from "@/data/hooks/user";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
+import { enqueueSnackbar } from "notistack";
 interface ObserveDetailPageProps {
   observe: Observe;
 }
@@ -31,11 +32,19 @@ export const ObserveDetailPage = ({ observe }: ObserveDetailPageProps) => {
   const { mutateAsync, isLoading } = useCreateRoomMutation();
 
   const handleConnectChat = async () => {
-    const data = await mutateAsync({
+    mutateAsync({
       id: observe.videoId,
       isAccident: false,
-    });
-    navigate(`/chat/${data.roomId}`);
+    })
+      .catch((e) => {
+        enqueueSnackbar(e.message, { variant: "error" });
+      })
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        navigate(`/chat/${data.roomId}`);
+      });
   };
 
   return (
