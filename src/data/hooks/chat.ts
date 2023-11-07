@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { accidentObserverRepository, chatRepository } from "../backend";
 import { GetMessageData, PostRoomDto } from "@/domain/dtos/chat";
-import { SendMessageDto } from "@/domain/dtos/socket";
 import { useCallback } from "react";
+import { AppMessage } from "@/domain/models/appMessage";
 
 export const useReadRoomsQuery = () => {
   return useQuery({
@@ -56,7 +56,7 @@ export const useReadMessageQuery = (roomId: number) => {
 export const useReadMessageQueryUpdater = () => {
   const queryClient = useQueryClient();
   return useCallback(
-    (roomId: number, dto: SendMessageDto) => {
+    (roomId: number, dto: AppMessage) => {
       queryClient.setQueryData(
         ["message", roomId],
         (oldData: GetMessageData | undefined) => {
@@ -65,13 +65,7 @@ export const useReadMessageQueryUpdater = () => {
           }
           return {
             ...oldData,
-            chatList: [
-              {
-                ...dto,
-                createdAt: new Date().toISOString(),
-              },
-              ...oldData.chatList,
-            ],
+            chatList: [dto, ...oldData.chatList],
           };
         }
       );

@@ -12,7 +12,6 @@ import {
 } from "../components/ChatDetailHeader";
 import { ChatBar } from "../components/ChatBar";
 import { SocketRepository } from "@/data/backend/socket";
-import { SendMessageDto } from "@/domain/dtos/socket";
 import { ChatMessage } from "../components/ChatMessage";
 import { AppMessage } from "@/domain/models/appMessage";
 
@@ -71,7 +70,7 @@ const ChatDetail = ({ roomId }: ChatDetailProps): ReactElement => {
     scrollToBottom(isPreviousData);
   }, [messages, isPreviousData]);
   const handleReceive = useCallback(
-    (dto: SendMessageDto) => {
+    (dto: AppMessage) => {
       updateQueryData(roomId, dto);
     },
     [updateQueryData, roomId]

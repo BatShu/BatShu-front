@@ -14,6 +14,7 @@ import AppButton from "@/presentation/common/components/AppButton";
 import { Accident } from "@/domain/models/accident";
 import { useReadAccidentById } from "@/data/hooks/accidentObserve";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
+import { enqueueSnackbar } from "notistack";
 interface AccidentDrawerProps {
   accidentId: number | null;
   onOpen?: () => void;
@@ -55,11 +56,19 @@ const AccidentDrawerDetail = ({ accident }: { accident: Accident }) => {
   const { mutateAsync, isLoading } = useCreateRoomMutation();
 
   const handleConnectChat = async () => {
-    const data = await mutateAsync({
+    mutateAsync({
       id: accident.id,
       isAccident: true,
-    });
-    navigate(`/chat/${data.roomId}`);
+    })
+      .catch((e) => {
+        enqueueSnackbar(e.message, { variant: "error" });
+      })
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        navigate(`/chat/${data.roomId}`);
+      });
   };
   const routeToDetail = () => {
     navigate(`/accident/${accident.id}`, {

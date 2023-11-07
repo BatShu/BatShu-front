@@ -1,8 +1,9 @@
-import { SendMessageDto } from "@/domain/dtos/socket";
+import { SendFileDto, SendMessageDto } from "@/domain/dtos/socket";
+import { AppMessage } from "@/domain/models/appMessage";
 import { io, Socket } from "socket.io-client";
 export class SocketRepository {
   socket: Socket;
-  constructor(roomId: number, onMessage: (message: SendMessageDto) => void) {
+  constructor(roomId: number, onMessage: (message: AppMessage) => void) {
     this.socket = io(import.meta.env.VITE_API_BASE_URL);
 
     this.socket.emit("join", `${roomId}`);
@@ -10,6 +11,14 @@ export class SocketRepository {
   }
   async sendMessage(dto: SendMessageDto) {
     this.socket.emit("sendChat", dto);
+  }
+
+  async sendFile(dto: SendFileDto) {
+    this.socket.emit("sendFile", dto);
+  }
+
+  async sendAccountRequest(dto: SendMessageDto) {
+    this.socket.emit("sendAccount", dto);
   }
 
   async disconnect() {

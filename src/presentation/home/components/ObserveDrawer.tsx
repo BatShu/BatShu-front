@@ -14,6 +14,7 @@ import AppButton from "@/presentation/common/components/AppButton";
 import { useReadObserveById } from "@/data/hooks/accidentObserve";
 import { Observe } from "@/domain/models/observe";
 import { useCreateRoomMutation } from "@/data/hooks/chat";
+import { enqueueSnackbar } from "notistack";
 
 interface ObserveDrawerProps {
   observeId: number | null;
@@ -58,11 +59,19 @@ const ObserveDrawerDetail = ({ observe }: { observe: Observe }) => {
   const { mutateAsync, isLoading } = useCreateRoomMutation();
 
   const handleConnectChat = async () => {
-    const data = await mutateAsync({
+    mutateAsync({
       id: observe.videoId,
       isAccident: false,
-    });
-    navigate(`/chat/${data.roomId}`);
+    })
+      .catch((e) => {
+        enqueueSnackbar(e.message, { variant: "error" });
+      })
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        navigate(`/chat/${data.roomId}`);
+      });
   };
   const routeToDetail = () => {
     navigate(`/observe/${observe.videoId}`, {
