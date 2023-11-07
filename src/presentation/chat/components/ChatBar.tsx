@@ -7,16 +7,35 @@ import { SocketRepository } from "@/data/backend/socket";
 import { useAuthStore } from "@/store/authStore";
 import { LoadingButton } from "@mui/lab";
 import { useMutation } from "@tanstack/react-query";
-import { SendMessageDto } from "@/domain/dtos/socket";
+import { SendFileDto, SendMessageDto } from "@/domain/dtos/socket";
 interface ChatBarProps {
   roomId: number;
   socketRepository: SocketRepository;
 }
 
-const useSendMutation = (socketRepository: SocketRepository) => {
+const useSendMessageMutation = (socketRepository: SocketRepository) => {
   return useMutation({
     mutationFn: async (dto: SendMessageDto) => {
       socketRepository.sendMessage(dto);
+    },
+  });
+};
+
+const useSendFileMutation = (socketRepository: SocketRepository) => {
+  return useMutation({
+    mutationFn: async (
+      dto: Omit<SendFileDto, "file"> & {
+        rawFile: File;
+      }
+    ) => {
+      const file = {
+        filename: dto.rawFile.name,
+        fileData: await dto.rawFile.arrayBuffer(),
+      };
+      socketRepository.sendFile({
+        ...dto,
+        file,
+      });
     },
   });
 };
@@ -26,8 +45,12 @@ export const ChatBar = ({
   socketRepository,
 }: ChatBarProps): ReactElement => {
   const ref = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const { appUser } = useAuthStore();
-  const { mutateAsync, isLoading } = useSendMutation(socketRepository);
+  const { mutateAsync: mutateMessage, isLoading } =
+    useSendMessageMutation(socketRepository);
+  const { mutateAsync: mutateFile, isLoading: isFileLoading } =
+    useSendFileMutation(socketRepository);
   if (appUser == null) {
     throw new Error("appUser is null");
   }
@@ -35,24 +58,31 @@ export const ChatBar = ({
     if (ref.current == null) return;
     const message = ref.current.value;
     if (message == null || message == "") return;
-    mutateAsync({
+    mutateMessage({
       message,
       sendUserUid: appUser.uid,
       roomId: roomId,
     });
     ref.current.value = "";
   };
+
   return (
     <Box css={styles.barContainer}>
       <Box css={styles.actionsContainer}>
-        <Button css={styles.actionButton}>
+        <Button
+          css={styles.actionButton}
+          onClick={() => {
+            if (fileRef.current == null) return;
+            fileRef.current.click();
+          }}
+        >
           <ImageIcon />
           자료 보내기
         </Button>
-        <Button css={styles.actionButton}>
+        <LoadingButton css={styles.actionButton} loading={isFileLoading}>
           <PasswordIcon />
           계좌 보내기
-        </Button>
+        </LoadingButton>
       </Box>
       <input
         placeholder="메시지를 입력해주세요!"
@@ -66,6 +96,23 @@ export const ChatBar = ({
       >
         <SendIcon />
       </LoadingButton>
+
+      <input
+        hidden
+        ref={fileRef}
+        type="file"
+        accept="image/*, video/*"
+        multiple={false}
+        onChange={(e) => {
+          if (e.target.files == null) return;
+          const file = e.target.files[0];
+          mutateFile({
+            rawFile: file,
+            sendUserUid: appUser.uid,
+            roomId: roomId,
+          });
+        }}
+      />
     </Box>
   );
 };

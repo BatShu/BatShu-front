@@ -4,10 +4,14 @@ export interface SendMessageDto {
   message: string;
 }
 
+export interface FileObjectType {
+  fileData: ArrayBuffer;
+  filename: string;
+}
 export interface SendFileDto {
   roomId: number;
   sendUserUid: string;
-  file: Blob;
+  file: FileObjectType;
 }
 
 export interface SendAccountRequest {

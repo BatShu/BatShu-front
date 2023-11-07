@@ -1,4 +1,4 @@
-import { SendMessageDto } from "@/domain/dtos/socket";
+import { SendFileDto, SendMessageDto } from "@/domain/dtos/socket";
 import { io, Socket } from "socket.io-client";
 export class SocketRepository {
   socket: Socket;
@@ -12,7 +12,7 @@ export class SocketRepository {
     this.socket.emit("sendChat", dto);
   }
 
-  async sendFile(dto: SendMessageDto) {
+  async sendFile(dto: SendFileDto) {
     this.socket.emit("sendFile", dto);
   }
 
