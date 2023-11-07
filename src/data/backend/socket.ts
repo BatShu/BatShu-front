@@ -12,6 +12,14 @@ export class SocketRepository {
     this.socket.emit("sendChat", dto);
   }
 
+  async sendFile(dto: SendMessageDto) {
+    this.socket.emit("sendFile", dto);
+  }
+
+  async sendAccountRequest(dto: SendMessageDto) {
+    this.socket.emit("sendAccount", dto);
+  }
+
   async disconnect() {
     this.socket.disconnect();
     this.socket.removeAllListeners();
