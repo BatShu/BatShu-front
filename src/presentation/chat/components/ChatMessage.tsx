@@ -19,7 +19,14 @@ export const ChatMessage = ({ message }: ChatMessageProps): ReactElement => {
       )}
       <Box css={styles.typoContainer}>
         {!isSelf && <Typography>{sendor?.displayName}</Typography>}
-        <Typography css={styles.message}>{message.message}</Typography>
+        {message.messageType == "message" && (
+          <Typography css={styles.message}>{message.message}</Typography>
+        )}
+        {message.messageType == "file" && (
+          <Box css={styles.imageContainer(isSelf)}>
+            <img src={message.message} css={styles.image} />
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -60,5 +67,18 @@ const styles = {
     letter-spacing: -0.41px;
     overflow-x: hidden;
     word-break: break-all;
+  `,
+  imageContainer: (isSelf: boolean) => css`
+    display: flex;
+    justify-content: ${isSelf ? "flex-end" : "flex-start"};
+  `,
+  image: css`
+    width: min(200px, 50%);
+    height: min(200px, 50%);
+    object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    padding: 5px;
+    background: #fff;
   `,
 };

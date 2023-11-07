@@ -47,13 +47,14 @@ export const ChatBar = ({
   const ref = useRef<HTMLInputElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const { appUser } = useAuthStore();
+  if (appUser == null) {
+    throw new Error("appUser is null");
+  }
   const { mutateAsync: mutateMessage, isLoading } =
     useSendMessageMutation(socketRepository);
   const { mutateAsync: mutateFile, isLoading: isFileLoading } =
     useSendFileMutation(socketRepository);
-  if (appUser == null) {
-    throw new Error("appUser is null");
-  }
+
   const handleSendMessage = () => {
     if (ref.current == null) return;
     const message = ref.current.value;
