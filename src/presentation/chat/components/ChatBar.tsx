@@ -1,4 +1,4 @@
-import { Box, Button, css } from "@mui/material";
+import { Box, css } from "@mui/material";
 import { ReactElement, useRef } from "react";
 import { ReactComponent as SendIcon } from "@/presentation/common/icons/outlined/Send 3.svg";
 import { ReactComponent as ImageIcon } from "@/presentation/common/icons/outlined/Image.svg";
@@ -67,20 +67,32 @@ export const ChatBar = ({
     ref.current.value = "";
   };
 
+  const handleSendAccount = () => {
+    mutateMessage({
+      message: "농협 302-1234-1234-12",
+      sendUserUid: appUser.uid,
+      roomId: roomId,
+    });
+  };
   return (
     <Box css={styles.barContainer}>
       <Box css={styles.actionsContainer}>
-        <Button
+        <LoadingButton
           css={styles.actionButton}
           onClick={() => {
             if (fileRef.current == null) return;
             fileRef.current.click();
           }}
+          loading={isFileLoading}
         >
           <ImageIcon />
           자료 보내기
-        </Button>
-        <LoadingButton css={styles.actionButton} loading={isFileLoading}>
+        </LoadingButton>
+        <LoadingButton
+          css={styles.actionButton}
+          loading={isLoading}
+          onClick={handleSendAccount}
+        >
           <PasswordIcon />
           계좌 보내기
         </LoadingButton>
