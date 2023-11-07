@@ -43,6 +43,7 @@ const styles = {
   `,
 
   message: css`
+    width: fit-content;
     display: inline-flex;
     padding: 5px 10px;
     justify-content: center;
