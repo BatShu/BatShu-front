@@ -3,6 +3,7 @@ import { AppMessage } from "@/domain/models/appMessage";
 import { useAuthStore } from "@/store/authStore";
 import { Avatar, Box, Typography, css } from "@mui/material";
 import { ReactElement } from "react";
+import { ImageOrVideo } from "./ImageOrVideo";
 
 interface ChatMessageProps {
   message: AppMessage;
@@ -24,7 +25,7 @@ export const ChatMessage = ({ message }: ChatMessageProps): ReactElement => {
         )}
         {message.messageType == "file" && (
           <Box css={styles.imageContainer(isSelf)}>
-            <img src={message.message} css={styles.image} />
+            <ImageOrVideo src={message.message} css={styles.image} />
           </Box>
         )}
       </Box>
@@ -73,8 +74,8 @@ const styles = {
     justify-content: ${isSelf ? "flex-end" : "flex-start"};
   `,
   image: css`
-    width: min(200px, 50%);
-    height: min(200px, 50%);
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     aspect-ratio: 1;
     border-radius: 8px;
