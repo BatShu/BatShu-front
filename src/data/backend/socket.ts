@@ -4,7 +4,10 @@ import { io, Socket } from "socket.io-client";
 export class SocketRepository {
   socket: Socket;
   constructor(roomId: number, onMessage: (message: AppMessage) => void) {
-    this.socket = io(import.meta.env.VITE_API_BASE_URL);
+    this.socket = io(import.meta.env.VITE_API_BASE_URL, {
+      transports: ["websocket"],
+      withCredentials: true,
+    });
 
     this.socket.emit("join", `${roomId}`);
     this.socket.on("message", onMessage);
